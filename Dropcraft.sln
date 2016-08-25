@@ -1,0 +1,73 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dropcraft.Contracts.Shared", "src\Dropcraft.Contracts\Dropcraft.Contracts.Shared\Dropcraft.Contracts.Shared.shproj", "{6540B834-53AE-412E-B26C-E78E568F8944}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dropcraft.Deployment.Shared", "src\Dropcraft.Deployment\Dropcraft.Deployment.Shared\Dropcraft.Deployment.Shared.shproj", "{C121B47B-3C56-491D-9866-04EF0634D72E}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Dropcraft.Runtime.Shared", "src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.Shared.shproj", "{01BF4043-E829-4B7B-B9A2-13483149B801}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dropcraft.Contracts", "Dropcraft.Contracts", "{89EB17C0-8243-4E6D-A5C7-4757BD16FC74}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dropcraft.Deployment", "Dropcraft.Deployment", "{0D3543CF-984B-49DE-9ACB-08D078BD9F28}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dropcraft.Runtime", "Dropcraft.Runtime", "{B419F541-77CF-4AB6-A266-8169D91FF94C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Contracts.Net46", "src\Dropcraft.Contracts\Dropcraft.Contracts.Net46\Dropcraft.Contracts.Net46.csproj", "{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}"
+EndProject
+Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Dropcraft.Contracts.NetCore", "src\Dropcraft.Contracts\Dropcraft.Contracts.NetCore\Dropcraft.Contracts.NetCore.xproj", "{802D27A7-2F00-49AF-BA96-B452C31D5E24}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Runtime.Net46", "src\Dropcraft.Runtime\Dropcraft.Runtime.Net46\Dropcraft.Runtime.Net46.csproj", "{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Tests.Shared.Dropcraft.Runtime", "tests\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Tests.Shared.Dropcraft.Runtime.shproj", "{F9C5D193-862B-4F66-AB15-F580F871B0C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Net46.Dropcraft.Runtime", "tests\Dropcraft.Runtime\Dropcraft.Runtime.Net46\Tests.Net46.Dropcraft.Runtime.csproj", "{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8}"
+EndProject
+Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.projitems*{01bf4043-e829-4b7b-b9a2-13483149b801}*SharedItemsImports = 13
+		src\Dropcraft.Contracts\Dropcraft.Contracts.Shared\Dropcraft.Contracts.projitems*{486e1e78-dacf-4a51-8aa3-9cefed3efe36}*SharedItemsImports = 4
+		src\Dropcraft.Contracts\Dropcraft.Contracts.Shared\Dropcraft.Contracts.projitems*{6540b834-53ae-412e-b26c-e78e568f8944}*SharedItemsImports = 13
+		src\Dropcraft.Deployment\Dropcraft.Deployment.Shared\Dropcraft.Deployment.projitems*{c121b47b-3c56-491d-9866-04ef0634d72e}*SharedItemsImports = 13
+		tests\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Tests.Shared.Dropcraft.Runtime.projitems*{cf557cf2-5f33-4da9-9602-6a2ccf8c9cd8}*SharedItemsImports = 4
+		src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.projitems*{d47b2e1e-fa99-4e0b-a28a-1ba1c7b2925d}*SharedItemsImports = 4
+		tests\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Tests.Shared.Dropcraft.Runtime.projitems*{f9c5d193-862b-4f66-ab15-f580f871b0c0}*SharedItemsImports = 13
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{802D27A7-2F00-49AF-BA96-B452C31D5E24}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{802D27A7-2F00-49AF-BA96-B452C31D5E24}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{802D27A7-2F00-49AF-BA96-B452C31D5E24}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{802D27A7-2F00-49AF-BA96-B452C31D5E24}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{6540B834-53AE-412E-B26C-E78E568F8944} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
+		{C121B47B-3C56-491D-9866-04EF0634D72E} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
+		{01BF4043-E829-4B7B-B9A2-13483149B801} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
+		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
+		{802D27A7-2F00-49AF-BA96-B452C31D5E24} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
+		{D47B2E1E-FA99-4E0B-A28A-1BA1C7B2925D} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
+		{F9C5D193-862B-4F66-AB15-F580F871B0C0} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
+		{CF557CF2-5F33-4DA9-9602-6A2CCF8C9CD8} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
+	EndGlobalSection
+EndGlobal
