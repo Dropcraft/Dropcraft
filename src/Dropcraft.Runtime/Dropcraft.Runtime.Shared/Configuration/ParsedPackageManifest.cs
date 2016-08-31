@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Dropcraft.Contracts.Configuration;
+using Dropcraft.Common.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Configuration
 {
-    public class ParsedPackageManifest : IParsedPackageConfiguration
+    public class ParsedPackageManifest : IRuntimeParsedPackageConfig
     {
         private readonly PackageInfo _packageInfo;
         private readonly JObject _jsonObject;

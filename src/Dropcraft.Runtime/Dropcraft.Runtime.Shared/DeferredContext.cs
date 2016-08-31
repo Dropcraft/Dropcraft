@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Dropcraft.Contracts.Configuration;
+using Dropcraft.Common.Configuration;
 
 namespace Dropcraft.Runtime
 {

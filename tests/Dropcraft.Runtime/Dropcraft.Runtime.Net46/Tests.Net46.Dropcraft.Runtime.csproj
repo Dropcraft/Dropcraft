@@ -80,9 +80,9 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Dropcraft.Contracts\Dropcraft.Contracts.Net46\Dropcraft.Contracts.Net46.csproj">
+    <ProjectReference Include="..\..\..\src\Dropcraft.Common\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
       <Project>{486e1e78-dacf-4a51-8aa3-9cefed3efe36}</Project>
-      <Name>Dropcraft.Contracts.Net46</Name>
+      <Name>Dropcraft.Common.Net46</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Dropcraft.Runtime\Dropcraft.Runtime.Net46\Dropcraft.Runtime.Net46.csproj">
       <Project>{d47b2e1e-fa99-4e0b-a28a-1ba1c7b2925d}</Project>

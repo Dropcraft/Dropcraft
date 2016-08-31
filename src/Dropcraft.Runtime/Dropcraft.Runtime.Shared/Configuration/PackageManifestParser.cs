@@ -1,11 +1,11 @@
 ﻿using System;
 using System.IO;
-using Dropcraft.Contracts.Configuration;
+using Dropcraft.Common.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Configuration
 {
-    public class PackageManifestParser : IPackageConfigurationParser
+    public class PackageManifestParser : IRuntimePackageConfigParser
     {
         /// <summary>
         /// ManifestNameTemplate allows to change package manifest file name from the default 'manifest.json'
@@ -19,7 +19,7 @@ namespace Dropcraft.Runtime.Configuration
             ManifestNameTemplate = "manifest.json";
         }
 
-        public IParsedPackageConfiguration Parse(PackageInfo packageInfo)
+        public IRuntimeParsedPackageConfig Parse(PackageInfo packageInfo)
         {
             var parsedManifestFile = ParseManifest(packageInfo);
             return parsedManifestFile == null ? null : new ParsedPackageManifest(packageInfo, parsedManifestFile);

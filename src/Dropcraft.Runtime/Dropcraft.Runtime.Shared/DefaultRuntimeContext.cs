@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dropcraft.Contracts;
-using Dropcraft.Contracts.Configuration;
+using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 
 namespace Dropcraft.Runtime
 {

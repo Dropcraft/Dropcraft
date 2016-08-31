@@ -13,9 +13,9 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ParsedPackageManifest.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DefaultRuntimeContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeferredContext.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DropcraftEngine.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EngineConfiguration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)EngineConfigurationBuilder.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)IDropcraftEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RuntimeEngine.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RuntimeConfiguration.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)RuntimeConfigurationBuilder.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)IRuntimeEngine.cs" />
   </ItemGroup>
 </Project>
