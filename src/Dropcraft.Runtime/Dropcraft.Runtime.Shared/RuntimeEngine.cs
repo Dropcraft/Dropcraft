@@ -13,7 +13,7 @@ namespace Dropcraft.Runtime
         private readonly List<IRuntimePackageConfigParser> _packageConfigurationParsers;
         private readonly List<PackageInfo> _packageSources;
 
-        RuntimeEngine(RuntimeConfiguration configuration)
+        public RuntimeEngine(RuntimeConfiguration configuration)
         {
             RuntimeContext = configuration.RuntimeContext;
             _packageSources = new List<PackageInfo>(configuration.PackageSources);

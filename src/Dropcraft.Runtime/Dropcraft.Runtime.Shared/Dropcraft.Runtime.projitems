@@ -15,7 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeferredContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RuntimeEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RuntimeConfiguration.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)RuntimeConfigurationBuilder.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IRuntimeEngine.cs" />
   </ItemGroup>
 </Project>

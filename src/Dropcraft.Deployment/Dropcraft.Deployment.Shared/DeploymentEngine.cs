@@ -1,26 +1,41 @@
-﻿using Dropcraft.Common;
-using Dropcraft.Deployment.Options;
+﻿using System.Collections.Generic;
+using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
+using Dropcraft.Deployment.NuGet;
+using NuGet.Configuration;
 
 namespace Dropcraft.Deployment
 {
-    class DeploymentEngine : IDeploymentEngine
+    public class DeploymentEngine : IDeploymentEngine
     {
         public DeploymentContext DeploymentContext { get; }
 
+        private readonly DropcraftProject _project;
+        private readonly SourceRepositoryProvider repositoryProvider;
 
-        public void InstallPackages(InstallOptions options)
+        public DeploymentEngine(DeploymentConfiguration configuration)
         {
-            throw new System.NotImplementedException();
+            DeploymentContext = configuration.DeploymentContext;
+
+            _project = new DropcraftProject(configuration.InstallPath);
+            
+            repositoryProvider = new SourceRepositoryProvider(Settings.LoadDefaultSettings(configuration.InstallPath));
+            foreach (var packageSource in configuration.PackageSources)
+            {
+                repositoryProvider.AddPackageRepository(packageSource);
+            }
         }
 
-        public void UpdatePackages(UpdateOptions options)
+        public void InstallPackages(IEnumerable<PackageId> packages)
         {
-            throw new System.NotImplementedException();
         }
 
-        public void UninstallPackages(UninstallOptions options)
+        public void UpdatePackages(IEnumerable<PackageId> packages)
         {
-            throw new System.NotImplementedException();
+        }
+
+        public void UninstallPackages(IEnumerable<PackageId> packages)
+        {
         }
     }
 }

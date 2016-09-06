@@ -1,5 +1,6 @@
-﻿using Dropcraft.Common;
-using Dropcraft.Deployment.Options;
+﻿using System.Collections.Generic;
+using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 
 namespace Dropcraft.Deployment
 {
@@ -7,8 +8,8 @@ namespace Dropcraft.Deployment
     {
         DeploymentContext DeploymentContext { get; }
 
-        void InstallPackages(InstallOptions options);
-        void UpdatePackages(UpdateOptions options);
-        void UninstallPackages(UninstallOptions options);
+        void InstallPackages(IEnumerable<PackageId> packages);
+        void UpdatePackages(IEnumerable<PackageId> packages);
+        void UninstallPackages(IEnumerable<PackageId> packages);
     }
 }

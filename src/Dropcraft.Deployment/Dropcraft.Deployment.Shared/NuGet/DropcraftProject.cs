@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using NuGet.Packaging;
+using NuGet.Packaging.Core;
 using NuGet.ProjectManagement;
+using NuGet.Protocol.Core.Types;
 
 namespace Dropcraft.Deployment.NuGet
 {
@@ -18,6 +19,14 @@ namespace Dropcraft.Deployment.NuGet
 
         public DropcraftProject(string root, PackagePathResolver packagePathResolver) : base(root, packagePathResolver)
         {
+        }
+
+        public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,
+            INuGetProjectContext nuGetProjectContext, CancellationToken token)
+        {
+            // TODO: register package
+
+            return base.InstallPackageAsync(packageIdentity, downloadResourceResult, nuGetProjectContext, token);
         }
     }
 }
