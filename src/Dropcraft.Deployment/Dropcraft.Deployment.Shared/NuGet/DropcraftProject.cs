@@ -25,7 +25,6 @@ namespace Dropcraft.Deployment.NuGet
             INuGetProjectContext nuGetProjectContext, CancellationToken token)
         {
             // TODO: register package
-
             return base.InstallPackageAsync(packageIdentity, downloadResourceResult, nuGetProjectContext, token);
         }
     }
