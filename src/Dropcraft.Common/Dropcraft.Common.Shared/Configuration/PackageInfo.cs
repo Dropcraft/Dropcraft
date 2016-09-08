@@ -1,31 +1,34 @@
 namespace Dropcraft.Common.Configuration
 {
     /// <summary>
-    /// PackageId uniquely defines package
+    /// InstallablePackageInfo uniquely defines package
     /// </summary>
-    public class PackageId
+    public class InstallablePackageInfo
     {
         /// <summary>
-        /// Id provides identifier of the package, usually it is identical to NuGet package identifier 
+        /// Id provides identifier of the installablePackage, usually it is identical to NuGet package identifier
         /// </summary>
         public string Id { get; }
 
         /// <summary>
-        /// Version defines version of the package, usually it is identical to NuGet package version
+        /// VersionRange defines version range of the package
         /// </summary>
-        public string Version { get; }
+        public string VersionRange { get; }
 
-        public PackageId(string id, string version)
+        public bool AllowPrereleaseVersions { get; }
+
+        public InstallablePackageInfo(string id, string versionRange, bool allowPrereleaseVersions)
         {
             Id = id;
-            Version = version;
+            VersionRange = versionRange;
+            AllowPrereleaseVersions = allowPrereleaseVersions;
         }
     }
 
     /// <summary>
     /// PackageInfo provides information of the selected package
     /// </summary>
-    public class PackageInfo : PackageId
+    public class PackageInfo : InstallablePackageInfo
     {
         /// <summary>
         /// Path provides path of the package folder
@@ -43,12 +46,12 @@ namespace Dropcraft.Common.Configuration
         public PackageMetadataInfo Metadata { get; }
 
         public PackageInfo(string id, string manifestFile, string installPath) 
-            : this(id, manifestFile, installPath, null, null)
+            : this(id, manifestFile, installPath, string.Empty, false, null)
         {
         }
 
-        public PackageInfo(string id, string manifestFile, string installPath, string version, PackageMetadataInfo metadata)
-            : base(id, version)
+        public PackageInfo(string id, string manifestFile, string installPath, string versionRange, bool allowPrereleaseVersions, PackageMetadataInfo metadata)
+            : base(id, versionRange, allowPrereleaseVersions)
         {
             ManifestFile = manifestFile;
             InstallPath = installPath;
@@ -57,7 +60,7 @@ namespace Dropcraft.Common.Configuration
 
         public override string ToString()
         {
-            return $"{Id}, {Version}";
+            return $"{Id}, {VersionRange}";
         }
     }
 }

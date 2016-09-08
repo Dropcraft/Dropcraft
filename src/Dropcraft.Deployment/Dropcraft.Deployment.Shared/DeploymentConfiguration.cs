@@ -5,26 +5,34 @@ namespace Dropcraft.Deployment
 {
     public class DeploymentConfiguration
     {
-        public DeploymentContext DeploymentContext { get; set; }
+        public bool UpdatePackages { get; private set; }
 
-        /// <summary>
-        /// Path to install/uninstall packages 
-        /// </summary>
-        public string InstallPath { get; set; }
+        public DeploymentContext DeploymentContext { get; }
 
         /// <summary>
         /// List of the package sources
         /// </summary>
         public List<string> PackageSources { get; } = new List<string>();
 
-        public DeploymentConfiguration(string installPath)
+        public DeploymentConfiguration(string installPath, string packagesFolderPath)
+            : this(new DefaultDeploymentContext(installPath, packagesFolderPath))
         {
-            InstallPath = installPath;
+        }
+
+        public DeploymentConfiguration(DeploymentContext deploymentContext)
+        {
+            DeploymentContext = deploymentContext;
         }
 
         public DeploymentConfiguration AddPackageSource(string packageSource)
         {
             PackageSources.Add(packageSource);
+            return this;
+        }
+
+        public DeploymentConfiguration UpdatePackagesFromSource(bool update)
+        {
+            UpdatePackages = update;
             return this;
         }
 

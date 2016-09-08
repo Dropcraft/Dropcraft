@@ -21,18 +21,21 @@ namespace Dropcraft.Runtime
             PackageSources.AddRange(packages);
         }
 
-        RuntimeConfiguration()
+        public RuntimeConfiguration() 
+            : this(new DefaultRuntimeContext())
         {
-            RuntimeContext = new DefaultRuntimeContext();
+        }
+
+        public RuntimeConfiguration(RuntimeContext runtimeContext)
+        {
+            RuntimeContext = runtimeContext;
             PackageConfigurationParsers.Add(new PackageManifestParser());
         }
 
-        public static RuntimeConfigurationWithSource LoadPackagesFrom(IEnumerable<PackageInfo> packagesSequence)
+        public RuntimeConfigurationWithSource LoadPackagesFrom(IEnumerable<PackageInfo> packagesSequence)
         {
-            var configuration = new RuntimeConfiguration();
-            configuration.AddPackageSources(packagesSequence);
-
-            return new RuntimeConfigurationWithSource(configuration);
+            AddPackageSources(packagesSequence);
+            return new RuntimeConfigurationWithSource(this);
         }
     }
 
@@ -54,12 +57,6 @@ namespace Dropcraft.Runtime
         public RuntimeConfigurationWithSource AddPackageConfigurationParser(IRuntimePackageConfigParser parser)
         {
             _configuration.PackageConfigurationParsers.Add(parser);
-            return this;
-        }
-
-        public RuntimeConfigurationWithSource WithContext(RuntimeContext context)
-        {
-            _configuration.RuntimeContext = context;
             return this;
         }
 

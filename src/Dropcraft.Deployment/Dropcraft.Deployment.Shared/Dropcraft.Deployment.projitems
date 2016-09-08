@@ -9,10 +9,12 @@
     <Import_RootNamespace>Dropcraft.Deployment</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="$(MSBuildThisFileDirectory)DefaultDeploymentContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeploymentConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeploymentEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IDeploymentEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\DropcraftProject.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGet\InstallablePackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\ProjectContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\SourceRepositoryProvider.cs" />
