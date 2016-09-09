@@ -10,7 +10,7 @@ namespace Dropcraft.Common
         /// <summary>
         /// Path to install/uninstall packages 
         /// </summary>
-        public string PackagesFolderPath { get; set; }
+        public string PackagesFolderPath { get; }
 
         protected DeploymentContext(string installPath, string packagesFolderPath)
         {

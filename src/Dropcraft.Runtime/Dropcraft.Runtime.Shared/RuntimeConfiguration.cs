@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Runtime

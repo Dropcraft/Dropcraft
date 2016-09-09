@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Configuration

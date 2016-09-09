@@ -5,14 +5,14 @@ namespace Dropcraft.Deployment
 {
     public class DeploymentConfiguration
     {
-        public bool UpdatePackages { get; private set; }
+        internal bool UpdatePackages { get; private set; }
 
-        public DeploymentContext DeploymentContext { get; }
+        internal DeploymentContext DeploymentContext { get; }
 
         /// <summary>
         /// List of the package sources
         /// </summary>
-        public List<string> PackageSources { get; } = new List<string>();
+        internal List<string> PackageSources { get; } = new List<string>();
 
         public DeploymentConfiguration(string installPath, string packagesFolderPath)
             : this(new DefaultDeploymentContext(installPath, packagesFolderPath))

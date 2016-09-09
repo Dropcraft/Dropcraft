@@ -27,12 +27,18 @@ Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Dropcraft.Common.NetCore", 
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Common.Net46", "src\Dropcraft.Common\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj", "{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}"
 EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Tests.Shared.Dropcraft.Deployment", "tests\Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment.shproj", "{AA9A1A34-C7BB-4A91-813F-1CDD499F86E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Net46.Dropcraft.Deployment", "tests\Dropcraft.Deployment\Tests.Net46.Dropcraft.Deployment\Tests.Net46.Dropcraft.Deployment.csproj", "{8F2201EC-40E9-4736-87D7-0430150F35A0}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.projitems*{01bf4043-e829-4b7b-b9a2-13483149b801}*SharedItemsImports = 13
 		src\Dropcraft.Common\Dropcraft.Common.Shared\Dropcraft.Common.projitems*{486e1e78-dacf-4a51-8aa3-9cefed3efe36}*SharedItemsImports = 4
 		src\Dropcraft.Deployment\Dropcraft.Deployment.Shared\Dropcraft.Deployment.projitems*{49f4f12b-97a1-46f3-8edb-f5fc48a951dd}*SharedItemsImports = 4
 		src\Dropcraft.Common\Dropcraft.Common.Shared\Dropcraft.Common.projitems*{6540b834-53ae-412e-b26c-e78e568f8944}*SharedItemsImports = 13
+		tests\Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment.projitems*{8f2201ec-40e9-4736-87d7-0430150f35a0}*SharedItemsImports = 4
+		tests\Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment\Tests.Shared.Dropcraft.Deployment.projitems*{aa9a1a34-c7bb-4a91-813f-1cdd499f86e3}*SharedItemsImports = 13
 		src\Dropcraft.Deployment\Dropcraft.Deployment.Shared\Dropcraft.Deployment.projitems*{c121b47b-3c56-491d-9866-04ef0634d72e}*SharedItemsImports = 13
 		tests\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Tests.Shared.Dropcraft.Runtime.projitems*{cf557cf2-5f33-4da9-9602-6a2ccf8c9cd8}*SharedItemsImports = 4
 		src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.projitems*{d47b2e1e-fa99-4e0b-a28a-1ba1c7b2925d}*SharedItemsImports = 4
@@ -63,6 +69,10 @@ Global
 		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -77,5 +87,7 @@ Global
 		{6540B834-53AE-412E-B26C-E78E568F8944} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
 		{802D27A7-2F00-49AF-BA96-B452C31D5E24} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
 		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
+		{AA9A1A34-C7BB-4A91-813F-1CDD499F86E3} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
+		{8F2201EC-40E9-4736-87D7-0430150F35A0} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
 	EndGlobalSection
 EndGlobal

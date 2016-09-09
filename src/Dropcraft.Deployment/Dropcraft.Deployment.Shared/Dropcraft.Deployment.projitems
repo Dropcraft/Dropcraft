@@ -15,6 +15,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)IDeploymentEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\DropcraftProject.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\InstallablePackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\ProjectContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\SourceRepositoryProvider.cs" />

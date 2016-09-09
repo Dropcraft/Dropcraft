@@ -1,34 +1,9 @@
-namespace Dropcraft.Common.Configuration
+namespace Dropcraft.Common.Package
 {
-    /// <summary>
-    /// InstallablePackageInfo uniquely defines package
-    /// </summary>
-    public class InstallablePackageInfo
-    {
-        /// <summary>
-        /// Id provides identifier of the installablePackage, usually it is identical to NuGet package identifier
-        /// </summary>
-        public string Id { get; }
-
-        /// <summary>
-        /// VersionRange defines version range of the package
-        /// </summary>
-        public string VersionRange { get; }
-
-        public bool AllowPrereleaseVersions { get; }
-
-        public InstallablePackageInfo(string id, string versionRange, bool allowPrereleaseVersions)
-        {
-            Id = id;
-            VersionRange = versionRange;
-            AllowPrereleaseVersions = allowPrereleaseVersions;
-        }
-    }
-
     /// <summary>
     /// PackageInfo provides information of the selected package
     /// </summary>
-    public class PackageInfo : InstallablePackageInfo
+    public class PackageInfo : VersionedPackageInfo
     {
         /// <summary>
         /// Path provides path of the package folder

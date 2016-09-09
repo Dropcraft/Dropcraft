@@ -1,4 +1,4 @@
-﻿namespace Dropcraft.Common.Configuration
+﻿namespace Dropcraft.Common.Package
 {
     public class PackageMetadataInfo
     {

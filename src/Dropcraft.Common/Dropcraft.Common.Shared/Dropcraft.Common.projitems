@@ -15,8 +15,6 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IDeploymentPackageConfigParser.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IDeploymentParsedPackageConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IRuntimePackageConfigParser.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\PackageInfo.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\PackageMetadataInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PackageStartupHandlerInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\IRuntimeParsedPackageConfig.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\RuntimeEventsHandlerInfo.cs" />
@@ -28,6 +26,11 @@
     <Compile Include="$(MSBuildThisFileDirectory)IHandlePackageDeployment.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IHandlePackageStartup.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)IHandleRuntimeEvents.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Package\InstallableFileInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Package\InstallablePackageInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Package\PackageInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Package\PackageMetadataInfo.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Package\VersionedPackageInfo.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)RuntimeContext.cs" />
   </ItemGroup>
 </Project>
