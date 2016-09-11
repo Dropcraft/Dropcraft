@@ -1,0 +1,9 @@
+image: Visual Studio 2015
+
+build_script:
+- ps: .\build.ps1
+
+test: off
+
+artifacts:
+- path: artifacts\nuget-package\*.nupkg

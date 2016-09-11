@@ -2,9 +2,8 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
-using Dropcraft.Deployment.NuGet;
 using Dropcraft.Common.Package;
+using Dropcraft.Deployment.NuGet;
 
 namespace Dropcraft.Deployment
 {
