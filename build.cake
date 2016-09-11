@@ -102,6 +102,22 @@ Task("Run-Tests")
     });
 });
 
+Task("Package")
+    .Does(() =>
+{
+    List<FilePath> nuspecs = new List<FilePath>(GetFiles("./src/nuspecs/*.nuspec"));
+    foreach (var nuspec in nuspecs)
+    {
+        NuGetPack(nuspec, new NuGetPackSettings
+        {
+            Version = versionInfo.NuGetVersion+"-beta",
+            BasePath = nuspec.GetDirectory(),
+            OutputDirectory = nupkgDestDir,
+            Symbols = false
+        });
+    }    
+});
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIMARY TARGETS
 ///////////////////////////////////////////////////////////////////////////////
@@ -112,7 +128,8 @@ Task("Build")
     .IsDependentOn("Version")
     .IsDependentOn("Update-AppVeyor-Build-Number")
     .IsDependentOn("Build-Solutions")
-    .IsDependentOn("Run-Tests");
+    //.IsDependentOn("Run-Tests")
+    .IsDependentOn("Package");
 
 Task("Default")
     .IsDependentOn("Build");

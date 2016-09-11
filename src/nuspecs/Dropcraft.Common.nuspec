@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dropcraft.Common</id>
+    <version>$version$</version>
+    <title>Dropcraft.Common</title>
+    <authors>Andrei Marukovich</authors>
+    <owners>Andrei Marukovich</owners>
+    <licenseUrl>https://github.com/Dropcraft/Dropcraft/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Dropcraft</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Common classes for Dropcraft, a NuGet-based deployment and application composition framework for .NET and .NET Core.</description>
+    <copyright>Copyright © 2016</copyright>
+    <tags>Dropcraft deployment NuGet extensibility plugin</tags>
+    <dependencies>
+      <group targetFramework="net461"/>
+      <group targetFramework="netstandard1.6">
+        <dependency id="NETStandard.Library" version="1.6.0" />
+        <dependency id="System.Diagnostics.TraceSource" version="4.0.0" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Dropcraft.Common\Dropcraft.Common.Net46\bin\Release\*.*" target="lib\net461\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Common\Dropcraft.Common.NetCore\bin\Release\netstandard1.6\*.*" target="lib\netstandard1.6\" exclude="**\*.pdb" />
+  </files>
+</package>

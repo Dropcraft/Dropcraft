@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dropcraft.Deployment</id>
+    <version>$version$</version>
+    <title>Dropcraft.Runtime</title>
+    <authors>Andrei Marukovich</authors>
+    <owners>Andrei Marukovich</owners>
+    <licenseUrl>https://github.com/Dropcraft/Dropcraft/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Dropcraft</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Deployment classes for Dropcraft, a NuGet-based deployment and application composition framework for .NET and .NET Core.</description>
+    <copyright>Copyright © 2016</copyright>
+    <tags>Dropcraft deployment NuGet extensibility plugin</tags>
+    <dependencies>
+      <group targetFramework="net461">
+        <dependency id="Dropcraft.Common" version="$version$" />
+        <dependency id="Microsoft.Web.Xdt" version="2.1.1"/>
+        <dependency id="Newtonsoft.Json" version="9.0.1"/>
+        <dependency id="NuGet.Client" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Commands" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Common" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Configuration" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.ContentModel" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.DependencyResolver" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.DependencyResolver.Core" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Frameworks" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.LibraryModel" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.PackageManagement" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Packaging" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Packaging.Core" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Packaging.Core.Types" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.ProjectManagement" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.ProjectModel" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Protocol.Core.Types" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Protocol.Core.v3" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Repositories" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Resolver" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.RuntimeModel" version="3.5.0-rc1-final"/>
+        <dependency id="NuGet.Versioning" version="3.5.0-rc1-final"/>        
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Dropcraft.Deployment\Dropcraft.Deployment.Net46\bin\Release\Dropcraft.Deployment.*.*" target="lib\net461\" exclude="**\*.pdb" />
+  </files>
+</package>

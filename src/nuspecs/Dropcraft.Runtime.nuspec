@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Dropcraft.Runtime</id>
+    <version>$version$</version>
+    <title>Dropcraft.Runtime</title>
+    <authors>Andrei Marukovich</authors>
+    <owners>Andrei Marukovich</owners>
+    <licenseUrl>https://github.com/Dropcraft/Dropcraft/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/Dropcraft</projectUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Runtime classes for Dropcraft, a NuGet-based deployment and application composition framework for .NET and .NET Core.</description>
+    <copyright>Copyright © 2016</copyright>
+    <tags>Dropcraft deployment NuGet extensibility plugin</tags>
+    <dependencies>
+      <group targetFramework="net461">
+        <dependency id="Dropcraft.Common" version="$version$" />
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\Dropcraft.Runtime\Dropcraft.Runtime.Net46\bin\Release\Dropcraft.Runtime.*.*" target="lib\net461\" exclude="**\*.pdb" />
+  </files>
+</package>
