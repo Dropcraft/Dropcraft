@@ -43,7 +43,7 @@ namespace Dropcraft.Deployment.NuGet
             _currentFramework = GetCurrentFramework();
             _repositoryProvider = new SourceRepositoryProvider(settings);
             _localRepository = _repositoryProvider.CreateRepository(_deploymentContext.PackagesFolderPath);
-            _project = new DropcraftProject(_deploymentContext.PackagesFolderPath);
+            _project = new DropcraftProject(_deploymentContext.PackagesFolderPath) {CurrentFramework = _currentFramework};
             _nuGetPackageManager = new NuGetPackageManager(_repositoryProvider, settings, _deploymentContext.PackagesFolderPath)
             {
                 PackagesFolderNuGetProject = _project
@@ -84,9 +84,11 @@ namespace Dropcraft.Deployment.NuGet
             return new InstallablePackage(packageInfo, resolvedVersion);
         }
 
-        public async Task InstallPackage(InstallablePackage package)
+        public async Task<List<InstallablePackage>> InstallPackage(InstallablePackage package)
         {
-            Trace.Current.Verbose($"Installing package {package.Id} {package.Version}");
+            Trace.Current.Verbose($"Installing package {package.Id} {package.Version} with dependencies");
+
+            _project.CleanRecentPackages();
             var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, package.AllowPrereleaseVersions,
                                                                                         false, VersionConstraints.None);
 
@@ -96,6 +98,7 @@ namespace Dropcraft.Deployment.NuGet
                     _repositoryProvider.Repositories, Array.Empty<SourceRepository>(), CancellationToken.None);
 
             Trace.Current.Verbose($"Installed package {package.Id} {package.Version}");
+            return _project.ProcessRecentPackages();
         }
 
         private async Task<NuGetVersion> GetLatestMatchingVersion(VersionedPackageInfo packageInfo, IEnumerable<SourceRepository> sourceRepositories, ILogger logger)
@@ -117,7 +120,7 @@ namespace Dropcraft.Deployment.NuGet
                     packageInfo.Id, _currentFramework, logger, CancellationToken.None);
                 return dependencyInfo
                     .Select(x => x.Version)
-                    .Where(x => x != null && (versionRange == null || versionRange.Satisfies(x)))
+                    .Where(x => x != null && (versionRange == null || versionRange.Satisfies(x)) && (packageInfo.AllowPrereleaseVersions || !x.IsPrerelease))
                     .DefaultIfEmpty()
                     .Max();
             }

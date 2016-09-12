@@ -128,7 +128,7 @@ Task("Build")
     .IsDependentOn("Version")
     .IsDependentOn("Update-AppVeyor-Build-Number")
     .IsDependentOn("Build-Solutions")
-    //.IsDependentOn("Run-Tests")
+    .IsDependentOn("Run-Tests")
     .IsDependentOn("Package");
 
 Task("Default")

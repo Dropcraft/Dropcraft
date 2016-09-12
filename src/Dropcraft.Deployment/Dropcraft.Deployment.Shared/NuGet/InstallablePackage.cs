@@ -1,15 +1,11 @@
-﻿using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Package;
+﻿using Dropcraft.Common.Package;
 using NuGet.Versioning;
 
 namespace Dropcraft.Deployment.NuGet
 {
-    internal class InstallablePackage
+    internal class InstallablePackage : InstallablePackageInfo
     {
-        public string Id { get; }
-
         public NuGetVersion Version { get; }
-        public bool AllowPrereleaseVersions { get; }
 
         public bool IsResolved => Version != null;
 
@@ -18,12 +14,15 @@ namespace Dropcraft.Deployment.NuGet
         {
         }
 
-        public InstallablePackage(VersionedPackageInfo packageInfo, NuGetVersion version)
+        public InstallablePackage(VersionedPackageInfo packageInfo, NuGetVersion version) 
+            : this(packageInfo.Id, packageInfo.VersionRange, packageInfo.AllowPrereleaseVersions, version)
         {
-            Id = packageInfo.Id;
-            AllowPrereleaseVersions = packageInfo.AllowPrereleaseVersions;
-            Version = version;
         }
 
+        public InstallablePackage(string id, string versionRange, bool allowPrereleaseVersions, NuGetVersion version)
+            : base(id, versionRange, allowPrereleaseVersions)
+        {
+            Version = version;
+        }
     }
 }

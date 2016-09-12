@@ -6,6 +6,8 @@
         public string TargetFilePath { get; set; }
         public FileType FileType { get; set; }
         public FileAction Action { get; set; }
+        public bool Conflict { get; set; }
+        public FileConflictResolution ConflictResolution { get; set; }
     }
 
     public enum FileAction
@@ -17,9 +19,15 @@
 
     public enum FileType
     {
-        Assembly,
+        LibFile,
         Content,
         Tool,
+        Configuration,
         Custom
+    }
+    public enum FileConflictResolution
+    {
+        Override,
+        KeepExisting,
     }
 }

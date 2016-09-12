@@ -8,12 +8,13 @@ namespace Tests.Dropcraft.Deployment
     public class DeploymentEngineTests
     {
         [Fact]
-        public async Task DeploymentEngine_shall_install_one_package_with_exact_version()
+        public async Task DeploymentEngine_shall_install_two_packages_with_exact_version()
         {
             using (var helper = new TestDeploymentHelper().WithDefaultEngine())
             {
-                await helper.Engine.InstallPackages(new[] { new VersionedPackageInfo("Newtonsoft.Json", "9.0.1", false) });
-                helper.IsPackageExists("Newtonsoft.Json.9.0.1").Should().BeTrue();
+                await helper.Engine.InstallPackages(new[] { new VersionedPackageInfo("bootstrap", "[3.3.7]", false) });
+                helper.IsPackageExists("bootstrap.3.3.7").Should().BeTrue();
+                helper.IsPackageExists("jQuery.1.9.1").Should().BeTrue();
             }
         }
 

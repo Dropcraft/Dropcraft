@@ -31,6 +31,14 @@ Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "Tests.Shared.Dropcraft.Depl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests.Net46.Dropcraft.Deployment", "tests\Dropcraft.Deployment\Tests.Net46.Dropcraft.Deployment\Tests.Net46.Dropcraft.Deployment.csproj", "{8F2201EC-40E9-4736-87D7-0430150F35A0}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Hosts", "Hosts", "{987D1F93-67D9-4E42-9D71-AF20B866C254}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Deployment", "Deployment", "{1FED4736-5B8E-4A16-8C7E-3E951B1819EB}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{1085D8DE-17E2-4D41-AA0F-28617FFD0592}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Net46", "src\Hosts\Deployment\Dropcraft.Net46\Dropcraft.Net46.csproj", "{8EE117E0-2B73-40E8-8484-E3A74032BEC8}"
+EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
 		src\Dropcraft.Runtime\Dropcraft.Runtime.Shared\Dropcraft.Runtime.projitems*{01bf4043-e829-4b7b-b9a2-13483149b801}*SharedItemsImports = 13
@@ -73,6 +81,10 @@ Global
 		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8F2201EC-40E9-4736-87D7-0430150F35A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -89,5 +101,8 @@ Global
 		{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36} = {89EB17C0-8243-4E6D-A5C7-4757BD16FC74}
 		{AA9A1A34-C7BB-4A91-813F-1CDD499F86E3} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
 		{8F2201EC-40E9-4736-87D7-0430150F35A0} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
+		{1FED4736-5B8E-4A16-8C7E-3E951B1819EB} = {987D1F93-67D9-4E42-9D71-AF20B866C254}
+		{1085D8DE-17E2-4D41-AA0F-28617FFD0592} = {987D1F93-67D9-4E42-9D71-AF20B866C254}
+		{8EE117E0-2B73-40E8-8484-E3A74032BEC8} = {1FED4736-5B8E-4A16-8C7E-3E951B1819EB}
 	EndGlobalSection
 EndGlobal
