@@ -21,9 +21,9 @@ namespace Dropcraft.Common
             return OnGetExtensibilityPoint(extensibilityPointKey);
         }
 
-        public void StashExtension(ExtensionInfo extensionInfo)
+        public void RegisterExtension(ExtensionInfo extensionInfo)
         {
-            OnStashExtension(extensionInfo);
+            OnRegisterExtension(extensionInfo);
         }
 
         public void RegisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler)
@@ -54,7 +54,7 @@ namespace Dropcraft.Common
         protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointKey, IHandleExtensibilityPoint extensibilityPoint);
         protected abstract void OnUnregisterExtensibilityPoint(string extensibilityPointKey);
         protected abstract IHandleExtensibilityPoint OnGetExtensibilityPoint(string extensibilityPointKey);
-        protected abstract void OnStashExtension(ExtensionInfo extensionInfo);
+        protected abstract void OnRegisterExtension(ExtensionInfo extensionInfo);
         protected abstract void OnRegisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler);
         protected abstract void OnUnregisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler);
         protected abstract void OnRaiseRuntimeEvent(RuntimeEvent runtimeEvent);

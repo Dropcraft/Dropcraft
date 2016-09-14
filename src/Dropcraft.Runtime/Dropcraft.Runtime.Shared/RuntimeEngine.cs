@@ -124,7 +124,7 @@ namespace Dropcraft.Runtime
             {
                 foreach (var extension in extensions)
                 {
-                    RuntimeContext.StashExtension(extension);
+                    RuntimeContext.RegisterExtension(extension);
                 }
             }
 

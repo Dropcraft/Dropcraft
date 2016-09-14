@@ -15,6 +15,8 @@ namespace Dropcraft.Deployment.NuGet
 {
     internal class DropcraftProject : FolderNuGetProject
     {
+        public FileConflictResolution DefaultConflictResolution { get; set; }
+
         private readonly FrameworkReducer _reducer = new FrameworkReducer();
 
         public NuGetFramework CurrentFramework { get; set; }
@@ -71,8 +73,9 @@ namespace Dropcraft.Deployment.NuGet
                 var fileInfo = new InstallableFileInfo
                 {
                     FilePath = Path.Combine(installedPath, itemPath),
-                    FileType = FileType.LibFile,
-                    Action = action
+                    FileType = fileType,
+                    Action = action,
+                    ConflictResolution = DefaultConflictResolution
                 };
 
                 package.InstallableFiles.Add(fileInfo);

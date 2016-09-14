@@ -15,6 +15,14 @@ namespace Dropcraft.Common.Package
         /// </summary>
         public string VersionRange { get; }
 
+        /// <summary>
+        /// Actual package version
+        /// </summary>
+        public string ResolvedVersion { get; protected set; }
+
+        /// <summary>
+        /// Defines if prerelease versions of the package are allowed
+        /// </summary>
         public bool AllowPrereleaseVersions { get; }
 
         public VersionedPackageInfo(string id, string versionRange, bool allowPrereleaseVersions)
@@ -22,6 +30,7 @@ namespace Dropcraft.Common.Package
             Id = id;
             VersionRange = versionRange;
             AllowPrereleaseVersions = allowPrereleaseVersions;
+            ResolvedVersion = string.Empty;
         }
     }
 }

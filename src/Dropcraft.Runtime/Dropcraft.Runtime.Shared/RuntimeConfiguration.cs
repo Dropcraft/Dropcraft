@@ -12,24 +12,34 @@ namespace Dropcraft.Runtime
     /// </summary>
     public class RuntimeConfiguration
     {
-        public RuntimeContext RuntimeContext { get; set; }
+        /// <summary>
+        /// Assigned runtime context
+        /// </summary>
+        public RuntimeContext RuntimeContext { get; }
 
-        public List<PackageInfo> PackageSources { get; } = new List<PackageInfo>();
+        internal List<PackageInfo> PackageSources { get; } = new List<PackageInfo>();
 
-        public List<IRuntimePackageConfigParser> PackageConfigurationParsers { get; } = new List<IRuntimePackageConfigParser>();
+        internal List<IRuntimePackageConfigParser> PackageConfigurationParsers { get; } = new List<IRuntimePackageConfigParser>();
 
-        public IDictionary<Type, Func<object>> ServiceFactories { get; } = new Dictionary<Type, Func<object>>();
+        internal IDictionary<Type, Func<object>> ServiceFactories { get; } = new Dictionary<Type, Func<object>>();
 
         internal void AddPackageSources(IEnumerable<PackageInfo> packages)
         {
             PackageSources.AddRange(packages);
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public RuntimeConfiguration() 
             : this(new DefaultRuntimeContext())
         {
         }
 
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="runtimeContext">Configured custom runtime context to use</param>
         public RuntimeConfiguration(RuntimeContext runtimeContext)
         {
             RuntimeContext = runtimeContext;
@@ -76,8 +86,7 @@ namespace Dropcraft.Runtime
         /// <returns>Configuration object</returns>
         public RuntimeConfigurationWithSource AddDefaultConfigurationParser()
         {
-            _configuration.PackageConfigurationParsers.Add(new PackageManifestParser());
-            return this;
+            return AddPackageConfigurationParser(new PackageManifestParser());
         }
 
         /// <summary>
@@ -95,7 +104,7 @@ namespace Dropcraft.Runtime
         /// Allows to export host services to use by packages during startup
         /// </summary>
         /// <typeparam name="T">Service type</typeparam>
-        /// <param name="serviceFactory">Service type facory to create a concrete service object</param>
+        /// <param name="serviceFactory">Service type factory to create a concrete service object</param>
         /// <returns>Configuration object</returns>
         public RuntimeConfigurationWithSource ExportHostService<T>(Func<T> serviceFactory) where T : class
         {

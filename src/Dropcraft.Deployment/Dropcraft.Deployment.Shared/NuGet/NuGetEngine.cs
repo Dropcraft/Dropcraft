@@ -32,10 +32,10 @@ namespace Dropcraft.Deployment.NuGet
         private readonly NuGetLogger _nuGetLogger;
         private readonly NuGetFramework _currentFramework;
 
-        public NuGetEngine(DeploymentContext deploymentContext, IEnumerable<string> packageSources, bool updatePackages)
+        public NuGetEngine(DeploymentConfiguration configuration)
         {
-            _deploymentContext = deploymentContext;
-            _updatePackages = updatePackages;
+            _deploymentContext = configuration.DeploymentContext;
+            _updatePackages = configuration.UpdatePackages;
 
             var settings = Settings.LoadDefaultSettings(_deploymentContext.PackagesFolderPath);
 
@@ -43,13 +43,18 @@ namespace Dropcraft.Deployment.NuGet
             _currentFramework = GetCurrentFramework();
             _repositoryProvider = new SourceRepositoryProvider(settings);
             _localRepository = _repositoryProvider.CreateRepository(_deploymentContext.PackagesFolderPath);
-            _project = new DropcraftProject(_deploymentContext.PackagesFolderPath) {CurrentFramework = _currentFramework};
+            _project = new DropcraftProject(_deploymentContext.PackagesFolderPath)
+            {
+                CurrentFramework = _currentFramework,
+                DefaultConflictResolution = configuration.DefaultConflictResolution
+            };
+
             _nuGetPackageManager = new NuGetPackageManager(_repositoryProvider, settings, _deploymentContext.PackagesFolderPath)
             {
                 PackagesFolderNuGetProject = _project
             };
 
-            foreach (var packageSource in packageSources)
+            foreach (var packageSource in configuration.PackageSources)
             {
                 _repositoryProvider.AddPackageRepository(packageSource);
             }

@@ -62,7 +62,7 @@ namespace Dropcraft.Runtime
             return extensibilityPoint;
         }
 
-        protected override void OnStashExtension(ExtensionInfo extensionInfo)
+        protected override void OnRegisterExtension(ExtensionInfo extensionInfo)
         {
             lock (_extensionLock)
             {

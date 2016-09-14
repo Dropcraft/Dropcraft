@@ -23,6 +23,9 @@ namespace Dropcraft.Deployment.NuGet
             : base(id, versionRange, allowPrereleaseVersions)
         {
             Version = version;
+
+            if (Version != null)
+                ResolvedVersion = Version.ToString();
         }
     }
 }

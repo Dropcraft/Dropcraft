@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Diagnostics;
 using Dropcraft.Common.Package;
+using Dropcraft.Deployment.Exceptions;
 using Dropcraft.Deployment.NuGet;
 using NuGet.Packaging;
 
@@ -13,13 +14,15 @@ namespace Dropcraft.Deployment
 {
     public class DeploymentEngine : IDeploymentEngine
     {
-        private readonly NuGetEngine _nuGetEngine;
         public DeploymentContext DeploymentContext { get; }
+        private readonly NuGetEngine _nuGetEngine;
+        private List<IDeploymentFilter> _deploymentFilters;
 
         public DeploymentEngine(DeploymentConfiguration configuration)
         {
             DeploymentContext = configuration.DeploymentContext;
-            _nuGetEngine = new NuGetEngine(DeploymentContext, configuration.PackageSources, configuration.UpdatePackages);
+            _deploymentFilters = new List<IDeploymentFilter>(configuration.DeploymentFilters);
+            _nuGetEngine = new NuGetEngine(configuration);
         }
 
         public async Task InstallPackages(IEnumerable<VersionedPackageInfo> packages)
@@ -44,6 +47,7 @@ namespace Dropcraft.Deployment
 
         protected virtual void ProcessInstallablePackage(InstallablePackageInfo package)
         {
+            Trace.Current.Verbose($"Processing package {package.Id} {package.ResolvedVersion}");
             foreach (var file in package.InstallableFiles)
             {
                 var fileName = Path.GetFileName(file.FilePath);
@@ -52,40 +56,60 @@ namespace Dropcraft.Deployment
 
                 file.TargetFilePath = Path.Combine(DeploymentContext.InstallPath, fileName);
                 file.Conflict = File.Exists(file.TargetFilePath);
-
-                //TODO: call external Filter
-                //TODO: read list of configuration files and mark file as config if needed
-
-                CopyFile(file);
-
-                //TODO: call package deployed
-                //TODO: reconfigure config files
             }
+
+            foreach (var deploymentFilter in _deploymentFilters)
+            {
+                Trace.Current.Verbose($"Run filter {deploymentFilter} for {package.Id}");
+                deploymentFilter.Filter(package);
+            }
+
+            var fileWithConflict = package.InstallableFiles.FirstOrDefault(
+                x => x.Conflict && x.ConflictResolution == FileConflictResolution.Fail);
+
+            if (fileWithConflict != null)
+            {
+                var msg =
+                    $"Deployment stopped because of file conflict between {fileWithConflict.FilePath} and {fileWithConflict.TargetFilePath}";
+                Trace.Current.Error(msg);
+                throw new FileConflictException(msg);
+            }
+
+            //TODO: read list of configuration files and mark file as config if needed
+
+            CopyFiles(package);
+
+            //TODO: call package deployed
+            //TODO: reconfigure config files
+
         }
 
-        protected virtual void CopyFile(InstallableFileInfo file)
+        protected virtual void CopyFiles(InstallablePackageInfo package)
         {
-            Trace.Current.Verbose($"Copy file {file.FilePath} to {file.TargetFilePath}");
-            if (file.Conflict)
+            foreach (var file in package.InstallableFiles)
             {
-                Trace.Current.Verbose($"Conflict between {file.FilePath} and {file.TargetFilePath}");
-                if (file.ConflictResolution == FileConflictResolution.KeepExisting)
+                Trace.Current.Verbose($"Copy file {file.FilePath} to {file.TargetFilePath}");
+                if (file.Conflict)
                 {
-                    Trace.Current.Verbose($"Conflict resolved: keep existing file");
-                    return;
+                    Trace.Current.Verbose($"Conflict between {file.FilePath} and {file.TargetFilePath}");
+                    if (file.ConflictResolution == FileConflictResolution.KeepExisting)
+                    {
+                        Trace.Current.Verbose($"Conflict resolved: keep existing file");
+                        return;
+                    }
+
+                    Trace.Current.Verbose($"Conflict resolved: override file");
                 }
 
-                Trace.Current.Verbose($"Conflict resolved: override file");
-            }
-
-            try
-            {
-                File.Copy(file.FilePath, file.TargetFilePath, true);
-            }
-            catch(Exception exception)
-            {
-                Trace.Current.Error($"Copy failed for {file.FilePath}, {exception.Message}, {exception.StackTrace}");
-                throw;
+                try
+                {
+                    File.Copy(file.FilePath, file.TargetFilePath, true);
+                }
+                catch (Exception exception)
+                {
+                    Trace.Current.Error($"Copy failed for {file.FilePath}, {exception.Message}, {exception.StackTrace}");
+                    throw;
+                }
             }
         }
 
