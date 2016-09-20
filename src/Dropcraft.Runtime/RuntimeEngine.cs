@@ -7,7 +7,7 @@ using Dropcraft.Common.Package;
 
 namespace Dropcraft.Runtime
 {
-    public partial class RuntimeEngine : IRuntimeEngine
+    public class RuntimeEngine : IRuntimeEngine
     {
         public RuntimeContext RuntimeContext { get; }
 
@@ -23,7 +23,7 @@ namespace Dropcraft.Runtime
 
         public Task Start()
         {
-            InitializePlatformServices();
+            OnInitializePlatformServices();
             return OnStart();
         }
 
@@ -39,9 +39,6 @@ namespace Dropcraft.Runtime
             var deferredContext = new DeferredContext();
             foreach (var package in _packageSources)
             {
-                if (!String.IsNullOrWhiteSpace(package.InstallPath))
-                    EntityActivator.Current.AddPackagePath(package.InstallPath);
-
                 HandlePackage(package, deferredContext, false);
             }
 
@@ -53,6 +50,14 @@ namespace Dropcraft.Runtime
         protected virtual void OnStop()
         {
             RaiseRuntimeEvent(new RuntimeStopEvent());
+        }
+
+        protected virtual void OnInitializePlatformServices()
+        {
+            if (EntityActivator.Current == null)
+            {
+                EntityActivator.InitializeEntityActivator(new ReflectionEntityActivator());
+            }
         }
 
         private void HandleDeferredContext(object obj)

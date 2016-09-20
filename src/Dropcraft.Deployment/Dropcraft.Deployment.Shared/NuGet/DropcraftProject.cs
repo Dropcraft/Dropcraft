@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Dropcraft.Common.Diagnostics;
+using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 using NuGet.Frameworks;
 using NuGet.Packaging;
@@ -18,6 +19,9 @@ namespace Dropcraft.Deployment.NuGet
         public FileConflictResolution DefaultConflictResolution { get; set; }
 
         private readonly FrameworkReducer _reducer = new FrameworkReducer();
+
+        private static readonly ILog Logger = LogProvider.For<DropcraftProject>();
+
 
         public NuGetFramework CurrentFramework { get; set; }
 
@@ -85,7 +89,7 @@ namespace Dropcraft.Deployment.NuGet
         public override Task<bool> InstallPackageAsync(PackageIdentity packageIdentity, DownloadResourceResult downloadResourceResult,
             INuGetProjectContext nuGetProjectContext, CancellationToken token)
         {
-            Trace.Current.Verbose($"Installing package {packageIdentity.Id} {packageIdentity.Version}");
+            Logger.Trace($"Installing package {packageIdentity.Id} {packageIdentity.Version}");
 
             RecentPackages.Add(packageIdentity);
             return base.InstallPackageAsync(packageIdentity, downloadResourceResult, nuGetProjectContext, token);

@@ -1,13 +1,14 @@
 ﻿using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Diagnostics;
+using Dropcraft.Common.Logging;
 
 namespace Dropcraft.Common
 {
     /// <summary>
-    /// EntityActivator provides platform-dependent instantiation logic for the standard types
+    /// EntityActivator provides platform-independent instantiation logic for the standard types
     /// </summary>
     public abstract class EntityActivator
     {
+        private static readonly ILog Logger = LogProvider.For<EntityActivator>();
         private static EntityActivator _currentEntityActivator;
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace Dropcraft.Common
         /// <returns>Instantiated extensibility point</returns>
         public IHandleExtensibilityPoint GetExtensibilityPointHandler(ExtensibilityPointInfo info)
         {
-            Trace.Current.Verbose($"GetExtensibilityPointHandler for {info}");
+            Logger.TraceFormat("GetExtensibilityPointHandler for {info}", info);
             return OnGetExtensibilityPointHandler(info);
         }
 
@@ -44,7 +45,7 @@ namespace Dropcraft.Common
         /// <returns>Instantiated extension</returns>
         public T GetExtension<T>(ExtensionInfo info) where T : class
         {
-            Trace.Current.Verbose($"GetExtension for {info}");
+            Logger.TraceFormat("GetExtension for {info}", info);
             return OnGetExtension<T>(info);
         }
 
@@ -57,7 +58,7 @@ namespace Dropcraft.Common
         /// <returns></returns>
         public IHandlePackageStartup GetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
         {
-            Trace.Current.Verbose($"GetPackageStartupHandler for {handlerInfo}");
+            Logger.TraceFormat("GetPackageStartupHandler for {info}", handlerInfo);
             return OnGetPackageStartupHandler(handlerInfo);
         }
 
@@ -69,34 +70,10 @@ namespace Dropcraft.Common
         /// <param name="handlerInfo">Information about the handler to construct</param>
         public IHandleRuntimeEvents GetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
         {
-            Trace.Current.Verbose($"GetRuntimeEventsHandler for {handlerInfo}");
+            Logger.TraceFormat("GetRuntimeEventsHandler for {info}", handlerInfo);
             return OnGetRuntimeEventsHandler(handlerInfo);
         }
 
         protected abstract IHandleRuntimeEvents OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo);
-
-        /// <summary>
-        /// Adds provided path to the list of locations to search for assemblies
-        /// </summary>
-        /// <param name="path">Path to add</param>
-        public void AddPackagePath(string path)
-        {
-            Trace.Current.Verbose($"AddPackagePath: {path}");
-            OnAddPackagePath(path);
-        }
-
-        protected abstract void OnAddPackagePath(string path);
-
-        /// <summary>
-        /// Removes provided path from the list of locations to search for assemblies
-        /// </summary>
-        /// <param name="path">Path to remove</param>
-        public void RemovePackagePath(string path)
-        {
-            Trace.Current.Verbose($"RemovePackagePath: {path}");
-            OnRemovePackagePath(path);
-        }
-
-        protected abstract void OnRemovePackagePath(string path);
     }
 }

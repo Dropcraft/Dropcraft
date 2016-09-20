@@ -7,8 +7,8 @@
     <ProjectGuid>{49F4F12B-97A1-46F3-8EDB-F5FC48A951DD}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Dropcraft.Deployment.Net46</RootNamespace>
-    <AssemblyName>Dropcraft.Deployment.Net46</AssemblyName>
+    <RootNamespace>Dropcraft.Deployment</RootNamespace>
+    <AssemblyName>Dropcraft.Deployment</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -144,14 +144,14 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Dropcraft.Common\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
-      <Project>{486e1e78-dacf-4a51-8aa3-9cefed3efe36}</Project>
-      <Name>Dropcraft.Common.Net46</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="app.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Dropcraft.Common\Dropcraft.Common.csproj">
+      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
+      <Name>Dropcraft.Common</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Dropcraft.Deployment.Shared\Dropcraft.Deployment.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

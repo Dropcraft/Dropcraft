@@ -1,25 +1,28 @@
 ﻿
-using Dropcraft.Common.Diagnostics;
+using System.Diagnostics;
+using Dropcraft.Common.Logging;
 using NuGet.Common;
 
 namespace Dropcraft.Deployment.NuGet
 {
     internal class NuGetLogger : ILogger
     {
-        public void LogDebug(string data) => Trace.Current.Verbose(data);
+        private static readonly ILog Logger = LogProvider.For<NuGetLogger>();
 
-        public void LogVerbose(string data) => Trace.Current.Verbose(data);
+        public void LogDebug(string data) => Logger.Debug(data);
 
-        public void LogInformation(string data) => Trace.Current.Verbose(data);
+        public void LogVerbose(string data) => Logger.Trace(data);
 
-        public void LogMinimal(string data) => Trace.Current.Verbose(data);
+        public void LogInformation(string data) => Logger.Info(data);
 
-        public void LogWarning(string data) => Trace.Current.Warning(data);
+        public void LogMinimal(string data) => Logger.Trace(data);
 
-        public void LogError(string data) => Trace.Current.Error(data);
+        public void LogWarning(string data) => Logger.Warn(data);
 
-        public void LogInformationSummary(string data) => Trace.Current.Verbose(data);
+        public void LogError(string data) => Logger.Error(data);
 
-        public void LogErrorSummary(string data) => Trace.Current.Verbose(data);
+        public void LogInformationSummary(string data) => Logger.Info(data);
+
+        public void LogErrorSummary(string data) => Logger.Error(data);
     }
 }

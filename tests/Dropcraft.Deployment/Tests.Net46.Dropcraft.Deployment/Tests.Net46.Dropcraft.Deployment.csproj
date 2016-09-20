@@ -65,9 +65,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Dropcraft.Common\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
-      <Project>{486E1E78-DACF-4A51-8AA3-9CEFED3EFE36}</Project>
-      <Name>Dropcraft.Common.Net46</Name>
+    <ProjectReference Include="..\..\..\src\Dropcraft.Common\Dropcraft.Common.csproj">
+      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
+      <Name>Dropcraft.Common</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Dropcraft.Deployment\Dropcraft.Deployment.Net46\Dropcraft.Deployment.Net46.csproj">
       <Project>{49F4F12B-97A1-46F3-8EDB-F5FC48A951DD}</Project>

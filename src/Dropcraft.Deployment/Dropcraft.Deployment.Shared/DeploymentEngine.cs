@@ -4,11 +4,10 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Diagnostics;
+using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Exceptions;
 using Dropcraft.Deployment.NuGet;
-using NuGet.Packaging;
 
 namespace Dropcraft.Deployment
 {
@@ -16,7 +15,9 @@ namespace Dropcraft.Deployment
     {
         public DeploymentContext DeploymentContext { get; }
         private readonly NuGetEngine _nuGetEngine;
-        private List<IDeploymentFilter> _deploymentFilters;
+        private readonly List<IDeploymentFilter> _deploymentFilters;
+
+        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
         public DeploymentEngine(DeploymentConfiguration configuration)
         {
@@ -47,7 +48,7 @@ namespace Dropcraft.Deployment
 
         protected virtual void ProcessInstallablePackage(InstallablePackageInfo package)
         {
-            Trace.Current.Verbose($"Processing package {package.Id} {package.ResolvedVersion}");
+            Logger.Trace($"Processing package {package.Id} {package.ResolvedVersion}");
             foreach (var file in package.InstallableFiles)
             {
                 var fileName = Path.GetFileName(file.FilePath);
@@ -60,7 +61,7 @@ namespace Dropcraft.Deployment
 
             foreach (var deploymentFilter in _deploymentFilters)
             {
-                Trace.Current.Verbose($"Run filter {deploymentFilter} for {package.Id}");
+                Logger.Trace($"Run filter {deploymentFilter} for {package.Id}");
                 deploymentFilter.Filter(package);
             }
 
@@ -71,7 +72,7 @@ namespace Dropcraft.Deployment
             {
                 var msg =
                     $"Deployment stopped because of file conflict between {fileWithConflict.FilePath} and {fileWithConflict.TargetFilePath}";
-                Trace.Current.Error(msg);
+                Logger.Error(msg);
                 throw new FileConflictException(msg);
             }
 
@@ -88,17 +89,17 @@ namespace Dropcraft.Deployment
         {
             foreach (var file in package.InstallableFiles)
             {
-                Trace.Current.Verbose($"Copy file {file.FilePath} to {file.TargetFilePath}");
+                Logger.Trace($"Copy file {file.FilePath} to {file.TargetFilePath}");
                 if (file.Conflict)
                 {
-                    Trace.Current.Verbose($"Conflict between {file.FilePath} and {file.TargetFilePath}");
+                    Logger.Trace($"Conflict between {file.FilePath} and {file.TargetFilePath}");
                     if (file.ConflictResolution == FileConflictResolution.KeepExisting)
                     {
-                        Trace.Current.Verbose($"Conflict resolved: keep existing file");
+                        Logger.Trace("Conflict resolved: keep existing file");
                         return;
                     }
 
-                    Trace.Current.Verbose($"Conflict resolved: override file");
+                    Logger.Trace("Conflict resolved: override file");
                 }
 
                 try
@@ -107,7 +108,7 @@ namespace Dropcraft.Deployment
                 }
                 catch (Exception exception)
                 {
-                    Trace.Current.Error($"Copy failed for {file.FilePath}, {exception.Message}, {exception.StackTrace}");
+                    Logger.Trace($"Copy failed for {file.FilePath}, {exception.Message}, {exception.StackTrace}");
                     throw;
                 }
             }

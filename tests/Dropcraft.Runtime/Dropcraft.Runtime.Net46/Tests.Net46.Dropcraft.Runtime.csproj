@@ -80,13 +80,13 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Dropcraft.Common\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
-      <Project>{486e1e78-dacf-4a51-8aa3-9cefed3efe36}</Project>
-      <Name>Dropcraft.Common.Net46</Name>
+    <ProjectReference Include="..\..\..\src\Dropcraft.Common\Dropcraft.Common.csproj">
+      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
+      <Name>Dropcraft.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Dropcraft.Runtime\Dropcraft.Runtime.Net46\Dropcraft.Runtime.Net46.csproj">
-      <Project>{d47b2e1e-fa99-4e0b-a28a-1ba1c7b2925d}</Project>
-      <Name>Dropcraft.Runtime.Net46</Name>
+    <ProjectReference Include="..\..\..\src\Dropcraft.Runtime\Dropcraft.Runtime.csproj">
+      <Project>{f0abec6b-540d-4f9a-af4d-3f107d6e7a7d}</Project>
+      <Name>Dropcraft.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="..\Dropcraft.Runtime.Shared\Tests.Shared.Dropcraft.Runtime.projitems" Label="Shared" />

@@ -9,9 +9,9 @@ namespace Dropcraft.Runtime.Configuration
     public class PackageManifestParser : IRuntimePackageConfigParser
     {
         /// <summary>
-        /// ManifestNameTemplate allows to change installablePackage manifest file name from the default 'manifest.json'
+        /// ManifestNameTemplate allows to change installablePackage manifest file name from the default 'dropcraft.json'
         /// to something like 'myapp-dropcraft.json' by a new providing template.
-        /// Example template: '{0}-dropcraft.json', where {0} will be replaced with the installablePackage's ID
+        /// Example template: '{0}-dropcraft.json', where {0} will be replaced with the package ID
         /// </summary>
         public string ManifestNameTemplate { get; set; }
 

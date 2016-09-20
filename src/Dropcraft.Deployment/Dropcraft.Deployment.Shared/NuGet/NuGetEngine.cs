@@ -1,13 +1,13 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Diagnostics;
+using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 using NuGet.Common;
 using NuGet.Configuration;
@@ -31,6 +31,7 @@ namespace Dropcraft.Deployment.NuGet
         private readonly SourceRepository _localRepository;
         private readonly NuGetLogger _nuGetLogger;
         private readonly NuGetFramework _currentFramework;
+        private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
 
         public NuGetEngine(DeploymentConfiguration configuration)
         {
@@ -63,7 +64,7 @@ namespace Dropcraft.Deployment.NuGet
 
         public async Task<InstallablePackage> ResolveInstallablePackage(VersionedPackageInfo packageInfo)
         {
-            Trace.Current.Verbose($"Resolving package {packageInfo.Id} {packageInfo.VersionRange}");
+            Logger.Trace($"Resolving package {packageInfo.Id} {packageInfo.VersionRange}");
 
             NuGetVersion resolvedVersion = null;
             if (!_updatePackages && !string.IsNullOrWhiteSpace(packageInfo.VersionRange))
@@ -73,7 +74,7 @@ namespace Dropcraft.Deployment.NuGet
 
             if (resolvedVersion != null)
             {
-                Trace.Current.Verbose($"Package {packageInfo.Id} resolved from {_deploymentContext.PackagesFolderPath} using version {resolvedVersion.Version}");
+                Logger.Trace($"Package {packageInfo.Id} resolved from {_deploymentContext.PackagesFolderPath} using version {resolvedVersion.Version}");
             }
             else
             if (_repositoryProvider.Repositories.Count > 0)
@@ -83,7 +84,7 @@ namespace Dropcraft.Deployment.NuGet
 
             if (resolvedVersion == null)
             {
-                Trace.Current.Verbose($"Package {packageInfo.Id} {packageInfo.VersionRange} cannot be resolved");
+                Logger.Trace($"Package {packageInfo.Id} {packageInfo.VersionRange} cannot be resolved");
             }
 
             return new InstallablePackage(packageInfo, resolvedVersion);
@@ -91,7 +92,7 @@ namespace Dropcraft.Deployment.NuGet
 
         public async Task<List<InstallablePackage>> InstallPackage(InstallablePackage package)
         {
-            Trace.Current.Verbose($"Installing package {package.Id} {package.Version} with dependencies");
+            Logger.Trace($"Installing package {package.Id} {package.Version} with dependencies");
 
             _project.CleanRecentPackages();
             var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, package.AllowPrereleaseVersions,
@@ -102,7 +103,7 @@ namespace Dropcraft.Deployment.NuGet
                     new PackageIdentity(package.Id, package.Version), resolutionContext, projectContext,
                     _repositoryProvider.Repositories, Array.Empty<SourceRepository>(), CancellationToken.None);
 
-            Trace.Current.Verbose($"Installed package {package.Id} {package.Version}");
+            Logger.Trace($"Installed package {package.Id} {package.Version}");
             return _project.ProcessRecentPackages();
         }
 
@@ -131,7 +132,7 @@ namespace Dropcraft.Deployment.NuGet
             }
             catch (Exception ex)
             {
-                Trace.Current.Warning($"Could not get latest version for package {packageInfo.Id}{packageInfo.VersionRange} from source {sourceRepository}: {ex.Message}");
+                Logger.Warn($"Could not get latest version for package {packageInfo.Id}{packageInfo.VersionRange} from source {sourceRepository}: {ex.Message}");
                 return null;
             }
         }

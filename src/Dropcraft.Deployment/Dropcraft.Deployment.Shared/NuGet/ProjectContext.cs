@@ -1,5 +1,6 @@
-﻿using System.Xml.Linq;
-using Dropcraft.Common.Diagnostics;
+﻿using System.Diagnostics;
+using System.Xml.Linq;
+using Dropcraft.Common.Logging;
 using NuGet.Packaging;
 using NuGet.ProjectManagement;
 
@@ -7,18 +8,20 @@ namespace Dropcraft.Deployment.NuGet
 {
     internal class ProjectContext : INuGetProjectContext
     {
+        private static readonly ILog Logger = LogProvider.For<NuGetLogger>();
+
         public void Log(MessageLevel level, string message, params object[] args)
         {
             switch (level)
             {
                 case MessageLevel.Warning:
-                    Trace.Current.Warning(message, args);
+                    Logger.WarnFormat(message, args);
                     break;
                 case MessageLevel.Error:
-                    Trace.Current.Error(message, args);
+                    Logger.ErrorFormat(message, args);
                     break;
                 default:
-                    Trace.Current.Verbose(message, args);
+                    Logger.TraceFormat(message, args);
                     break;
             }
         }
@@ -35,7 +38,7 @@ namespace Dropcraft.Deployment.NuGet
 
         public void ReportError(string message)
         {
-            Trace.Current.Verbose(message);
+            Logger.Error(message);
         }
 
         public NuGetActionType ActionType { get; set; }

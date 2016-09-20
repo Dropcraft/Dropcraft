@@ -1,0 +1,12 @@
+{
+  "supports": {},
+  "dependencies": {
+    "NETStandard.Library": "1.6.0",
+    "Microsoft.NETCore.Portable.Compatibility": "1.0.1",
+    "Microsoft.CSharp": "4.0.1",
+    "System.Dynamic.Runtime": "4.0.11"
+  },
+  "frameworks": {
+    "netstandard1.3": {}
+  }
+}

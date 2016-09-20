@@ -13,12 +13,15 @@
     <copyright>Copyright © 2016</copyright>
     <tags>Dropcraft deployment NuGet extensibility plugin</tags>
     <dependencies>
-      <group targetFramework="net461">
+      <group targetFramework="netstandard1.3">
+        <dependency id="NETStandard.Library" version="1.6.0" />
+        <dependency id="Microsoft.NETCore.Portable.Compatibility" version="1.0.1" />
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="Dropcraft.Common" version="$version$" />
       </group>
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Dropcraft.Runtime\Dropcraft.Runtime.Net46\bin\Release\Dropcraft.Runtime.*.*" target="lib\net461\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Runtime\bin\Release\Dropcraft.Runtime*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
   </files>
 </package>
