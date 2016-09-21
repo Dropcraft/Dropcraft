@@ -28,7 +28,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Package configuration parsers
         /// </summary>
-        internal List<IDeploymentPackageConfigParser> PackageConfigurationParsers { get; } = new List<IDeploymentPackageConfigParser>();
+        internal List<PackageConfigurationSource> PackageConfigurationSources { get; } = new List<PackageConfigurationSource>();
 
         /// <summary>
         /// Deployment filters
@@ -74,20 +74,20 @@ namespace Dropcraft.Deployment
         /// Adds default package configuration parser
         /// </summary>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddDefaultConfigurationParser()
+        public DeploymentConfiguration AddDefaultConfigurationSource()
         {
-            //PackageConfigurationParsers.Add(new PackageManifestParser()); TODO
+            //PackageConfigurationSources.Add(new PackageManifestParser()); TODO
             return this;
         }
 
         /// <summary>
-        /// Allows to define custom package configuration parsers
+        /// Allows to define custom package configuration source
         /// </summary>
-        /// <param name="parser">Custom configuration parser</param>
+        /// <param name="source">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddPackageConfigurationParser(IDeploymentPackageConfigParser parser)
+        public DeploymentConfiguration AddPackageConfigurationSource(PackageConfigurationSource source)
         {
-            PackageConfigurationParsers.Add(parser);
+            PackageConfigurationSources.Add(source);
             return this;
         }
 

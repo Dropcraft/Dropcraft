@@ -45,11 +45,11 @@
     <Compile Include="Configuration\EntityActivationMode.cs" />
     <Compile Include="Configuration\ExtensibilityPointInfo.cs" />
     <Compile Include="Configuration\ExtensionInfo.cs" />
-    <Compile Include="Configuration\IConfigurationSource.cs" />
-    <Compile Include="Configuration\IDeploymentPackageConfigParser.cs" />
-    <Compile Include="Configuration\IDeploymentParsedPackageConfig.cs" />
+    <Compile Include="Configuration\ProductConfigurationSource.cs" />
     <Compile Include="Configuration\IRuntimePackageConfigParser.cs" />
     <Compile Include="Configuration\IRuntimeParsedPackageConfig.cs" />
+    <Compile Include="Configuration\PackageConfiguration.cs" />
+    <Compile Include="Configuration\PackageConfigurationSource.cs" />
     <Compile Include="Configuration\PackageDeploymentHandlerInfo.cs" />
     <Compile Include="Configuration\PackageStartupHandlerInfo.cs" />
     <Compile Include="Configuration\RuntimeEventsHandlerInfo.cs" />

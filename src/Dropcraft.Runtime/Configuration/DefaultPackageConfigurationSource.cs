@@ -6,7 +6,10 @@ using Dropcraft.Common.Package;
 
 namespace Dropcraft.Runtime.Configuration
 {
-    public class DefaultConfigurationSource : IConfigurationSource
+    /// <summary>
+    /// Configuration source for default JSON-based package configuration files
+    /// </summary>
+    public class DefaultPackageConfigurationSource : PackageConfigurationSource
     {
         /// <summary>
         /// ManifestNameTemplate defines package manifest file name.
@@ -15,34 +18,24 @@ namespace Dropcraft.Runtime.Configuration
         /// </summary>
         public string ManifestNameTemplate { get; set; } = "manifest.json";
 
-        /// <summary>
-        /// Defines application configuration file name to store information about installed packages, dependencies, etc.
-        /// </summary>
-        public string ApplicationConfigurationFileName { get; set; } = "dropcraft.json";
 
-        public IInstallablePackageConfiguration GetPackageConfiguration(InstallablePackageInfo packageInfo,
-            RuntimeContext runtimeContext)
+        public DefaultPackageConfigurationSource(DeploymentContext deploymentContext) 
+            : base(deploymentContext)
+        {
+        }
+
+        protected override PackageConfiguration OnGetPackageConfiguration(InstallablePackageInfo packageInfo)
         {
             var manifestName = string.Format(ManifestNameTemplate, packageInfo.Id);
             var manifestFile = packageInfo.InstallableFiles.FirstOrDefault(x => x.FilePath.EndsWith(manifestName));
             if (manifestFile != null)
             {
                 var text = File.ReadAllText(manifestFile.FilePath);
-//                return JObject.Parse(text);
+                //                return JObject.Parse(text);
 
             }
 
             return null;
-        }
-
-        public IInstaledPackageConfiguration GetPackageConfiguration(PackageInfo packageInfo, DeploymentContext deploymentContext)
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public IApplicationConfiguration GetApplicationConfiguration(RuntimeContext runtimeContext)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

@@ -27,9 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runtime", "Runtime", "{1085
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Net46", "src\Hosts\Deployment\Dropcraft.Net46\Dropcraft.Net46.csproj", "{8EE117E0-2B73-40E8-8484-E3A74032BEC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Common", "src\Dropcraft.Common\Dropcraft.Common.csproj", "{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Runtime", "src\Dropcraft.Runtime\Dropcraft.Runtime.csproj", "{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Dropcraft.Common", "Dropcraft.Common", "{D7152C7F-8A11-4E64-BAB1-2B7897E444E4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Common", "src\Dropcraft.Common\Dropcraft.Common.csproj", "{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}"
 EndProject
 Global
 	GlobalSection(SharedMSBuildProjectFiles) = preSolution
@@ -61,14 +63,14 @@ Global
 		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8EE117E0-2B73-40E8-8484-E3A74032BEC8}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -84,5 +86,6 @@ Global
 		{1085D8DE-17E2-4D41-AA0F-28617FFD0592} = {987D1F93-67D9-4E42-9D71-AF20B866C254}
 		{8EE117E0-2B73-40E8-8484-E3A74032BEC8} = {1FED4736-5B8E-4A16-8C7E-3E951B1819EB}
 		{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
+		{F93F5CCB-BACD-4E5F-9ED5-3DB77E2206FA} = {D7152C7F-8A11-4E64-BAB1-2B7897E444E4}
 	EndGlobalSection
 EndGlobal

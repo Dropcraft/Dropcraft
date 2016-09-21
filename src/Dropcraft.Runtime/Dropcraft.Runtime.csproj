@@ -42,10 +42,9 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\ApplicationConfiguration.cs" />
-    <Compile Include="Configuration\DefaultConfigurationSource.cs" />
-    <Compile Include="Configuration\InstaledPackageConfiguration.cs" />
-    <Compile Include="Configuration\InstallablePackageConfiguration.cs" />
+    <Compile Include="Configuration\DefaultPackageConfiguration.cs" />
+    <Compile Include="Configuration\DefaultPackageConfigurationSource.cs" />
+    <Compile Include="Configuration\DefaultProductConfigurationSource.cs" />
     <Compile Include="Configuration\PackageManifestParser.cs" />
     <Compile Include="Configuration\ParsedPackageManifest.cs" />
     <Compile Include="DefaultRuntimeContext.cs" />
