@@ -17,6 +17,8 @@ namespace Dropcraft.Common.Configuration
             RuntimeContext = runtimeContext;
         }
 
+        public bool IsProductConfigured => OnIsProductConfigured();
+
         public IEnumerable<PackageInfo> GetPackages()
         {
             return OnGetPackages();
@@ -35,5 +37,6 @@ namespace Dropcraft.Common.Configuration
         protected abstract IEnumerable<PackageInfo> OnGetPackages();
         protected abstract PackageConfiguration OnGetPackageConfiguration(PackageInfo packageInfo);
         protected abstract void OnSetPackageConfiguration(InstallablePackageInfo packageInfo);
+        protected abstract bool OnIsProductConfigured();
     }
 }

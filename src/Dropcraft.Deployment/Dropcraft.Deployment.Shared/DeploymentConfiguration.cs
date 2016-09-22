@@ -26,9 +26,14 @@ namespace Dropcraft.Deployment
         internal FileConflictResolution DefaultConflictResolution { get; set; }
 
         /// <summary>
-        /// Package configuration parsers
+        /// Package configuration sources
         /// </summary>
         internal List<PackageConfigurationSource> PackageConfigurationSources { get; } = new List<PackageConfigurationSource>();
+
+        /// <summary>
+        /// Product configuration sources
+        /// </summary>
+        internal List<ProductConfigurationSource> ProductConfigurationSources { get; } = new List<ProductConfigurationSource>();
 
         /// <summary>
         /// Deployment filters
@@ -71,27 +76,6 @@ namespace Dropcraft.Deployment
         }
 
         /// <summary>
-        /// Adds default package configuration parser
-        /// </summary>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddDefaultConfigurationSource()
-        {
-            //PackageConfigurationSources.Add(new PackageManifestParser()); TODO
-            return this;
-        }
-
-        /// <summary>
-        /// Allows to define custom package configuration source
-        /// </summary>
-        /// <param name="source">Custom configuration source</param>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddPackageConfigurationSource(PackageConfigurationSource source)
-        {
-            PackageConfigurationSources.Add(source);
-            return this;
-        }
-
-        /// <summary>
         /// Adds <see cref="IDeploymentFilter"/> filter to use during deployment
         /// </summary>
         /// <param name="filter">Filter instance</param>
@@ -105,11 +89,17 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Allows to setup additional options
         /// </summary>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfigurationOptions ConfigureTo()
-        {
-            return new DeploymentConfigurationOptions(this);
-        }
+        public DeploymentConfigurationOptions ConfigureTo => new DeploymentConfigurationOptions(this);
+
+        /// <summary>
+        /// Allows to setup the configuration sources for packages
+        /// </summary>
+        public PackageConfigurationSourcesOptions PackageConfigurationSource => new PackageConfigurationSourcesOptions(this);
+
+        /// <summary>
+        /// Allows to setup the configuration sources for product
+        /// </summary>
+        public ProductConfigurationSourcesOptions ProductConfigurationSource => new ProductConfigurationSourcesOptions(this);
 
         /// <summary>
         /// Creates <see cref="IDeploymentEngine"/> instances.
@@ -120,40 +110,4 @@ namespace Dropcraft.Deployment
             return new DeploymentEngine(this);
         }
     }
-
-    /// <summary>
-    /// Allows to setup additional options
-    /// </summary>
-    public class DeploymentConfigurationOptions
-    {
-        readonly DeploymentConfiguration _configuration;
-
-        public DeploymentConfigurationOptions(DeploymentConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
-
-        /// <summary>
-        /// Instructs to always update packages from the remote sources, default value is false
-        /// </summary>
-        /// <param name="update">When true, packages will be always updated from the remote source, even if they can be resolved from the installed path</param>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration UpdatePackagesFromSource(bool update)
-        {
-            _configuration.UpdatePackages = update;
-            return _configuration;
-        }
-
-        /// <summary>
-        /// Defines a default method of the file conflict resolution
-        /// </summary>
-        /// <param name="resolutionStrategy">Resolution strategy</param>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration ResolveFileConflictsUsing(FileConflictResolution resolutionStrategy)
-        {
-            _configuration.DefaultConflictResolution = resolutionStrategy;
-            return _configuration;
-        }
-    }
-
 }

@@ -1,11 +1,40 @@
-﻿namespace Dropcraft.Runtime.Configuration
+﻿using System.Collections.Generic;
+using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
+
+namespace Dropcraft.Runtime.Configuration
 {
-    public class DefaultProductConfigurationSource
+    public class DefaultProductConfigurationSource : ProductConfigurationSource
     {
         /// <summary>
-        /// Defines application configuration file name to store information about installed packages, dependencies, etc.
+        /// Defines product configuration file name to store information about installed packages, dependencies, etc.
         /// </summary>
-        public string ApplicationConfigurationFileName { get; set; } = "dropcraft.json";
+        public string ProductConfigurationFileName { get; set; } = "dropcraft.json";
 
+        public DefaultProductConfigurationSource(string productPath, RuntimeContext runtimeContext) 
+            : base(productPath, runtimeContext)
+        {
+        }
+
+        protected override IEnumerable<PackageInfo> OnGetPackages()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override PackageConfiguration OnGetPackageConfiguration(PackageInfo packageInfo)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override void OnSetPackageConfiguration(InstallablePackageInfo packageInfo)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        protected override bool OnIsProductConfigured()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

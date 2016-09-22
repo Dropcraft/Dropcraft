@@ -55,11 +55,13 @@
     <Compile Include="Configuration\RuntimeEventsHandlerInfo.cs" />
     <Compile Include="DeploymentContext.cs" />
     <Compile Include="EntityActivator.cs" />
+    <Compile Include="IDeploymentEngine.cs" />
     <Compile Include="IDeploymentFilter.cs" />
     <Compile Include="IHandleExtensibilityPoint.cs" />
     <Compile Include="IHandlePackageDeployment.cs" />
     <Compile Include="IHandlePackageStartup.cs" />
     <Compile Include="IHandleRuntimeEvents.cs" />
+    <Compile Include="IRuntimeEngine.cs" />
     <Compile Include="Logging\LibLog.cs" />
     <Compile Include="Packaging\InstallableFileInfo.cs" />
     <Compile Include="Packaging\InstallablePackageInfo.cs" />

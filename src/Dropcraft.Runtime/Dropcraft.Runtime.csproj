@@ -49,7 +49,6 @@
     <Compile Include="Configuration\ParsedPackageManifest.cs" />
     <Compile Include="DefaultRuntimeContext.cs" />
     <Compile Include="DeferredContext.cs" />
-    <Compile Include="IRuntimeEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ReflectionEntityActivator.cs" />
     <Compile Include="RuntimeConfiguration.cs" />

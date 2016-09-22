@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
+using Dropcraft.Common;
 using Dropcraft.Deployment;
 
 namespace Tests.Dropcraft.Deployment

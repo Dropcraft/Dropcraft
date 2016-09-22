@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Dropcraft.Common;
 
-namespace Dropcraft.Runtime
+namespace Dropcraft.Common
 {
     public interface IRuntimeEngine
     {

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dropcraft.Common;
 using Dropcraft.Common.Package;
 
-namespace Dropcraft.Deployment
+namespace Dropcraft.Common
 {
     public interface IDeploymentEngine
     {
