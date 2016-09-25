@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common
 {
@@ -8,8 +7,8 @@ namespace Dropcraft.Common
     {
         DeploymentContext DeploymentContext { get; }
 
-        Task InstallPackages(IEnumerable<VersionedPackageInfo> packages);
-        Task UpdatePackages(IEnumerable<VersionedPackageInfo> packages);
-        Task UninstallPackages(IEnumerable<VersionedPackageInfo> packages);
+        Task InstallPackages(IEnumerable<PackageId> packages);
+        Task UpdatePackages(IEnumerable<PackageId> packages);
+        Task UninstallPackages(IEnumerable<PackageId> packages);
     }
 }

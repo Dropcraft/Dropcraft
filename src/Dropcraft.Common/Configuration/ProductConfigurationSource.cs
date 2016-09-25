@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Configuration
 {
@@ -8,12 +7,10 @@ namespace Dropcraft.Common.Configuration
     /// </summary>
     public abstract class ProductConfigurationSource
     {
-        protected string ProductPath { get; private set; }
         protected RuntimeContext RuntimeContext { get; private set; }
 
-        protected ProductConfigurationSource(string productPath, RuntimeContext runtimeContext)
+        protected ProductConfigurationSource(RuntimeContext runtimeContext)
         {
-            ProductPath = productPath;
             RuntimeContext = runtimeContext;
         }
 
@@ -29,14 +26,14 @@ namespace Dropcraft.Common.Configuration
             return OnGetPackageConfiguration(packageInfo);
         }
 
-        public void SetPackageConfiguration(InstallablePackageInfo packageInfo)
+        public void SetPackageConfiguration(PackageInfo packageInfo)
         {
             OnSetPackageConfiguration(packageInfo);
         }
 
         protected abstract IEnumerable<PackageInfo> OnGetPackages();
         protected abstract PackageConfiguration OnGetPackageConfiguration(PackageInfo packageInfo);
-        protected abstract void OnSetPackageConfiguration(InstallablePackageInfo packageInfo);
+        protected abstract void OnSetPackageConfiguration(PackageInfo packageInfo);
         protected abstract bool OnIsProductConfigured();
     }
 }

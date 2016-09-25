@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Dropcraft.Common.Package;
+using Dropcraft.Common;
 using FluentAssertions;
 using Xunit;
 
@@ -12,7 +12,7 @@ namespace Tests.Dropcraft.Deployment
         {
             using (var helper = new TestDeploymentHelper().WithDefaultEngine())
             {
-                await helper.Engine.InstallPackages(new[] { new VersionedPackageInfo("bootstrap", "[3.3.7]", false) });
+                await helper.Engine.InstallPackages(new[] { new PackageId("bootstrap", "[3.3.7]", false) });
                 helper.IsPackageExists("bootstrap.3.3.7").Should().BeTrue();
                 helper.IsPackageExists("jQuery.1.9.1").Should().BeTrue();
             }
@@ -23,7 +23,7 @@ namespace Tests.Dropcraft.Deployment
         {
             using (var helper = new TestDeploymentHelper().WithDefaultEngine())
             {
-                await helper.Engine.InstallPackages(new[] { new VersionedPackageInfo("Newtonsoft.Json", string.Empty, false) });
+                await helper.Engine.InstallPackages(new[] { new PackageId("Newtonsoft.Json", string.Empty, false) });
                 helper.IsSimilarPackageExists("Newtonsoft.Json").Should().BeTrue();
             }
         }

@@ -1,6 +1,7 @@
 ﻿using System;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Runtime
 {
@@ -17,9 +18,9 @@ namespace Dropcraft.Runtime
             return (T)Activator.CreateInstance(type);
         }
 
-        protected override IHandleExtensibilityPoint OnGetExtensibilityPointHandler(ExtensibilityPointInfo info)
+        protected override IExtensibilityPointHandler OnGetExtensibilityPointHandler(ExtensibilityPointInfo info)
         {
-            return Instantiate<IHandleExtensibilityPoint>(info.ClassName);
+            return Instantiate<IExtensibilityPointHandler>(info.ClassName);
         }
 
         protected override T OnGetExtension<T>(ExtensionInfo info)
@@ -27,14 +28,14 @@ namespace Dropcraft.Runtime
             return Instantiate<T>(info.ClassName);
         }
 
-        protected override IHandlePackageStartup OnGetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
+        protected override IPackageStartupHandler OnGetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
         {
-            return Instantiate<IHandlePackageStartup>(handlerInfo.ClassName);
+            return Instantiate<IPackageStartupHandler>(handlerInfo.ClassName);
         }
 
-        protected override IHandleRuntimeEvents OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
+        protected override IRuntimeEventsHandler OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
         {
-            return Instantiate<IHandleRuntimeEvents>(handlerInfo.ClassName);
+            return Instantiate<IRuntimeEventsHandler>(handlerInfo.ClassName);
         }
     }
 }

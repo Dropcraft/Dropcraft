@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Dropcraft.Common;
 using Dropcraft.Common.Logging;
-using Dropcraft.Common.Package;
 using NuGet.Frameworks;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
@@ -44,13 +44,13 @@ namespace Dropcraft.Deployment.NuGet
             RecentPackages.Clear();
         }
 
-        public List<InstallablePackage> ProcessRecentPackages()
+        public List<ActionablePackage> ProcessRecentPackages()
         {
-            var installedPackages = new List<InstallablePackage>();
+            var installedPackages = new List<ActionablePackage>();
 
             foreach (var package in RecentPackages)
             {
-                var installablePackage = new InstallablePackage(package.Id, package.Version.ToString(), package.Version.IsPrerelease, package.Version);
+                var installablePackage = new ActionablePackage(package.Id, package.Version.ToString(), package.Version.IsPrerelease, package.Version);
 
                 var installedPath = GetInstalledPath(package);
                 var packageFilePath = GetInstalledPackageFilePath(package);
@@ -67,14 +67,14 @@ namespace Dropcraft.Deployment.NuGet
             return installedPackages;
         }
 
-        private void AddFiles(InstallablePackage package, string installedPath, List<FrameworkSpecificGroup> groups, FileType fileType, FileAction action)
+        private void AddFiles(ActionablePackage package, string installedPath, List<FrameworkSpecificGroup> groups, FileType fileType, FileAction action)
         {
             var referenceGroup = GetMostCompatibleGroup(_reducer, CurrentFramework, groups);
             if (referenceGroup == null) return;
 
             foreach (var itemPath in referenceGroup.Items)
             {
-                var fileInfo = new InstallableFileInfo
+                var fileInfo = new PackageFileInfo
                 {
                     FilePath = Path.Combine(installedPath, itemPath),
                     FileType = fileType,
@@ -82,7 +82,7 @@ namespace Dropcraft.Deployment.NuGet
                     ConflictResolution = DefaultConflictResolution
                 };
 
-                package.InstallableFiles.Add(fileInfo);
+                package.ActionableFiles.Add(fileInfo);
             }
         }
 

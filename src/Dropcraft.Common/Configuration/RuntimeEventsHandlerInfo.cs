@@ -1,6 +1,4 @@
-﻿using Dropcraft.Common.Package;
-
-namespace Dropcraft.Common.Configuration
+﻿namespace Dropcraft.Common.Configuration
 {
     public class RuntimeEventsHandlerInfo
     {

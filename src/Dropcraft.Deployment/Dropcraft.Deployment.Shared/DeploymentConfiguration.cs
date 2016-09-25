@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Package;
+using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Deployment
 {
@@ -38,7 +38,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Deployment filters
         /// </summary>
-        internal List<IDeploymentFilter> DeploymentFilters { get; } = new List<IDeploymentFilter>();
+        internal List<IPackageFileFilteringHandler> DeploymentFilters { get; } = new List<IPackageFileFilteringHandler>();
 
         /// <summary>
         /// List of the package sources
@@ -76,11 +76,11 @@ namespace Dropcraft.Deployment
         }
 
         /// <summary>
-        /// Adds <see cref="IDeploymentFilter"/> filter to use during deployment
+        /// Adds <see cref="IPackageFileFilteringHandler"/> filter to use during deployment
         /// </summary>
         /// <param name="filter">Filter instance</param>
         /// <returns></returns>
-        public DeploymentConfiguration AddDeploymentFilter(IDeploymentFilter filter)
+        public DeploymentConfiguration AddDeploymentFilter(IPackageFileFilteringHandler filter)
         {
             DeploymentFilters.Add(filter);
             return this;

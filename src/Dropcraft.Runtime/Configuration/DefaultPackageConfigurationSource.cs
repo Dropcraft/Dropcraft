@@ -2,7 +2,7 @@
 using System.Linq;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Package;
+using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Configuration
 {
@@ -24,15 +24,14 @@ namespace Dropcraft.Runtime.Configuration
         {
         }
 
-        protected override PackageConfiguration OnGetPackageConfiguration(InstallablePackageInfo packageInfo)
+        protected override PackageConfiguration OnGetPackageConfiguration(PackageInfo packageInfo)
         {
-            var manifestName = string.Format(ManifestNameTemplate, packageInfo.Id);
-            var manifestFile = packageInfo.InstallableFiles.FirstOrDefault(x => x.FilePath.EndsWith(manifestName));
+            var manifestName = string.Format(ManifestNameTemplate, packageInfo.PackageId.Id);
+            var manifestFile = packageInfo.Files.FirstOrDefault(x => x.EndsWith(manifestName));
             if (manifestFile != null)
             {
-                var text = File.ReadAllText(manifestFile.FilePath);
-                //                return JObject.Parse(text);
-
+                var text = File.ReadAllText(manifestFile);
+                return new DefaultPackageConfiguration(packageInfo, JObject.Parse(text));
             }
 
             return null;

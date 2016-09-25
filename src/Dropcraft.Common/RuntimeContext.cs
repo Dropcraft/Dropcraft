@@ -1,12 +1,20 @@
 ﻿using System;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Common
 {
     public abstract class RuntimeContext
     {
+        public string ProductPath { get; private set; }
+
+        protected RuntimeContext(string productPath)
+        {
+            ProductPath = productPath;
+        }
+
         public void RegisterExtensibilityPoint(string extensibilityPointKey,
-            IHandleExtensibilityPoint extensibilityPoint)
+            IExtensibilityPointHandler extensibilityPoint)
         {
             OnRegisterExtensibilityPoint(extensibilityPointKey, extensibilityPoint);
         }
@@ -16,7 +24,7 @@ namespace Dropcraft.Common
             OnUnregisterExtensibilityPoint(extensibilityPointKey);
         }
 
-        public IHandleExtensibilityPoint GetExtensibilityPoint(string extensibilityPointKey)
+        public IExtensibilityPointHandler GetExtensibilityPoint(string extensibilityPointKey)
         {
             return OnGetExtensibilityPoint(extensibilityPointKey);
         }
@@ -26,12 +34,12 @@ namespace Dropcraft.Common
             OnRegisterExtension(extensionInfo);
         }
 
-        public void RegisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler)
+        public void RegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             OnRegisterRuntimeEventHandler(runtimeEventsHandler);
         }
 
-        public void UnregisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler)
+        public void UnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             OnUnregisterRuntimeEventHandler(runtimeEventsHandler);
         }
@@ -51,12 +59,12 @@ namespace Dropcraft.Common
             OnRegisterHostService(type, serviceFactory);
         }
 
-        protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointKey, IHandleExtensibilityPoint extensibilityPoint);
+        protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint);
         protected abstract void OnUnregisterExtensibilityPoint(string extensibilityPointKey);
-        protected abstract IHandleExtensibilityPoint OnGetExtensibilityPoint(string extensibilityPointKey);
+        protected abstract IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey);
         protected abstract void OnRegisterExtension(ExtensionInfo extensionInfo);
-        protected abstract void OnRegisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler);
-        protected abstract void OnUnregisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler);
+        protected abstract void OnRegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler);
+        protected abstract void OnUnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler);
         protected abstract void OnRaiseRuntimeEvent(RuntimeEvent runtimeEvent);
         protected abstract T OnGetHostService<T>() where T : class;
 

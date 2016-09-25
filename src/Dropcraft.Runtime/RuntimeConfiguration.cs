@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Package;
 using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Runtime
@@ -17,22 +16,17 @@ namespace Dropcraft.Runtime
         /// </summary>
         public RuntimeContext RuntimeContext { get; }
 
-        internal List<PackageInfo> PackageSources { get; } = new List<PackageInfo>();
+        internal List<IPackageSequence> PackageSequences { get; } = new List<IPackageSequence>();
 
-        internal List<IRuntimePackageConfigParser> PackageConfigurationParsers { get; } = new List<IRuntimePackageConfigParser>();
+        internal List<ProductConfigurationSource> ProductConfigurationSources { get; } = new List<ProductConfigurationSource>();
 
         internal IDictionary<Type, Func<object>> ServiceFactories { get; } = new Dictionary<Type, Func<object>>();
-
-        internal void AddPackageSources(IEnumerable<PackageInfo> packages)
-        {
-            PackageSources.AddRange(packages);
-        }
 
         /// <summary>
         /// Constructor
         /// </summary>
-        public RuntimeConfiguration() 
-            : this(new DefaultRuntimeContext())
+        public RuntimeConfiguration(string productPath) 
+            : this(new DefaultRuntimeContext(productPath))
         {
         }
 
@@ -46,13 +40,13 @@ namespace Dropcraft.Runtime
         }
 
         /// <summary>
-        /// Allows to define primary package to load
+        /// Allows to define primary packages to load
         /// </summary>
         /// <param name="packagesSequence">List of the packages</param>
         /// <returns>Configuration object</returns>
-        public RuntimeConfigurationWithSource LoadPackagesFrom(IEnumerable<PackageInfo> packagesSequence)
+        public RuntimeConfigurationWithSource LoadPackagesFrom(IPackageSequence packagesSequence)
         {
-            AddPackageSources(packagesSequence);
+            PackageSequences.Add(packagesSequence);
             return new RuntimeConfigurationWithSource(this);
         }
     }
@@ -74,29 +68,29 @@ namespace Dropcraft.Runtime
         /// </summary>
         /// <param name="packagesSequence">List of the packages to load</param>
         /// <returns>Configuration object</returns>
-        public RuntimeConfigurationWithSource AlsoLoadPackagesFrom(IEnumerable<PackageInfo> packagesSequence)
+        public RuntimeConfigurationWithSource AlsoLoadPackagesFrom(IPackageSequence packagesSequence)
         {
-            _configuration.AddPackageSources(packagesSequence);
+            _configuration.PackageSequences.Add(packagesSequence);
             return this;
         }
 
         /// <summary>
-        /// Adds default package configuration parser
+        /// Adds default product configuration source
         /// </summary>
         /// <returns>Configuration object</returns>
         public RuntimeConfigurationWithSource AddDefaultConfigurationParser()
         {
-            return AddPackageConfigurationParser(new PackageManifestParser());
+            return AddProductConfigurationSource(new DefaultProductConfigurationSource(_configuration.RuntimeContext));
         }
 
         /// <summary>
-        /// Allows to define custom package configuration parsers
+        /// Allows to define custom product configuration source
         /// </summary>
-        /// <param name="parser">Custom configuration parser</param>
+        /// <param name="source">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public RuntimeConfigurationWithSource AddPackageConfigurationParser(IRuntimePackageConfigParser parser)
+        public RuntimeConfigurationWithSource AddProductConfigurationSource(ProductConfigurationSource source)
         {
-            _configuration.PackageConfigurationParsers.Add(parser);
+            _configuration.ProductConfigurationSources.Add(source);
             return this;
         }
 

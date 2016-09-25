@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Logging;
-using Dropcraft.Common.Package;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.Frameworks;
@@ -62,7 +61,7 @@ namespace Dropcraft.Deployment.NuGet
 
         }
 
-        public async Task<InstallablePackage> ResolveInstallablePackage(VersionedPackageInfo packageInfo)
+        public async Task<ActionablePackage> ResolveInstallablePackage(PackageId packageInfo)
         {
             Logger.Trace($"Resolving package {packageInfo.Id} {packageInfo.VersionRange}");
 
@@ -87,27 +86,27 @@ namespace Dropcraft.Deployment.NuGet
                 Logger.Trace($"Package {packageInfo.Id} {packageInfo.VersionRange} cannot be resolved");
             }
 
-            return new InstallablePackage(packageInfo, resolvedVersion);
+            return new ActionablePackage(packageInfo, resolvedVersion);
         }
 
-        public async Task<List<InstallablePackage>> InstallPackage(InstallablePackage package)
+        public async Task<List<ActionablePackage>> InstallPackage(ActionablePackage package)
         {
-            Logger.Trace($"Installing package {package.Id} {package.Version} with dependencies");
+            Logger.Trace($"Installing package {package.PackageId.Id} {package.Version} with dependencies");
 
             _project.CleanRecentPackages();
-            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, package.AllowPrereleaseVersions,
+            var resolutionContext = new ResolutionContext(DependencyBehavior.Lowest, package.PackageId.AllowPrereleaseVersions,
                                                                                         false, VersionConstraints.None);
 
             var projectContext = new ProjectContext();
             await _nuGetPackageManager.InstallPackageAsync(_nuGetPackageManager.PackagesFolderNuGetProject,
-                    new PackageIdentity(package.Id, package.Version), resolutionContext, projectContext,
+                    new PackageIdentity(package.PackageId.Id, package.Version), resolutionContext, projectContext,
                     _repositoryProvider.Repositories, Array.Empty<SourceRepository>(), CancellationToken.None);
 
-            Logger.Trace($"Installed package {package.Id} {package.Version}");
+            Logger.Trace($"Installed package {package.PackageId.Id} {package.Version}");
             return _project.ProcessRecentPackages();
         }
 
-        private async Task<NuGetVersion> GetLatestMatchingVersion(VersionedPackageInfo packageInfo, IEnumerable<SourceRepository> sourceRepositories, ILogger logger)
+        private async Task<NuGetVersion> GetLatestMatchingVersion(PackageId packageInfo, IEnumerable<SourceRepository> sourceRepositories, ILogger logger)
         {
             NuGetVersion[] versionMatches = await Task.WhenAll(sourceRepositories.Select(x => GetLatestMatchingVersion(packageInfo, x, logger)));
             return versionMatches
@@ -116,7 +115,7 @@ namespace Dropcraft.Deployment.NuGet
                 .Max();
         }
 
-        private async Task<NuGetVersion> GetLatestMatchingVersion(VersionedPackageInfo packageInfo, SourceRepository sourceRepository, ILogger logger)
+        private async Task<NuGetVersion> GetLatestMatchingVersion(PackageId packageInfo, SourceRepository sourceRepository, ILogger logger)
         {
             try
             {

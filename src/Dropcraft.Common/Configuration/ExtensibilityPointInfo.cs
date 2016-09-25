@@ -1,5 +1,4 @@
 ﻿using System;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Configuration
 {

@@ -2,32 +2,34 @@
 using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Runtime
 {
     public class DefaultRuntimeContext : RuntimeContext
     {
         private readonly object _eventsLock;
-        private readonly List<IHandleRuntimeEvents> _eventHandlers;
+        private readonly List<IRuntimeEventsHandler> _eventHandlers;
 
         private readonly object _extensionLock;
-        private readonly Dictionary<string, IHandleExtensibilityPoint> _extensibilityPoints;
+        private readonly Dictionary<string, IExtensibilityPointHandler> _extensibilityPoints;
         private readonly List<ExtensionInfo> _extensions;
 
         private readonly Dictionary<Type, Func<object>> _serviceFactories;
 
-        public DefaultRuntimeContext()
+        public DefaultRuntimeContext(string productPath)
+            : base(productPath)
         {
             _eventsLock = new object();
-            _eventHandlers = new List<IHandleRuntimeEvents>();
+            _eventHandlers = new List<IRuntimeEventsHandler>();
 
             _extensionLock = new object();
-            _extensibilityPoints = new Dictionary<string, IHandleExtensibilityPoint>();
+            _extensibilityPoints = new Dictionary<string, IExtensibilityPointHandler>();
             _extensions = new List<ExtensionInfo>();
             _serviceFactories = new Dictionary<Type, Func<object>>();
     }
 
-        protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IHandleExtensibilityPoint extensibilityPoint)
+        protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
         {
             lock (_extensionLock)
             {
@@ -52,9 +54,9 @@ namespace Dropcraft.Runtime
             }
         }
 
-        protected override IHandleExtensibilityPoint OnGetExtensibilityPoint(string extensibilityPointKey)
+        protected override IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey)
         {
-            IHandleExtensibilityPoint extensibilityPoint;
+            IExtensibilityPointHandler extensibilityPoint;
             lock (_extensionLock)
             {
                 _extensibilityPoints.TryGetValue(extensibilityPointKey, out extensibilityPoint);
@@ -66,7 +68,7 @@ namespace Dropcraft.Runtime
         {
             lock (_extensionLock)
             {
-                IHandleExtensibilityPoint extensibilityPoint;
+                IExtensibilityPointHandler extensibilityPoint;
                 if (_extensibilityPoints.TryGetValue(extensionInfo.ExtensibilityPointId, out extensibilityPoint))
                 {
                     extensibilityPoint.RegisterExtension(extensionInfo);
@@ -78,7 +80,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        protected override void OnRegisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler)
+        protected override void OnRegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             lock (_eventsLock)
             {
@@ -86,7 +88,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        protected override void OnUnregisterRuntimeEventHandler(IHandleRuntimeEvents runtimeEventsHandler)
+        protected override void OnUnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             lock (_eventsLock)
             {

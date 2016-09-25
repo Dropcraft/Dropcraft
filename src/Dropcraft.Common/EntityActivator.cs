@@ -1,4 +1,5 @@
 ﻿using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Handler;
 using Dropcraft.Common.Logging;
 
 namespace Dropcraft.Common
@@ -30,13 +31,13 @@ namespace Dropcraft.Common
         /// </summary>
         /// <param name="info">Information about the extensibility point</param>
         /// <returns>Instantiated extensibility point</returns>
-        public IHandleExtensibilityPoint GetExtensibilityPointHandler(ExtensibilityPointInfo info)
+        public IExtensibilityPointHandler GetExtensibilityPointHandler(ExtensibilityPointInfo info)
         {
             Logger.TraceFormat("GetExtensibilityPointHandler for {info}", info);
             return OnGetExtensibilityPointHandler(info);
         }
 
-        protected abstract IHandleExtensibilityPoint OnGetExtensibilityPointHandler(ExtensibilityPointInfo info);
+        protected abstract IExtensibilityPointHandler OnGetExtensibilityPointHandler(ExtensibilityPointInfo info);
 
         /// <summary>
         /// Instantiates extension using IExtensionInfo information
@@ -56,24 +57,24 @@ namespace Dropcraft.Common
         /// </summary>
         /// <param name="handlerInfo">Information about the handler to construct</param>
         /// <returns></returns>
-        public IHandlePackageStartup GetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
+        public IPackageStartupHandler GetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
         {
             Logger.TraceFormat("GetPackageStartupHandler for {info}", handlerInfo);
             return OnGetPackageStartupHandler(handlerInfo);
         }
 
-        protected abstract IHandlePackageStartup OnGetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo);
+        protected abstract IPackageStartupHandler OnGetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo);
 
         /// <summary>
         /// Instantiates runtime events handler using provided RuntimeEventsHandlerInfo
         /// </summary>
         /// <param name="handlerInfo">Information about the handler to construct</param>
-        public IHandleRuntimeEvents GetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
+        public IRuntimeEventsHandler GetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
         {
             Logger.TraceFormat("GetRuntimeEventsHandler for {info}", handlerInfo);
             return OnGetRuntimeEventsHandler(handlerInfo);
         }
 
-        protected abstract IHandleRuntimeEvents OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo);
+        protected abstract IRuntimeEventsHandler OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo);
     }
 }

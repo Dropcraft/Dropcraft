@@ -1,9 +1,9 @@
 
 using Dropcraft.Common.Configuration;
 
-namespace Dropcraft.Common
+namespace Dropcraft.Common.Handler
 {
-    public interface IHandleExtensibilityPoint
+    public interface IExtensibilityPointHandler
     {
         void Initialize(ExtensibilityPointInfo extensibilityPointInfo, RuntimeContext context);
 

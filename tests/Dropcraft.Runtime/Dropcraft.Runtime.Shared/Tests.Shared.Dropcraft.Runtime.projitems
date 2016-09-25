@@ -9,6 +9,6 @@
     <Import_RootNamespace>Tests.Dropcraft.Runtime</Import_RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="$(MSBuildThisFileDirectory)Configuration\ParsedPackageManifestTests.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)Configuration\DefaultPackageConfigurationTests.cs" />
   </ItemGroup>
 </Project>

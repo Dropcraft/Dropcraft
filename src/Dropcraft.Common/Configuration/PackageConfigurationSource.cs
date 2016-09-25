@@ -1,6 +1,4 @@
-﻿using Dropcraft.Common.Package;
-
-namespace Dropcraft.Common.Configuration
+﻿namespace Dropcraft.Common.Configuration
 {
     /// <summary>
     /// PackageConfigurationSource is a source of configuration for packages during deployment.
@@ -14,11 +12,11 @@ namespace Dropcraft.Common.Configuration
             DeploymentContext = deploymentContext;
         }
 
-        public PackageConfiguration GetPackageConfiguration(InstallablePackageInfo packageInfo)
+        public PackageConfiguration GetPackageConfiguration(PackageInfo packageInfo)
         {
             return OnGetPackageConfiguration(packageInfo);
         }
 
-        protected abstract PackageConfiguration OnGetPackageConfiguration(InstallablePackageInfo packageInfo);
+        protected abstract PackageConfiguration OnGetPackageConfiguration(PackageInfo packageInfo);
     }
 }

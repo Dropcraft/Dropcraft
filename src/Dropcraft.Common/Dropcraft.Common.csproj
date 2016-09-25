@@ -46,8 +46,6 @@
     <Compile Include="Configuration\ExtensibilityPointInfo.cs" />
     <Compile Include="Configuration\ExtensionInfo.cs" />
     <Compile Include="Configuration\ProductConfigurationSource.cs" />
-    <Compile Include="Configuration\IRuntimePackageConfigParser.cs" />
-    <Compile Include="Configuration\IRuntimeParsedPackageConfig.cs" />
     <Compile Include="Configuration\PackageConfiguration.cs" />
     <Compile Include="Configuration\PackageConfigurationSource.cs" />
     <Compile Include="Configuration\PackageDeploymentHandlerInfo.cs" />
@@ -56,18 +54,18 @@
     <Compile Include="DeploymentContext.cs" />
     <Compile Include="EntityActivator.cs" />
     <Compile Include="IDeploymentEngine.cs" />
-    <Compile Include="IDeploymentFilter.cs" />
-    <Compile Include="IHandleExtensibilityPoint.cs" />
-    <Compile Include="IHandlePackageDeployment.cs" />
-    <Compile Include="IHandlePackageStartup.cs" />
-    <Compile Include="IHandleRuntimeEvents.cs" />
+    <Compile Include="Handler\IPackageFileFilteringHandler.cs" />
+    <Compile Include="Handler\IExtensibilityPointHandler.cs" />
+    <Compile Include="Handler\IPackageDeploymentHandler.cs" />
+    <Compile Include="Handler\IPackageStartupHandler.cs" />
+    <Compile Include="Handler\IRuntimeEventsHandler.cs" />
+    <Compile Include="IPackageSequence.cs" />
     <Compile Include="IRuntimeEngine.cs" />
     <Compile Include="Logging\LibLog.cs" />
-    <Compile Include="Packaging\InstallableFileInfo.cs" />
-    <Compile Include="Packaging\InstallablePackageInfo.cs" />
-    <Compile Include="Packaging\PackageInfo.cs" />
-    <Compile Include="Packaging\PackageMetadataInfo.cs" />
-    <Compile Include="Packaging\VersionedPackageInfo.cs" />
+    <Compile Include="PackageFileInfo.cs" />
+    <Compile Include="PackageInfo.cs" />
+    <Compile Include="PackageMetadata.cs" />
+    <Compile Include="PackageId.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RuntimeContext.cs" />
   </ItemGroup>

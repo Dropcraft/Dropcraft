@@ -1,9 +1,9 @@
-﻿namespace Dropcraft.Common.Package
+﻿namespace Dropcraft.Common
 {
     /// <summary>
     /// Defines one file for deployment
     /// </summary>
-    public class InstallableFileInfo
+    public class PackageFileInfo
     {
         /// <summary>
         /// Source file path, includes file name

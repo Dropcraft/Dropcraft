@@ -1,9 +1,9 @@
-namespace Dropcraft.Common.Package
+namespace Dropcraft.Common
 {
     /// <summary>
-    /// VersionedPackageInfo represents package with ID and version
+    /// PackageId represents package with ID and version
     /// </summary>
-    public class VersionedPackageInfo
+    public class PackageId
     {
         /// <summary>
         /// Id provides identifier of the installablePackage, usually it is identical to NuGet package identifier
@@ -18,14 +18,14 @@ namespace Dropcraft.Common.Package
         /// <summary>
         /// Actual package version
         /// </summary>
-        public string ResolvedVersion { get; protected set; }
+        public string ResolvedVersion { get; set; }
 
         /// <summary>
-        /// Defines if prerelease versions of the package are allowed
+        /// Defines if pre-release versions of the package are allowed
         /// </summary>
         public bool AllowPrereleaseVersions { get; }
 
-        public VersionedPackageInfo(string id, string versionRange, bool allowPrereleaseVersions)
+        public PackageId(string id, string versionRange, bool allowPrereleaseVersions)
         {
             Id = id;
             VersionRange = versionRange;

@@ -4,8 +4,8 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
+using Dropcraft.Common.Handler;
 using Dropcraft.Common.Logging;
-using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Exceptions;
 using Dropcraft.Deployment.NuGet;
 
@@ -15,20 +15,20 @@ namespace Dropcraft.Deployment
     {
         public DeploymentContext DeploymentContext { get; }
         private readonly NuGetEngine _nuGetEngine;
-        private readonly List<IDeploymentFilter> _deploymentFilters;
+        private readonly List<IPackageFileFilteringHandler> _deploymentFilters;
 
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
         public DeploymentEngine(DeploymentConfiguration configuration)
         {
             DeploymentContext = configuration.DeploymentContext;
-            _deploymentFilters = new List<IDeploymentFilter>(configuration.DeploymentFilters);
+            _deploymentFilters = new List<IPackageFileFilteringHandler>(configuration.DeploymentFilters);
             _nuGetEngine = new NuGetEngine(configuration);
         }
 
-        public async Task InstallPackages(IEnumerable<VersionedPackageInfo> packages)
+        public async Task InstallPackages(IEnumerable<PackageId> packages)
         {
-            var installedPackages = new List<InstallablePackage>();
+            var installedPackages = new List<ActionablePackage>();
             var installablePackages = await Task.WhenAll(packages.Select(_nuGetEngine.ResolveInstallablePackage));
 
             foreach (var package in installablePackages)
@@ -43,13 +43,13 @@ namespace Dropcraft.Deployment
             if (!Directory.Exists(DeploymentContext.InstallPath))
                 Directory.CreateDirectory(DeploymentContext.InstallPath);
 
-            installedPackages.ForEach(ProcessInstallablePackage);
+            installedPackages.ForEach(x=>ProcessInstallablePackage(x, x.ActionableFiles));
         }
 
-        protected virtual void ProcessInstallablePackage(InstallablePackageInfo package)
+        protected virtual void ProcessInstallablePackage(PackageInfo package, List<PackageFileInfo> packageFiles)
         {
-            Logger.Trace($"Processing package {package.Id} {package.ResolvedVersion}");
-            foreach (var file in package.InstallableFiles)
+            Logger.Trace($"Processing package {package.PackageId.Id} {package.PackageId.ResolvedVersion}");
+            foreach (var file in packageFiles)
             {
                 var fileName = Path.GetFileName(file.FilePath);
                 if (string.IsNullOrWhiteSpace(fileName))
@@ -61,12 +61,11 @@ namespace Dropcraft.Deployment
 
             foreach (var deploymentFilter in _deploymentFilters)
             {
-                Logger.Trace($"Run filter {deploymentFilter} for {package.Id}");
-                deploymentFilter.Filter(package);
+                Logger.Trace($"Run filter {deploymentFilter} for {package.PackageId.Id}");
+                deploymentFilter.Filter(package, packageFiles, DeploymentContext);
             }
 
-            var fileWithConflict = package.InstallableFiles.FirstOrDefault(
-                x => x.Conflict && x.ConflictResolution == FileConflictResolution.Fail);
+            var fileWithConflict = packageFiles.FirstOrDefault(x => x.Conflict && x.ConflictResolution == FileConflictResolution.Fail);
 
             if (fileWithConflict != null)
             {
@@ -78,16 +77,16 @@ namespace Dropcraft.Deployment
 
             //TODO: read list of configuration files and mark file as config if needed
 
-            CopyFiles(package);
+            CopyFiles(package, packageFiles);
 
             //TODO: call package deployed
             //TODO: reconfigure config files
 
         }
 
-        protected virtual void CopyFiles(InstallablePackageInfo package)
+        protected virtual void CopyFiles(PackageInfo package, List<PackageFileInfo> packageFiles)
         {
-            foreach (var file in package.InstallableFiles)
+            foreach (var file in packageFiles)
             {
                 Logger.Trace($"Copy file {file.FilePath} to {file.TargetFilePath}");
                 if (file.Conflict)
@@ -114,11 +113,11 @@ namespace Dropcraft.Deployment
             }
         }
 
-        public async Task UpdatePackages(IEnumerable<VersionedPackageInfo> packages)
+        public async Task UpdatePackages(IEnumerable<PackageId> packages)
         {
         }
 
-        public async Task UninstallPackages(IEnumerable<VersionedPackageInfo> packages)
+        public async Task UninstallPackages(IEnumerable<PackageId> packages)
         {
         }
 

@@ -17,7 +17,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)DeploymentEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\FileConflictException.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\DropcraftProject.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)NuGet\InstallablePackage.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)NuGet\ActionablePackage.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\NuGetLogger.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)NuGet\ProjectContext.cs" />

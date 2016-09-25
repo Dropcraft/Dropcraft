@@ -45,8 +45,6 @@
     <Compile Include="Configuration\DefaultPackageConfiguration.cs" />
     <Compile Include="Configuration\DefaultPackageConfigurationSource.cs" />
     <Compile Include="Configuration\DefaultProductConfigurationSource.cs" />
-    <Compile Include="Configuration\PackageManifestParser.cs" />
-    <Compile Include="Configuration\ParsedPackageManifest.cs" />
     <Compile Include="DefaultRuntimeContext.cs" />
     <Compile Include="DeferredContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

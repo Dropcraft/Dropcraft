@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Runtime.Configuration
 {
@@ -12,8 +11,8 @@ namespace Dropcraft.Runtime.Configuration
         /// </summary>
         public string ProductConfigurationFileName { get; set; } = "dropcraft.json";
 
-        public DefaultProductConfigurationSource(string productPath, RuntimeContext runtimeContext) 
-            : base(productPath, runtimeContext)
+        public DefaultProductConfigurationSource(RuntimeContext runtimeContext)
+            : base(runtimeContext)
         {
         }
 
@@ -27,7 +26,7 @@ namespace Dropcraft.Runtime.Configuration
             throw new System.NotImplementedException();
         }
 
-        protected override void OnSetPackageConfiguration(InstallablePackageInfo packageInfo)
+        protected override void OnSetPackageConfiguration(PackageInfo packageInfo)
         {
             throw new System.NotImplementedException();
         }
