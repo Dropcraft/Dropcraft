@@ -11,8 +11,8 @@ namespace Dropcraft.Runtime.Configuration
         /// </summary>
         public string ProductConfigurationFileName { get; set; } = "dropcraft.json";
 
-        public DefaultProductConfigurationSource(RuntimeContext runtimeContext)
-            : base(runtimeContext)
+        public DefaultProductConfigurationSource(ProductContext context)
+            : base(context)
         {
         }
 

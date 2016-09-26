@@ -4,13 +4,11 @@ using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Common
 {
-    public abstract class RuntimeContext
+    public abstract class RuntimeContext : ProductContext
     {
-        public string ProductPath { get; private set; }
-
         protected RuntimeContext(string productPath)
+            : base(productPath)
         {
-            ProductPath = productPath;
         }
 
         public void RegisterExtensibilityPoint(string extensibilityPointKey,

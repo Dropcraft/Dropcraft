@@ -19,8 +19,8 @@ namespace Dropcraft.Runtime.Configuration
         public string ManifestNameTemplate { get; set; } = "manifest.json";
 
 
-        public DefaultPackageConfigurationSource(DeploymentContext deploymentContext) 
-            : base(deploymentContext)
+        public DefaultPackageConfigurationSource(ProductContext context) 
+            : base(context)
         {
         }
 

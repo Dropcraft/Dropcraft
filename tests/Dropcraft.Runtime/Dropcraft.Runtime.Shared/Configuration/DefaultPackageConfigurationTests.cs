@@ -85,6 +85,16 @@ namespace Dropship.Runtime.Configuration
         }
 
         [Fact]
+        public void Missed_deployment_handlers_will_return_empty_list()
+        {
+            var config = JObject.Parse("{}");
+            var manifest = new DefaultPackageConfiguration(null, config);
+            var list = manifest.GetPackageDeploymentHandlers();
+
+            list.Count().Should().Be(0);
+        }
+
+        [Fact]
         public void Missed_extensibility_points_will_return_empty_list()
         {
             var config = JObject.Parse("{}");
@@ -126,6 +136,20 @@ namespace Dropship.Runtime.Configuration
             var handlers = manifest.GetRuntimeEventHandlers();
 
             var handlersList = new List<RuntimeEventsHandlerInfo>(handlers);
+            handlersList.Count.Should().Be(3);
+            handlersList[0].ClassName.Should().Be("1");
+            handlersList[1].ClassName.Should().Be("2");
+            handlersList[2].ClassName.Should().Be("3");
+        }
+
+        [Fact]
+        public void Simple_config_to_return_three_deployment_handlers()
+        {
+            var config = JObject.Parse("{\"deploymentHandlers\": [\"1\",\"2\",\"3\"]}");
+            var manifest = new DefaultPackageConfiguration(null, config);
+            var handlers = manifest.GetPackageDeploymentHandlers();
+
+            var handlersList = new List<PackageDeploymentHandlerInfo>(handlers);
             handlersList.Count.Should().Be(3);
             handlersList[0].ClassName.Should().Be("1");
             handlersList[1].ClassName.Should().Be("2");

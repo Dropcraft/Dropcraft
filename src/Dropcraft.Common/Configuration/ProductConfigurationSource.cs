@@ -7,11 +7,11 @@ namespace Dropcraft.Common.Configuration
     /// </summary>
     public abstract class ProductConfigurationSource
     {
-        protected RuntimeContext RuntimeContext { get; private set; }
+        protected ProductContext Context { get; private set; }
 
-        protected ProductConfigurationSource(RuntimeContext runtimeContext)
+        protected ProductConfigurationSource(ProductContext context)
         {
-            RuntimeContext = runtimeContext;
+            Context = context;
         }
 
         public bool IsProductConfigured => OnIsProductConfigured();

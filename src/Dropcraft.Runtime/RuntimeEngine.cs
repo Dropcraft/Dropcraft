@@ -11,12 +11,10 @@ namespace Dropcraft.Runtime
         public RuntimeContext RuntimeContext { get; }
 
         private readonly List<ProductConfigurationSource> _productConfigurationSources;
-        private readonly List<IPackageSequence> _packageSequences;
 
         public RuntimeEngine(RuntimeConfiguration configuration)
         {
             RuntimeContext = configuration.RuntimeContext;
-            _packageSequences = new List<IPackageSequence>(configuration.PackageSequences);
             _productConfigurationSources = new List<ProductConfigurationSource>(configuration.ProductConfigurationSources);
         }
 
@@ -36,9 +34,9 @@ namespace Dropcraft.Runtime
             RaiseRuntimeEvent(new RuntimeStartEvent());
 
             var deferredContext = new DeferredContext();
-            foreach (var packageSequence in _packageSequences)
+            foreach (var packageSource in _productConfigurationSources)
             {
-                var packages = packageSequence.GetPackages();
+                var packages = packageSource.GetPackages();
                 foreach (var package in packages)
                 {
                     HandlePackage(package, deferredContext, false);

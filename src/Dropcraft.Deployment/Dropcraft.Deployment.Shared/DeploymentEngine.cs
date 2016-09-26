@@ -40,8 +40,8 @@ namespace Dropcraft.Deployment
                     installedPackages.AddRange(processedPackages);
             }
 
-            if (!Directory.Exists(DeploymentContext.InstallPath))
-                Directory.CreateDirectory(DeploymentContext.InstallPath);
+            if (!Directory.Exists(DeploymentContext.ProductPath))
+                Directory.CreateDirectory(DeploymentContext.ProductPath);
 
             installedPackages.ForEach(x=>ProcessInstallablePackage(x, x.ActionableFiles));
         }
@@ -55,7 +55,7 @@ namespace Dropcraft.Deployment
                 if (string.IsNullOrWhiteSpace(fileName))
                     continue;
 
-                file.TargetFilePath = Path.Combine(DeploymentContext.InstallPath, fileName);
+                file.TargetFilePath = Path.Combine(DeploymentContext.ProductPath, fileName);
                 file.Conflict = File.Exists(file.TargetFilePath);
             }
 
@@ -74,8 +74,6 @@ namespace Dropcraft.Deployment
                 Logger.Error(msg);
                 throw new FileConflictException(msg);
             }
-
-            //TODO: read list of configuration files and mark file as config if needed
 
             CopyFiles(package, packageFiles);
 

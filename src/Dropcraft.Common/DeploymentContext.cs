@@ -1,20 +1,15 @@
 namespace Dropcraft.Common
 {
-    public abstract class DeploymentContext
+    public abstract class DeploymentContext : ProductContext
     {
-        /// <summary>
-        /// Path to install/uninstall product 
-        /// </summary>
-        public string InstallPath { get; }
-
         /// <summary>
         /// Path to install/uninstall packages 
         /// </summary>
         public string PackagesFolderPath { get; }
 
-        protected DeploymentContext(string installPath, string packagesFolderPath)
+        protected DeploymentContext(string productPath, string packagesFolderPath)
+            : base(productPath)
         {
-            InstallPath = installPath;
             PackagesFolderPath = packagesFolderPath;
         }
     }

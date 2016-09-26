@@ -1,4 +1,5 @@
 using Dropcraft.Common.Configuration;
+using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Deployment
 {
@@ -17,7 +18,7 @@ namespace Dropcraft.Deployment
         /// <returns>Configuration object</returns>
         public DeploymentConfiguration AddDefault()
         {
-            //PackageConfigurationSources.Add(new PackageManifestParser()); TODO
+            _configuration.ProductConfigurationSource.Add(new DefaultProductConfigurationSource(_configuration.DeploymentContext));
             return _configuration;
         }
 

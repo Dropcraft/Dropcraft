@@ -5,11 +5,11 @@
     /// </summary>
     public abstract class PackageConfigurationSource
     {
-        protected DeploymentContext DeploymentContext { get; private set; }
+        protected ProductContext Context { get; private set; }
 
-        protected PackageConfigurationSource(DeploymentContext deploymentContext)
+        protected PackageConfigurationSource(ProductContext context)
         {
-            DeploymentContext = deploymentContext;
+            Context = context;
         }
 
         public PackageConfiguration GetPackageConfiguration(PackageInfo packageInfo)

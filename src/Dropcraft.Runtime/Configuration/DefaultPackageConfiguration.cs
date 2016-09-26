@@ -136,7 +136,17 @@ namespace Dropcraft.Runtime.Configuration
 
         protected override IEnumerable<PackageDeploymentHandlerInfo> OnGetPackageDeploymentHandlers()
         {
-            throw new System.NotImplementedException();
+            var result = new List<PackageDeploymentHandlerInfo>();
+
+            JToken token;
+            if (_jsonObject.TryGetValue("deploymentHandlers", out token) && token.HasValues)
+            {
+                var array = (JArray)token;
+                var handlers = array.Select(x => new PackageDeploymentHandlerInfo(_packageInfo, x.ToString()));
+                result.AddRange(handlers);
+            }
+
+            return result;
         }
     }
 }

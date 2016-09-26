@@ -152,6 +152,10 @@
       <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
       <Name>Dropcraft.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\Dropcraft.Runtime\Dropcraft.Runtime.csproj">
+      <Project>{F0ABEC6B-540D-4F9A-AF4D-3F107D6E7A7D}</Project>
+      <Name>Dropcraft.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="..\Dropcraft.Deployment.Shared\Dropcraft.Deployment.projitems" Label="Shared" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
