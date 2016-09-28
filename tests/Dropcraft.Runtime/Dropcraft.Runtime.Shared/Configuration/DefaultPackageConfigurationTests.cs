@@ -149,7 +149,7 @@ namespace Dropship.Runtime.Configuration
             var manifest = new DefaultPackageConfiguration(null, config);
             var handlers = manifest.GetPackageDeploymentHandlers();
 
-            var handlersList = new List<PackageDeploymentHandlerInfo>(handlers);
+            var handlersList = new List<DeploymentEventsHandlerInfo>(handlers);
             handlersList.Count.Should().Be(3);
             handlersList[0].ClassName.Should().Be("1");
             handlersList[1].ClassName.Should().Be("2");

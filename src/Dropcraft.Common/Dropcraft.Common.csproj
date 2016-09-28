@@ -48,7 +48,7 @@
     <Compile Include="Configuration\ProductConfigurationSource.cs" />
     <Compile Include="Configuration\PackageConfiguration.cs" />
     <Compile Include="Configuration\PackageConfigurationSource.cs" />
-    <Compile Include="Configuration\PackageDeploymentHandlerInfo.cs" />
+    <Compile Include="Configuration\DeploymentEventsHandlerInfo.cs" />
     <Compile Include="Configuration\PackageStartupHandlerInfo.cs" />
     <Compile Include="Configuration\RuntimeEventsHandlerInfo.cs" />
     <Compile Include="DeploymentContext.cs" />
@@ -56,7 +56,7 @@
     <Compile Include="IDeploymentEngine.cs" />
     <Compile Include="Handler\IPackageFileFilteringHandler.cs" />
     <Compile Include="Handler\IExtensibilityPointHandler.cs" />
-    <Compile Include="Handler\IPackageDeploymentHandler.cs" />
+    <Compile Include="Handler\IDeploymentEventsHandler.cs" />
     <Compile Include="Handler\IPackageStartupHandler.cs" />
     <Compile Include="Handler\IRuntimeEventsHandler.cs" />
     <Compile Include="IRuntimeEngine.cs" />

@@ -1,3 +1,5 @@
+using Dropcraft.Common.Handler;
+
 namespace Dropcraft.Common
 {
     public abstract class DeploymentContext : ProductContext
@@ -12,5 +14,25 @@ namespace Dropcraft.Common
         {
             PackagesFolderPath = packagesFolderPath;
         }
+
+        public void RegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
+        {
+            OnRegisterDeploymentEventHandler(deploymentEventsHandler);
+        }
+
+        public void UnregisterRuntimeEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
+        {
+            OnUnregisterDeploymentEventHandler(deploymentEventsHandler);
+        }
+
+        public void RaiseRuntimeEvent(DeploymentEvent deploymentEvent)
+        {
+            OnRaiseDeploymentEvent(deploymentEvent);
+        }
+
+        protected abstract void OnRegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler);
+        protected abstract void OnUnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler);
+        protected abstract void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent);
+
     }
 }

@@ -37,7 +37,7 @@ namespace Dropcraft.Common.Configuration
             return OnGetExtensibilityPoints();
         }
 
-        public IEnumerable<PackageDeploymentHandlerInfo> GetPackageDeploymentHandlers()
+        public IEnumerable<DeploymentEventsHandlerInfo> GetPackageDeploymentHandlers()
         {
             return OnGetPackageDeploymentHandlers();
         }
@@ -48,6 +48,6 @@ namespace Dropcraft.Common.Configuration
         protected abstract IEnumerable<RuntimeEventsHandlerInfo> OnGetRuntimeEventHandlers();
         protected abstract IEnumerable<ExtensionInfo> OnGetExtensions();
         protected abstract IEnumerable<ExtensibilityPointInfo> OnGetExtensibilityPoints();
-        protected abstract IEnumerable<PackageDeploymentHandlerInfo> OnGetPackageDeploymentHandlers();
+        protected abstract IEnumerable<DeploymentEventsHandlerInfo> OnGetPackageDeploymentHandlers();
     }
 }

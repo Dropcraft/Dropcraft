@@ -134,15 +134,15 @@ namespace Dropcraft.Runtime.Configuration
             return result;
         }
 
-        protected override IEnumerable<PackageDeploymentHandlerInfo> OnGetPackageDeploymentHandlers()
+        protected override IEnumerable<DeploymentEventsHandlerInfo> OnGetPackageDeploymentHandlers()
         {
-            var result = new List<PackageDeploymentHandlerInfo>();
+            var result = new List<DeploymentEventsHandlerInfo>();
 
             JToken token;
             if (_jsonObject.TryGetValue("deploymentHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
-                var handlers = array.Select(x => new PackageDeploymentHandlerInfo(_packageInfo, x.ToString()));
+                var handlers = array.Select(x => new DeploymentEventsHandlerInfo(_packageInfo, x.ToString()));
                 result.AddRange(handlers);
             }
 
