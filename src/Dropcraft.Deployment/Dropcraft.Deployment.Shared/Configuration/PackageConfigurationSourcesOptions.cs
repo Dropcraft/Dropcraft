@@ -16,9 +16,9 @@ namespace Dropcraft.Deployment
         /// Adds default package configuration source
         /// </summary>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddDefault()
+        public DeploymentConfiguration AddDefaultConfigurationSource()
         {
-            _configuration.PackageConfigurationSources.Add(new DefaultPackageConfigurationSource(_configuration.DeploymentContext));
+            _configuration.PackageConfigurationSources.Add(new PackageConfigurationSource());
             return _configuration;
         }
 
@@ -27,7 +27,7 @@ namespace Dropcraft.Deployment
         /// </summary>
         /// <param name="source">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration Add(PackageConfigurationSource source)
+        public DeploymentConfiguration AddDefaultSource(IPackageConfigurationSource source)
         {
             _configuration.PackageConfigurationSources.Add(source);
             return _configuration;

@@ -78,11 +78,6 @@
         Tool,
 
         /// <summary>
-        /// Configuration file from any folder
-        /// </summary>
-        Configuration,
-
-        /// <summary>
         /// Custom file, will be ignored by the default engine
         /// </summary>
         Custom

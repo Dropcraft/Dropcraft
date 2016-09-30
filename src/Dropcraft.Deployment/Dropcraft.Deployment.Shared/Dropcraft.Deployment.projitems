@@ -12,7 +12,7 @@
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\DeploymentConfigurationOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\PackageConfigurationSourcesOptions.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Configuration\ProductConfigurationSourcesOptions.cs" />
-    <Compile Include="$(MSBuildThisFileDirectory)DefaultDeploymentContext.cs" />
+    <Compile Include="$(MSBuildThisFileDirectory)DeploymentContext.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeploymentConfiguration.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)DeploymentEngine.cs" />
     <Compile Include="$(MSBuildThisFileDirectory)Exceptions\FileConflictException.cs" />

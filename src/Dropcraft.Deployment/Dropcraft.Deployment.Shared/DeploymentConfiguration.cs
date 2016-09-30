@@ -13,7 +13,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Assigned deployment context
         /// </summary>
-        public DeploymentContext DeploymentContext { get; }
+        public IDeploymentContext DeploymentContext { get; }
 
         /// <summary>
         /// Instructs to always try to update packages from the remote sources
@@ -28,12 +28,12 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Package configuration sources
         /// </summary>
-        internal List<PackageConfigurationSource> PackageConfigurationSources { get; } = new List<PackageConfigurationSource>();
+        internal List<IPackageConfigurationSource> PackageConfigurationSources { get; } = new List<IPackageConfigurationSource>();
 
         /// <summary>
         /// Product configuration sources
         /// </summary>
-        internal List<ProductConfigurationSource> ProductConfigurationSources { get; } = new List<ProductConfigurationSource>();
+        internal IProductConfigurationSource ProductConfigurationSource { get; set; }
 
         /// <summary>
         /// Deployment filters
@@ -51,7 +51,7 @@ namespace Dropcraft.Deployment
         /// <param name="installPath">Path to deploy composed application</param>
         /// <param name="packagesFolderPath">Path to install packages</param>
         public DeploymentConfiguration(string installPath, string packagesFolderPath)
-            : this(new DefaultDeploymentContext(installPath, packagesFolderPath))
+            : this(new DeploymentContext(installPath, packagesFolderPath))
         {
         }
 
@@ -59,7 +59,7 @@ namespace Dropcraft.Deployment
         /// Constructor
         /// </summary>
         /// <param name="deploymentContext">Configured custom deployment context to use</param>
-        public DeploymentConfiguration(DeploymentContext deploymentContext)
+        public DeploymentConfiguration(IDeploymentContext deploymentContext)
         {
             DeploymentContext = deploymentContext;
         }
@@ -94,12 +94,12 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Allows to setup the configuration sources for packages
         /// </summary>
-        public PackageConfigurationSourcesOptions PackageConfigurationSource => new PackageConfigurationSourcesOptions(this);
+        public PackageConfigurationSourcesOptions ForPackageConfiguration => new PackageConfigurationSourcesOptions(this);
 
         /// <summary>
         /// Allows to setup the configuration sources for product
         /// </summary>
-        public ProductConfigurationSourcesOptions ProductConfigurationSource => new ProductConfigurationSourcesOptions(this);
+        public ProductConfigurationSourcesOptions ForProductConfiguration => new ProductConfigurationSourcesOptions(this);
 
         /// <summary>
         /// Creates <see cref="IDeploymentEngine"/> instances.

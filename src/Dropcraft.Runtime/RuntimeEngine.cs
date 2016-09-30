@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Handler;
@@ -8,14 +7,16 @@ namespace Dropcraft.Runtime
 {
     public class RuntimeEngine : IRuntimeEngine
     {
-        public RuntimeContext RuntimeContext { get; }
+        public IRuntimeContext RuntimeContext { get; }
 
-        private readonly List<ProductConfigurationSource> _productConfigurationSources;
+        private readonly IProductConfigurationProvider _configurationProvider;
 
         public RuntimeEngine(RuntimeConfiguration configuration)
         {
             RuntimeContext = configuration.RuntimeContext;
-            _productConfigurationSources = new List<ProductConfigurationSource>(configuration.ProductConfigurationSources);
+            _configurationProvider = configuration
+                                    .ProductConfigurationSource
+                                    .GetProductConfigurationProvider(RuntimeContext);
         }
 
         public Task Start()
@@ -34,13 +35,11 @@ namespace Dropcraft.Runtime
             RaiseRuntimeEvent(new RuntimeStartEvent());
 
             var deferredContext = new DeferredContext();
-            foreach (var packageSource in _productConfigurationSources)
+
+            var packages = _configurationProvider.GetPackages();
+            foreach (var package in packages)
             {
-                var packages = packageSource.GetPackages();
-                foreach (var package in packages)
-                {
-                    HandlePackage(package, deferredContext, false);
-                }
+                HandlePackage(package, deferredContext, false);
             }
 
             RaiseRuntimeEvent(new AllRegularPackagesLoadedEvent());
@@ -80,14 +79,7 @@ namespace Dropcraft.Runtime
 
         private void HandlePackage(PackageInfo package, DeferredContext deferredContext, bool ignoreEntityActivationMode)
         {
-            PackageConfiguration configuration = null;
-            foreach (var configurationSource in _productConfigurationSources)
-            {
-                configuration = configurationSource.GetPackageConfiguration(package);
-                if (configuration != null)
-                    break;
-            }
-
+            var configuration = _configurationProvider.GetPackageConfiguration(package.PackageId);
             if (configuration == null || !configuration.IsPackageEnabled())
                 return;
 
@@ -103,7 +95,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        private void LoadPackageInfo(PackageConfiguration configurationProvider, DeferredContext deferredContext, bool ignoreEntityActivationMode)
+        private void LoadPackageInfo(IPackageConfiguration configurationProvider, DeferredContext deferredContext, bool ignoreEntityActivationMode)
         {
             var packageStartupHandlerInfos = configurationProvider.GetPackageStartupHandlers();
             if (packageStartupHandlerInfos != null)

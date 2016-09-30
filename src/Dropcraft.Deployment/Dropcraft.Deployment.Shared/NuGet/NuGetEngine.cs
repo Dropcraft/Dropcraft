@@ -21,7 +21,7 @@ namespace Dropcraft.Deployment.NuGet
 {
     internal class NuGetEngine
     {
-        private readonly DeploymentContext _deploymentContext;
+        private readonly IDeploymentContext _deploymentContext;
         private readonly bool _updatePackages;
 
         private readonly DropcraftProject _project;

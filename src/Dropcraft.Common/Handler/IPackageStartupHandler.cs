@@ -2,6 +2,6 @@ namespace Dropcraft.Common.Handler
 {
     public interface IPackageStartupHandler
     {
-        void Start(RuntimeContext runtimeContext);
+        void Start(IRuntimeContext runtimeContext);
     }
 }

@@ -13,7 +13,7 @@ namespace Dropcraft.Deployment
 {
     public class DeploymentEngine : IDeploymentEngine
     {
-        public DeploymentContext DeploymentContext { get; }
+        public IDeploymentContext DeploymentContext { get; }
         private readonly NuGetEngine _nuGetEngine;
         private readonly List<IPackageFileFilteringHandler> _deploymentFilters;
 

@@ -15,7 +15,7 @@ namespace Dropcraft.Common.Handler
 
     public abstract class RuntimeEvent
     {
-        public RuntimeContext Context { get; set; }
+        public IRuntimeContext Context { get; set; }
 
         public abstract void HandleEvent(IRuntimeEventsHandler eventHandler);
     }

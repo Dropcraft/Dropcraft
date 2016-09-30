@@ -13,12 +13,12 @@ namespace Dropcraft.Deployment
         }
 
         /// <summary>
-        /// Adds default product configuration source
+        /// Instructs to use the default product configuration source
         /// </summary>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddDefault()
+        public DeploymentConfiguration UseDefaultConfigurationSource()
         {
-            _configuration.ProductConfigurationSource.Add(new DefaultProductConfigurationSource(_configuration.DeploymentContext));
+            _configuration.ProductConfigurationSource = new ProductConfigurationSource();
             return _configuration;
         }
 
@@ -27,9 +27,9 @@ namespace Dropcraft.Deployment
         /// </summary>
         /// <param name="source">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration Add(ProductConfigurationSource source)
+        public DeploymentConfiguration UseCustomConfigurationSource(IProductConfigurationSource source)
         {
-            _configuration.ProductConfigurationSources.Add(source);
+            _configuration.ProductConfigurationSource = source;
             return _configuration;
         }
     }

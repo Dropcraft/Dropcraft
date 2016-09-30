@@ -6,27 +6,23 @@ namespace Dropcraft.Common.Configuration
     {
         public string Id { get; }
 
-        private readonly Func<Type, object> _configGetter;
-
         public PackageInfo PackageInfo { get; }
 
         public string ClassName { get; }
 
         public string ExtensibilityPointId { get; }
 
-        public T GetConfiguration<T>() where T : class, new()
-        {
-            return (T)_configGetter(typeof(T));
-        }
+        public ICustomConfiguration CustomConfiguration { get; private set; }
+
 
         public ExtensionInfo(PackageInfo packageInfo, string className, string extensibilityPointId,
-                                        string id, Func<Type, object> configGetter)
+                                        string id, ICustomConfiguration customConfiguration)
         {
             PackageInfo = packageInfo;
             ClassName = className;
             ExtensibilityPointId = extensibilityPointId;
             Id = id;
-            _configGetter = configGetter;
+            CustomConfiguration = customConfiguration;
         }
 
         public override string ToString()

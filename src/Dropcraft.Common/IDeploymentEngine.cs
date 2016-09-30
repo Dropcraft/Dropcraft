@@ -5,7 +5,7 @@ namespace Dropcraft.Common
 {
     public interface IDeploymentEngine
     {
-        DeploymentContext DeploymentContext { get; }
+        IDeploymentContext DeploymentContext { get; }
 
         Task InstallPackages(IEnumerable<PackageId> packages);
         Task UpdatePackages(IEnumerable<PackageId> packages);

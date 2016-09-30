@@ -30,12 +30,20 @@
 
   "extensions": [
     {
-      "id" : "",
-      "extensibilityPointId" : "",
-      "class" : "",
+      "id": "",
+      "extensibilityPointId": "",
+      "class": "",
       "configuration": {}
     }
-  ]
+  ],
+
+  "config": {
+    "x": [
+    ],
+    "x1": {
+    },
+    "x3" : "z" 
+  } 
 }
 
 

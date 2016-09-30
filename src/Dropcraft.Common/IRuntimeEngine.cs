@@ -4,7 +4,7 @@ namespace Dropcraft.Common
 {
     public interface IRuntimeEngine
     {
-        RuntimeContext RuntimeContext { get; }
+        IRuntimeContext RuntimeContext { get; }
 
         Task Start();
         void Stop();

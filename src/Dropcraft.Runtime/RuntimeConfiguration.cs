@@ -14,9 +14,9 @@ namespace Dropcraft.Runtime
         /// <summary>
         /// Assigned runtime context
         /// </summary>
-        public RuntimeContext RuntimeContext { get; }
+        public IRuntimeContext RuntimeContext { get; }
 
-        internal List<ProductConfigurationSource> ProductConfigurationSources { get; } = new List<ProductConfigurationSource>();
+        internal IProductConfigurationSource ProductConfigurationSource { get; set; }
 
         internal IDictionary<Type, Func<object>> ServiceFactories { get; } = new Dictionary<Type, Func<object>>();
 
@@ -24,7 +24,7 @@ namespace Dropcraft.Runtime
         /// Constructor
         /// </summary>
         public RuntimeConfiguration(string productPath) 
-            : this(new DefaultRuntimeContext(productPath))
+            : this(new RuntimeContext(productPath))
         {
         }
 
@@ -32,12 +32,12 @@ namespace Dropcraft.Runtime
         /// Constructor
         /// </summary>
         /// <param name="runtimeContext">Configured custom runtime context to use</param>
-        public RuntimeConfiguration(RuntimeContext runtimeContext)
+        public RuntimeConfiguration(IRuntimeContext runtimeContext)
         {
             RuntimeContext = runtimeContext;
         }
 
-        public RuntimeConfigurationForPackagesSource LoadPackages => new RuntimeConfigurationForPackagesSource(this);
+        public RuntimeConfigurationForPackagesSource ForProductConfiguration => new RuntimeConfigurationForPackagesSource(this);
 
         /// <summary>
         /// Allows to export host services to use by packages during startup
@@ -80,24 +80,23 @@ namespace Dropcraft.Runtime
         }
 
         /// <summary>
-        /// Instructs to use product configuration from the installation folder. Can be combined with the custom package sources.
+        /// Instructs to use product configuration from the installation folder.
         /// </summary>
         /// <returns>Configuration object</returns>
-        public RuntimeConfiguration UsingProductConfiguration()
+        public RuntimeConfiguration UseDefaultConfigurationSource()
         {
-            _runtimeConfiguration.ProductConfigurationSources.Add(new DefaultProductConfigurationSource(_runtimeConfiguration.RuntimeContext));
+            _runtimeConfiguration.ProductConfigurationSource = new ProductConfigurationSource();
             return _runtimeConfiguration;
         }
 
         /// <summary>
-        /// Instruct to add a custom package configuration source. Can be used instead and in combination with the default configuration 
-        /// to add standalone packages and to control the package loading order.
+        /// Instruct to use a custom package configuration source.
         /// </summary>
         /// <param name="configurationSource">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public RuntimeConfiguration UsingCustomConfiguration(ProductConfigurationSource configurationSource)
+        public RuntimeConfiguration UseCustomConfigurationSource(IProductConfigurationSource configurationSource)
         {
-            _runtimeConfiguration.ProductConfigurationSources.Add(configurationSource);
+            _runtimeConfiguration.ProductConfigurationSource = configurationSource;
             return _runtimeConfiguration;
         }
     }
