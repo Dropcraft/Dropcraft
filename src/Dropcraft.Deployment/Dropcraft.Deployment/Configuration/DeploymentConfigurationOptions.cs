@@ -46,5 +46,16 @@ namespace Dropcraft.Deployment.Configuration
             _configuration.TargetFramework = frameworkId;
             return _configuration;
         }
+
+        /// <summary>
+        /// Instructs to allow package downgrades
+        /// </summary>
+        /// <param name="allowDowngrades">Are downgrades allowed</param>
+        /// <returns>Configuration object</returns>
+        public DeploymentConfiguration AllowDowngrades(bool allowDowngrades)
+        {
+            _configuration.AllowDowngrades = allowDowngrades;
+            return _configuration;
+        }
     }
 }

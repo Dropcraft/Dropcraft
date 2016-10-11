@@ -7,6 +7,7 @@ using Dropcraft.Common;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using NuGet.DependencyResolver;
+using NuGet.LibraryModel;
 using NuGet.Packaging;
 using NuGet.Packaging.Core;
 using NuGet.Versioning;
@@ -98,6 +99,13 @@ namespace Dropcraft.Deployment.Workflow
 
         protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, ActionablePackage parent, InstallationContext context)
         {
+            if (node.Key.TypeConstraint != LibraryDependencyTarget.Package &&
+                node.Key.TypeConstraint != LibraryDependencyTarget.PackageProjectExternal)
+            {
+                var exception = new ArgumentException($"Package {node.Key.Name} cannot be resolved from the sources");
+                throw exception;
+            }
+
             var package = new ActionablePackage
             {
                 Id = new PackageId(node.Item.Key.Name, node.Item.Key.Version.ToNormalizedString(),
