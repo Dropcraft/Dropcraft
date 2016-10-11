@@ -9,7 +9,7 @@ namespace Dropcraft.Common.Configuration
     {
         bool IsProductConfigured { get; }
 
-        IEnumerable<PackageInfo> GetPackages();
+        IEnumerable<PackageId> GetPackages();
 
         IPackageConfiguration GetPackageConfiguration(PackageId packageId);
         void SetPackageConfiguration(PackageId packageId, IPackageConfiguration packageConfiguration);

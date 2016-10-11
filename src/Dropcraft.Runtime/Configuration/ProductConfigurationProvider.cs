@@ -9,21 +9,26 @@ namespace Dropcraft.Runtime.Configuration
 {
     public class ProductConfigurationProvider : IProductConfigurationProvider
     {
+        private readonly string _configPath;
         public bool IsProductConfigured { get; private set; }
 
         public ProductConfigurationProvider(IProductContext context, string productConfigurationFileName)
+            : this(Path.Combine(context.ProductPath, productConfigurationFileName))
         {
-            TryParseConfiguration(context, productConfigurationFileName);
         }
 
-        private void TryParseConfiguration(IProductContext context, string productConfigurationFileName)
+        public ProductConfigurationProvider(string configPath)
         {
-            var config = Path.Combine(context.ProductPath, productConfigurationFileName);
+            _configPath = configPath;
+            TryParseConfiguration();
+        }
 
-            if (!File.Exists(config))
+        private void TryParseConfiguration()
+        {
+            if (!File.Exists(_configPath))
                 return;
 
-            using (var stream = File.OpenText(config))
+            using (var stream = File.OpenText(_configPath))
             {
                 var reader = new JsonTextReader(stream);
                 var jObject = JObject.Load(reader);
@@ -35,24 +40,31 @@ namespace Dropcraft.Runtime.Configuration
             IsProductConfigured = true;
         }
 
-        public IEnumerable<PackageInfo> GetPackages()
+        public IEnumerable<PackageId> GetPackages()
         {
-            throw new System.NotImplementedException();
+            var packages = new List<PackageId>();
+            if (!IsProductConfigured)
+                return packages;
+            
+            return packages;
         }
 
         public IPackageConfiguration GetPackageConfiguration(PackageId packageId)
         {
+            if (!IsProductConfigured)
+                return null;
+
             throw new System.NotImplementedException();
         }
 
         public void SetPackageConfiguration(PackageId packageId, IPackageConfiguration packageConfiguration)
         {
-            throw new System.NotImplementedException();
         }
 
         public void RemovePackageConfiguration(PackageId packageId)
         {
-            throw new System.NotImplementedException();
+            if (!IsProductConfigured)
+                return;
         }
     }
 }

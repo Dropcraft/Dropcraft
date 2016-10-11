@@ -50,7 +50,7 @@ namespace Dropcraft.Common.Handler
 
     public class BeforePackageLoadedEvent : RuntimeEvent
     {
-        public PackageInfo PackageInfo { get; set; }
+        public PackageId Package { get; set; }
 
         public override void HandleEvent(IRuntimeEventsHandler eventHandler)
         {
@@ -60,7 +60,7 @@ namespace Dropcraft.Common.Handler
 
     public class AfterPackageLoadedEvent : RuntimeEvent
     {
-        public PackageInfo PackageInfo { get; set; }
+        public PackageId Package { get; set; }
 
         public override void HandleEvent(IRuntimeEventsHandler eventHandler)
         {

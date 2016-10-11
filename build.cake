@@ -110,7 +110,7 @@ Task("Package")
     {
         NuGetPack(nuspec, new NuGetPackSettings
         {
-            Version = versionInfo.NuGetVersion+"-beta",
+            Version = versionInfo.NuGetVersion+"-pre"+versionInfo.CommitsSinceVersionSource.ToString(),
             BasePath = nuspec.GetDirectory(),
             OutputDirectory = nupkgDestDir,
             Symbols = false

@@ -77,17 +77,17 @@ namespace Dropcraft.Runtime
             RaiseRuntimeEvent(new AllDeferredPackagesLoadedEvent());
         }
 
-        private void HandlePackage(PackageInfo package, DeferredContext deferredContext, bool ignoreEntityActivationMode)
+        private void HandlePackage(PackageId package, DeferredContext deferredContext, bool ignoreEntityActivationMode)
         {
-            var configuration = _configurationProvider.GetPackageConfiguration(package.PackageId);
+            var configuration = _configurationProvider.GetPackageConfiguration(package);
             if (configuration == null || !configuration.IsPackageEnabled())
                 return;
 
             if (configuration.GetPackageActivationMode() == EntityActivationMode.Immediate)
             {
-                RaiseRuntimeEvent(new BeforePackageLoadedEvent {PackageInfo = package});
+                RaiseRuntimeEvent(new BeforePackageLoadedEvent {Package = package});
                 LoadPackageInfo(configuration, deferredContext, ignoreEntityActivationMode);
-                RaiseRuntimeEvent(new AfterPackageLoadedEvent { PackageInfo = package });
+                RaiseRuntimeEvent(new AfterPackageLoadedEvent { Package = package });
             }
             else
             {

@@ -8,7 +8,6 @@ namespace Dropcraft.Common
         IDeploymentContext DeploymentContext { get; }
 
         Task InstallPackages(IEnumerable<PackageId> packages);
-        Task UpdatePackages(IEnumerable<PackageId> packages);
         Task UninstallPackages(IEnumerable<PackageId> packages);
     }
 }
