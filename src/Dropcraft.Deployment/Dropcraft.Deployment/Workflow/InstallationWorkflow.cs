@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using NuGet.DependencyResolver;
 using NuGet.LibraryModel;
-using NuGet.Packaging;
-using NuGet.Packaging.Core;
 using NuGet.Versioning;
 
 namespace Dropcraft.Deployment.Workflow
@@ -19,11 +17,8 @@ namespace Dropcraft.Deployment.Workflow
         private readonly NuGetEngine _nuGetEngine;
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
-        public InstallationContext Context { get; set; }
-
-        public InstallationWorkflow(InstallationContext context, NuGetEngine nuGetEngine)
+        public InstallationWorkflow(NuGetEngine nuGetEngine)
         {
-            Context = context;
             _nuGetEngine = nuGetEngine;
         }
 
@@ -31,11 +26,11 @@ namespace Dropcraft.Deployment.Workflow
         /// Ensures that all packages are versioned and versions are valid
         /// </summary>
         /// <returns>Async Task</returns>
-        public async Task EnsureAllPackagesAreVersioned()
+        public async Task EnsureAllPackagesAreVersioned(InstallationContext context)
         {
             var tasks = new List<Task<PackageId>>();
 
-            foreach (var packageId in Context.InputPackages)
+            foreach (var packageId in context.InputPackages)
             {
                 if (string.IsNullOrWhiteSpace(packageId.Id))
                     throw new ArgumentException("Package Id cannot be empty");
@@ -43,58 +38,70 @@ namespace Dropcraft.Deployment.Workflow
                 tasks.Add(ResolvePackageVersion(packageId));
             }
 
-            Context.InputPackages = (await Task.WhenAll(tasks)).ToList();
+            context.InputPackages = (await Task.WhenAll(tasks)).ToList();
         }
 
         /// <summary>
         /// Resolves dependencies for all packages
         /// </summary>
         /// <returns>Async Task</returns>
-        public async Task ResolvePackages()
+        public async Task ResolvePackages(InstallationContext context)
         {
-            MergeWithProductPackages();
+            MergeWithProductPackages(context);
 
-            var resolvedPackages = await _nuGetEngine.ResolvePackages(Context.InputPackages);
+            var resolvedPackages = await _nuGetEngine.ResolvePackages(context.InputPackages);
             _nuGetEngine.AnalysePackages(resolvedPackages);
 
             foreach (var innerNode in resolvedPackages.InnerNodes)
             {
-                FlattenPackageNode(innerNode, null, Context);
+                FlattenPackageNode(innerNode, null, context);
             }
 
-            while (Context.FlatteningCache.Any())
+            while (context.FlatteningCache.Any())
             {
-                var nextNode = Context.FlatteningCache.Dequeue();
-                FlattenPackageNode(nextNode.Item1, nextNode.Item2, Context);
+                var nextNode = context.FlatteningCache.Dequeue();
+                FlattenPackageNode(nextNode.Item1, nextNode.Item2, context);
             }
 
-            Context.PackagesForInstallation.Reverse();
-            PrepareListForDeletion();
+            PrepareInstallationAndDeletionLists(context);
         }
 
         /// <summary>
         /// Installs packages to the destination folder
         /// </summary>
+        /// <param name="context">Installation context</param>
         /// <param name="path">Destination path</param>
         /// <returns>Async Task</returns>
-        public void InstallPackages(string path)
+        public void InstallPackages(InstallationContext context, string path)
         {
-            foreach (var package in Context.PackagesForInstallation)
+            foreach (var package in context.PackagesForInstallation)
             {
                 _nuGetEngine.InstallPackage(package.Match, path).GetAwaiter().GetResult();
             }
         }
 
-        protected void PrepareListForDeletion()
+        protected void PrepareInstallationAndDeletionLists(InstallationContext context)
         {
-            foreach (var package in Context.ProductPackages)
+            foreach (var package in context.ResultingProductPackages)
             {
-                if (Context.PackagesForInstallation.Any(
-                        x => x.Id.Id == package.Id && x.Id.VersionRange != package.VersionRange))
+                var packageMatch = context.InputProductPackages.FirstOrDefault(x => x.Id == package.Id.Id);
+
+                if (packageMatch != null)
                 {
-                    Context.ProductPackagesForDeletion.Add(package);
+                    if (packageMatch.VersionRange != package.Id.VersionRange)
+                    {
+                        context.ProductPackagesForDeletion.Add(packageMatch);
+                        context.PackagesForInstallation.Add(package);
+                    }
+                }
+                else
+                {
+                    context.PackagesForInstallation.Add(package);
                 }
             }
+
+            context.ResultingProductPackages.Reverse();
+            context.PackagesForInstallation.Reverse();
         }
 
         protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, ActionablePackage parent, InstallationContext context)
@@ -113,7 +120,7 @@ namespace Dropcraft.Deployment.Workflow
                 Match = node.Item.Data.Match
             };
 
-            context.PackagesForInstallation.Add(package);
+            context.ResultingProductPackages.Add(package);
             parent?.Dependencies.Add(package);
 
             foreach (var innerNode in node.InnerNodes)
@@ -122,14 +129,14 @@ namespace Dropcraft.Deployment.Workflow
             }
         }
 
-        protected void MergeWithProductPackages()
+        protected void MergeWithProductPackages(InstallationContext context)
         {
             var listForMerge = new List<PackageId>();
 
-            foreach (var productPackage in Context.ProductPackages)
+            foreach (var productPackage in context.InputProductPackages)
             {
                 var addPackage = true;
-                foreach (var newPackage in Context.InputPackages)
+                foreach (var newPackage in context.InputPackages)
                 {
                     if (newPackage.Id == productPackage.Id)
                         addPackage = false;
@@ -139,7 +146,7 @@ namespace Dropcraft.Deployment.Workflow
                     listForMerge.Add(productPackage);
             }
 
-            Context.InputPackages.AddRange(listForMerge);
+            context.InputPackages.AddRange(listForMerge);
         }
 
         protected async Task<PackageId> ResolvePackageVersion(PackageId packageId)

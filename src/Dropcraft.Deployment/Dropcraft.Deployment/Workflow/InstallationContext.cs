@@ -9,8 +9,9 @@ namespace Dropcraft.Deployment.Workflow
     {
         public List<PackageId> InputPackages { get; set; }
 
-        public List<PackageId> ProductPackages { get; set; }
+        public List<PackageId> InputProductPackages { get; set; }
 
+        public List<ActionablePackage> ResultingProductPackages { get; } = new List<ActionablePackage>();
         public List<ActionablePackage> PackagesForInstallation { get; } = new List<ActionablePackage>();
         public List<PackageId> ProductPackagesForDeletion { get; } = new List<PackageId>();
 
@@ -19,7 +20,7 @@ namespace Dropcraft.Deployment.Workflow
         public InstallationContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
         {
             InputPackages = new List<PackageId>(newPackages);
-            ProductPackages = new List<PackageId>(productPackages);
+            InputProductPackages = new List<PackageId>(productPackages);
             FlatteningCache = new Queue<Tuple<GraphNode<RemoteResolveResult>, ActionablePackage>>();
         }
     }

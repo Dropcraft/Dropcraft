@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 
 namespace Dropcraft.Deployment
 {
@@ -26,6 +27,21 @@ namespace Dropcraft.Deployment
         {
             Configuration.ForPackages.AddRemoteSource("https://api.nuget.org/v3/index.json");
             return this;
+        }
+
+        public bool IsPackageExists(string packageName, string ver)
+        {
+            var packagePath = Path.Combine(PackagesPath, packageName);
+            var verPath = Path.Combine(packagePath, ver);
+
+            return Directory.Exists(packagePath) && Directory.Exists(verPath);
+        }
+
+        public bool IsPackageWithAnyVersionExists(string packageNameNoVersion)
+        {
+            return Directory
+                    .EnumerateDirectories(PackagesPath, packageNameNoVersion + "*", SearchOption.TopDirectoryOnly)
+                    .Any();
         }
 
         public void Dispose()

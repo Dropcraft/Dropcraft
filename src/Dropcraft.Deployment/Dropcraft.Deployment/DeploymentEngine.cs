@@ -13,9 +13,8 @@ namespace Dropcraft.Deployment
     {
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
         private readonly List<IPackageFileFilteringHandler> _deploymentFilters;
-        private readonly NuGetEngine _nuGetEngine;
-
-        protected IProductConfigurationProvider ProductConfigurationProvider { get; private set; }
+        protected NuGetEngine NuGetEngine { get; }
+        protected IProductConfigurationProvider ProductConfigurationProvider { get; }
         public IDeploymentContext DeploymentContext { get; }
 
 
@@ -26,24 +25,35 @@ namespace Dropcraft.Deployment
                 configuration.ProductConfigurationSource.GetProductConfigurationProvider(DeploymentContext);
 
             _deploymentFilters = new List<IPackageFileFilteringHandler>(configuration.DeploymentFilters);
-            _nuGetEngine = new NuGetEngine(configuration);
+            NuGetEngine = new NuGetEngine(configuration);
         }
 
         public async Task InstallPackages(IEnumerable<PackageId> packages)
         {
+            Logger.Trace("Installing packages");
             var productPackages = ProductConfigurationProvider.GetPackages();
+            var context = new InstallationContext(packages, productPackages);
+            Logger.Trace($"{context.InputProductPackages.Count} product packages and {context.InputPackages.Count} new packages are requested");
 
-            var workflow = GetInstallationWorkflow(packages, productPackages);
-            await workflow.EnsureAllPackagesAreVersioned();
-            await workflow.ResolvePackages();
+            var workflow = GetInstallationWorkflow(context);
+            await workflow.EnsureAllPackagesAreVersioned(context);
+            Logger.Trace("Versions are verified and updated when needed");
 
-            workflow.InstallPackages(DeploymentContext.PackagesFolderPath);
+            await workflow.ResolvePackages(context);
+            Logger.Trace($"Packages are resolved: {context.PackagesForInstallation.Count} to be installed and {context.ProductPackagesForDeletion.Count} to be deleted");
+
+            workflow.InstallPackages(context, DeploymentContext.PackagesFolderPath);
+            Logger.Trace($"All resolved packages are installed into {DeploymentContext.PackagesFolderPath}");
+
+            // delete files
+            // identify files to copy and filter
+            // copy new files
+            // create product.json
         }
 
-        protected virtual InstallationWorkflow GetInstallationWorkflow(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
+        protected virtual InstallationWorkflow GetInstallationWorkflow(InstallationContext context)
         {
-            var context = new InstallationContext(newPackages, productPackages);
-            return new InstallationWorkflow(context, _nuGetEngine);
+            return new InstallationWorkflow(NuGetEngine);
         }
 
         public async Task UninstallPackages(IEnumerable<PackageId> packages)
