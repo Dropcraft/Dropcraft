@@ -42,8 +42,8 @@ namespace Dropcraft.Deployment
             await workflow.ResolvePackages(context);
             Logger.Trace($"Packages are resolved: {context.PackagesForInstallation.Count} to be installed and {context.ProductPackagesForDeletion.Count} to be deleted");
 
-            workflow.InstallPackages(context, DeploymentContext.PackagesFolderPath);
-            Logger.Trace($"All resolved packages are installed into {DeploymentContext.PackagesFolderPath}");
+            workflow.DownloadPackages(context, DeploymentContext.PackagesFolderPath);
+            Logger.Trace($"All resolved packages are unpacked to {DeploymentContext.PackagesFolderPath}");
 
             // delete files
             // identify files to copy and filter

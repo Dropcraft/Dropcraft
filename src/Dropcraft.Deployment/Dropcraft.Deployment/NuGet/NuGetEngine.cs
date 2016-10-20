@@ -202,5 +202,11 @@ namespace Dropcraft.Deployment.NuGet
                 CancellationToken.None);
         }
 
+        public string GetPackageTargetPath(string packageId, NuGetVersion version, string path)
+        {
+            var pathResolver = new VersionFolderPathResolver(path);
+            return pathResolver.GetInstallPath(packageId, version);
+        }
+
     }
 }

@@ -67,16 +67,18 @@ namespace Dropcraft.Deployment.Workflow
         }
 
         /// <summary>
-        /// Installs packages to the destination folder
+        /// Download and unpack packages to the destination folder
         /// </summary>
         /// <param name="context">Installation context</param>
         /// <param name="path">Destination path</param>
         /// <returns>Async Task</returns>
-        public void InstallPackages(InstallationContext context, string path)
+        public void DownloadPackages(InstallationContext context, string path)
         {
             foreach (var package in context.PackagesForInstallation)
             {
                 _nuGetEngine.InstallPackage(package.Match, path).GetAwaiter().GetResult();
+                package.TargetPath = _nuGetEngine.GetPackageTargetPath(package.Match.Library.Name,
+                    package.Match.Library.Version, path);
             }
         }
 

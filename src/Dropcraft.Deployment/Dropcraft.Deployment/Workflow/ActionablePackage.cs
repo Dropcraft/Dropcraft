@@ -8,7 +8,7 @@ namespace Dropcraft.Deployment.Workflow
     {
         public PackageId Id { get; set; }
         public RemoteMatch Match { get; set; }
-
+        public string TargetPath { get; set; }
         public List<ActionablePackage> Dependencies { get; } = new List<ActionablePackage>();
     }
 }

@@ -120,7 +120,7 @@ namespace Dropcraft.Deployment.Workflow
 
             public TestContext ExecuteInstall(string path)
             {
-                Workflow.InstallPackages(Ctx, path);
+                Workflow.DownloadPackages(Ctx, path);
                 return this;
             }
 
