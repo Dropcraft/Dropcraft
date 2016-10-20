@@ -22,7 +22,7 @@ namespace Dropcraft.Deployment.NuGet
     public class NuGetEngine
     {
         private readonly NuGetLogger _nuGetLogger;
-        private readonly IDeploymentContext _deploymentContext;
+        private readonly DeploymentContext _deploymentContext;
         private readonly bool _updatePackages;
         private readonly bool _allowDowngrades;
         private readonly SourceRepositoryProvider _repositoryProvider;

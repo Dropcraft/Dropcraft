@@ -7,7 +7,7 @@ namespace Dropcraft.Runtime
 {
     public class RuntimeEngine : IRuntimeEngine
     {
-        public IRuntimeContext RuntimeContext { get; }
+        public RuntimeContext RuntimeContext { get; }
 
         private readonly IProductConfigurationProvider _configurationProvider;
 

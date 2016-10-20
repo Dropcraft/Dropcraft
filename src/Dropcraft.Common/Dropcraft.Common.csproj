@@ -46,6 +46,8 @@
     <Compile Include="Configuration\EntityActivationMode.cs" />
     <Compile Include="Configuration\ExtensibilityPointInfo.cs" />
     <Compile Include="Configuration\ExtensionInfo.cs" />
+    <Compile Include="Configuration\IDeploymentStartegyProvider.cs" />
+    <Compile Include="Configuration\IDeploymentStrategySource.cs" />
     <Compile Include="Configuration\IPackageConfigurationProvider.cs" />
     <Compile Include="Configuration\IProductConfigurationProvider.cs" />
     <Compile Include="Configuration\IProductConfigurationSource.cs" />
@@ -54,10 +56,9 @@
     <Compile Include="Configuration\DeploymentEventsHandlerInfo.cs" />
     <Compile Include="Configuration\PackageStartupHandlerInfo.cs" />
     <Compile Include="Configuration\RuntimeEventsHandlerInfo.cs" />
-    <Compile Include="IDeploymentContext.cs" />
+    <Compile Include="DeploymentContext.cs" />
     <Compile Include="EntityActivator.cs" />
     <Compile Include="IDeploymentEngine.cs" />
-    <Compile Include="Handler\IPackageFileFilteringHandler.cs" />
     <Compile Include="Handler\IExtensibilityPointHandler.cs" />
     <Compile Include="Handler\IDeploymentEventsHandler.cs" />
     <Compile Include="Handler\IPackageStartupHandler.cs" />
@@ -70,7 +71,7 @@
     <Compile Include="PackageId.cs" />
     <Compile Include="IProductContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="IRuntimeContext.cs" />
+    <Compile Include="RuntimeContext.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

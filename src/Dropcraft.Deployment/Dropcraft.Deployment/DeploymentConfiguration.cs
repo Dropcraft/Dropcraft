@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
 using Dropcraft.Deployment.Configuration;
+using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Deployment
 {
@@ -14,7 +14,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Assigned deployment context
         /// </summary>
-        public IDeploymentContext DeploymentContext { get; }
+        public DeploymentContext DeploymentContext { get; }
 
         /// <summary>
         /// Instructs to always try to update packages from the remote sources
@@ -49,7 +49,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Deployment filters
         /// </summary>
-        internal List<IPackageFileFilteringHandler> DeploymentFilters { get; } = new List<IPackageFileFilteringHandler>();
+        internal IDeploymentStrategySource DeploymentStrategySource { get; set; }
 
         /// <summary>
         /// List of remote package sources
@@ -62,7 +62,7 @@ namespace Dropcraft.Deployment
         /// <param name="installPath">Path to deploy composed application</param>
         /// <param name="packagesFolderPath">Path to install packages</param>
         public DeploymentConfiguration(string installPath, string packagesFolderPath)
-            : this(new DeploymentContext(installPath, packagesFolderPath))
+            : this(new DefaultDeploymentContext(installPath, packagesFolderPath))
         {
         }
 
@@ -70,20 +70,12 @@ namespace Dropcraft.Deployment
         /// Constructor
         /// </summary>
         /// <param name="deploymentContext">Configured custom deployment context to use</param>
-        public DeploymentConfiguration(IDeploymentContext deploymentContext)
+        public DeploymentConfiguration(DeploymentContext deploymentContext)
         {
             DeploymentContext = deploymentContext;
-        }
 
-        /// <summary>
-        /// Adds <see cref="IPackageFileFilteringHandler"/> filter to use during deployment
-        /// </summary>
-        /// <param name="filter">Filter instance</param>
-        /// <returns></returns>
-        public DeploymentConfiguration AddDeploymentFilter(IPackageFileFilteringHandler filter)
-        {
-            DeploymentFilters.Add(filter);
-            return this;
+            ProductConfigurationSource = new ProductConfigurationSource();
+            DeploymentStrategySource = new DeploymentStrategySource();
         }
 
         /// <summary>
@@ -100,6 +92,11 @@ namespace Dropcraft.Deployment
         /// Allows to setup the configuration sources for product
         /// </summary>
         public ProductConfigurationOptions ForProductConfiguration => new ProductConfigurationOptions(this);
+
+        /// <summary>
+        /// Allows to setup the deployment startegy for product
+        /// </summary>
+        public DeploymentConfigurationOptions ForDeployment => new DeploymentConfigurationOptions(this);
 
         /// <summary>
         /// Allows to setup local and remote package sources

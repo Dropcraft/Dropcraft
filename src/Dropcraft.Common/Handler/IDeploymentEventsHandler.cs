@@ -12,7 +12,7 @@ namespace Dropcraft.Common.Handler
 
     public abstract class DeploymentEvent
     {
-        public IDeploymentContext Context { get; set; }
+        public DeploymentContext Context { get; set; }
 
         public PackageInfo PackageInfo { get; set; }
 

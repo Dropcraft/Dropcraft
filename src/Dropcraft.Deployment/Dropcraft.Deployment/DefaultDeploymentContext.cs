@@ -4,22 +4,18 @@ using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Deployment
 {
-    public class DeploymentContext : IDeploymentContext
+    public class DefaultDeploymentContext : DeploymentContext
     {
         private readonly object _eventsLock = new object();
         private readonly List<IDeploymentEventsHandler> _eventHandlers = new List<IDeploymentEventsHandler>();
 
-        public string ProductPath { get; }
-
-        public string PackagesFolderPath { get; }
-
-        public DeploymentContext(string productPath, string packagesFolderPath) 
+        public DefaultDeploymentContext(string productPath, string packagesFolderPath) 
         {
             ProductPath = productPath;
             PackagesFolderPath = packagesFolderPath;
         }
 
-        public void RaiseDeploymentEvent(DeploymentEvent deploymentEvent)
+        protected override void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent)
         {
             lock (_eventsLock)
             {
@@ -30,7 +26,7 @@ namespace Dropcraft.Deployment
             }
         }
 
-        public void RegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
+        protected override void OnRegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
         {
             lock (_eventsLock)
             {
@@ -38,7 +34,7 @@ namespace Dropcraft.Deployment
             }
         }
 
-        public void UnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
+        protected override void OnUnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
         {
             lock (_eventsLock)
             {

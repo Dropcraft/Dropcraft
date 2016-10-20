@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using Dropcraft.Deployment.Workflow;
@@ -12,19 +11,20 @@ namespace Dropcraft.Deployment
     public class DeploymentEngine : IDeploymentEngine
     {
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
-        private readonly List<IPackageFileFilteringHandler> _deploymentFilters;
         protected NuGetEngine NuGetEngine { get; }
         protected IProductConfigurationProvider ProductConfigurationProvider { get; }
-        public IDeploymentContext DeploymentContext { get; }
+        protected IDeploymentStartegyProvider DeploymentStartegyProvider { get; }
+        public DeploymentContext DeploymentContext { get; }
 
 
         public DeploymentEngine(DeploymentConfiguration configuration)
         {
             DeploymentContext = configuration.DeploymentContext;
+
             ProductConfigurationProvider =
                 configuration.ProductConfigurationSource.GetProductConfigurationProvider(DeploymentContext);
+            DeploymentStartegyProvider = configuration.DeploymentStrategySource.GetStartegyProvider(DeploymentContext);
 
-            _deploymentFilters = new List<IPackageFileFilteringHandler>(configuration.DeploymentFilters);
             NuGetEngine = new NuGetEngine(configuration);
         }
 

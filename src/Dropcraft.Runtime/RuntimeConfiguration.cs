@@ -14,7 +14,7 @@ namespace Dropcraft.Runtime
         /// <summary>
         /// Assigned runtime context
         /// </summary>
-        public IRuntimeContext RuntimeContext { get; }
+        public RuntimeContext RuntimeContext { get; }
 
         internal IProductConfigurationSource ProductConfigurationSource { get; set; }
 
@@ -24,7 +24,7 @@ namespace Dropcraft.Runtime
         /// Constructor
         /// </summary>
         public RuntimeConfiguration(string productPath) 
-            : this(new RuntimeContext(productPath))
+            : this(new DefaultRuntimeContext(productPath))
         {
         }
 
@@ -32,7 +32,7 @@ namespace Dropcraft.Runtime
         /// Constructor
         /// </summary>
         /// <param name="runtimeContext">Configured custom runtime context to use</param>
-        public RuntimeConfiguration(IRuntimeContext runtimeContext)
+        public RuntimeConfiguration(RuntimeContext runtimeContext)
         {
             RuntimeContext = runtimeContext;
         }

@@ -6,7 +6,7 @@ using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Runtime
 {
-    public class RuntimeContext : IRuntimeContext
+    public class DefaultRuntimeContext : RuntimeContext
     {
         private readonly object _eventsLock;
         private readonly List<IRuntimeEventsHandler> _eventHandlers;
@@ -16,9 +16,8 @@ namespace Dropcraft.Runtime
         private readonly List<ExtensionInfo> _extensions;
 
         private readonly Dictionary<Type, Func<object>> _serviceFactories;
-        public string ProductPath { get; private set; }
 
-        public RuntimeContext(string productPath)
+        public DefaultRuntimeContext(string productPath)
         {
             ProductPath = productPath;
 
@@ -31,7 +30,7 @@ namespace Dropcraft.Runtime
             _serviceFactories = new Dictionary<Type, Func<object>>();
     }
 
-        public void RegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
+        protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
         {
             lock (_extensionLock)
             {
@@ -48,7 +47,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public void UnregisterExtensibilityPoint(string extensibilityPointKey)
+        protected override void OnUnregisterExtensibilityPoint(string extensibilityPointKey)
         {
             lock (_extensionLock)
             {
@@ -56,7 +55,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public IExtensibilityPointHandler GetExtensibilityPoint(string extensibilityPointKey)
+        protected override IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey)
         {
             IExtensibilityPointHandler extensibilityPoint;
             lock (_extensionLock)
@@ -66,7 +65,7 @@ namespace Dropcraft.Runtime
             return extensibilityPoint;
         }
 
-        public void RegisterExtension(ExtensionInfo extensionInfo)
+        protected override void OnRegisterExtension(ExtensionInfo extensionInfo)
         {
             lock (_extensionLock)
             {
@@ -82,7 +81,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public void RegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
+        protected override void OnRegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             lock (_eventsLock)
             {
@@ -90,7 +89,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public void UnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
+        protected override void OnUnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
         {
             lock (_eventsLock)
             {
@@ -98,7 +97,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public void RaiseRuntimeEvent(RuntimeEvent runtimeEvent)
+        protected override void OnRaiseRuntimeEvent(RuntimeEvent runtimeEvent)
         {
             lock (_eventsLock)
             {
@@ -109,7 +108,7 @@ namespace Dropcraft.Runtime
             }
         }
 
-        public T GetHostService<T>() where T: class
+        protected override T OnGetHostService<T>()
         {
             Func<object> func;
             if (_serviceFactories.TryGetValue(typeof (T), out func))
@@ -120,7 +119,7 @@ namespace Dropcraft.Runtime
             return default(T);
         }
 
-        public void RegisterHostService(Type type, Func<object> serviceFactory)
+        protected override void OnRegisterHostService(Type type, Func<object> serviceFactory)
         {
             _serviceFactories.Add(type, serviceFactory);
         }

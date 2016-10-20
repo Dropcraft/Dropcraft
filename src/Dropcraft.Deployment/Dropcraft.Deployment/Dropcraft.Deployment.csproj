@@ -39,13 +39,15 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DeploymentStrategySource.cs" />
+    <Compile Include="Configuration\DeploymentStrategyOptions.cs" />
     <Compile Include="Workflow\ActionablePackage.cs" />
     <Compile Include="Configuration\DeploymentConfigurationOptions.cs" />
     <Compile Include="Configuration\PackagesConfigurationOptions.cs" />
     <Compile Include="Configuration\PackageSourceOptions.cs" />
     <Compile Include="Configuration\ProductConfigurationOptions.cs" />
     <Compile Include="DeploymentConfiguration.cs" />
-    <Compile Include="DeploymentContext.cs" />
+    <Compile Include="DefaultDeploymentContext.cs" />
     <Compile Include="DeploymentEngine.cs" />
     <Compile Include="NuGet\NuGetEngine.cs" />
     <Compile Include="NuGet\NuGetLogger.cs" />

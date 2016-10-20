@@ -27,7 +27,7 @@ namespace Dropcraft.Deployment.Configuration
         /// </summary>
         /// <param name="source">Custom configuration source</param>
         /// <returns>Configuration object</returns>
-        public DeploymentConfiguration AddCustomConfigurationSource(IPackageConfigurationSource source)
+        public DeploymentConfiguration AddConfigurationSource(IPackageConfigurationSource source)
         {
             _configuration.PackageConfigurationSources.Add(source);
             return _configuration;
