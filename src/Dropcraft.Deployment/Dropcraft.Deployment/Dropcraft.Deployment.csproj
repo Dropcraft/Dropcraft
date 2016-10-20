@@ -39,6 +39,7 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Configuration\DeploymentStarategyProvider.cs" />
     <Compile Include="Configuration\DeploymentStrategySource.cs" />
     <Compile Include="Configuration\DeploymentStrategyOptions.cs" />
     <Compile Include="Workflow\ActionablePackage.cs" />
