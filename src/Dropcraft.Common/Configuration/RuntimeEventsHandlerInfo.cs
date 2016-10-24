@@ -2,11 +2,11 @@
 {
     public class RuntimeEventsHandlerInfo
     {
-        public PackageInfo PackageInfo { get; }
+        public PackageId PackageInfo { get; }
 
         public string ClassName { get; }
 
-        public RuntimeEventsHandlerInfo(PackageInfo packageInfo, string className)
+        public RuntimeEventsHandlerInfo(PackageId packageInfo, string className)
         {
             PackageInfo = packageInfo;
             ClassName = className;

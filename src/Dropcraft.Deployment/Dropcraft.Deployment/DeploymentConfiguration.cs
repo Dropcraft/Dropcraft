@@ -27,11 +27,6 @@ namespace Dropcraft.Deployment
         internal bool AllowDowngrades { get; set; }
 
         /// <summary>
-        /// Defines default conflict resolution strategy
-        /// </summary>
-        internal FileConflictResolution DefaultConflictResolution { get; set; }
-
-        /// <summary>
         /// Defines target .NET framework
         /// </summary>
         internal string TargetFramework { get; set; }

@@ -37,5 +37,21 @@ namespace Dropcraft.Deployment.NuGet
             }
         }
 
+        [Fact]
+        public void Compatible_framework_shall_be_resolved()
+        {
+            var fx = NuGetEngine.GetMostCompatibleFramework("net45",
+                new[] {"net40", "net45", "sl5", "portable-net40+sl5+win8+wp8+wpa81"});
+            fx.Should().Be("net45");
+        }
+
+        [Fact]
+        public void Portable_compatible_framework_shall_be_resolved()
+        {
+            var fx = NuGetEngine.GetMostCompatibleFramework("portable-net40+sl5+win8+wp8+wpa81",
+                new[] {"net40", "net45", "sl5", "portable-net40+sl5+win8+wp8+wpa81"});
+            fx.Should().Be("portable-net40+sl5+win8+wp8+wpa81");
+        }
+
     }
 }

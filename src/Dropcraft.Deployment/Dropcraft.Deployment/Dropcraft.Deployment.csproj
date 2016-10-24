@@ -42,7 +42,7 @@
     <Compile Include="Configuration\DeploymentStarategyProvider.cs" />
     <Compile Include="Configuration\DeploymentStrategySource.cs" />
     <Compile Include="Configuration\DeploymentStrategyOptions.cs" />
-    <Compile Include="Workflow\ActionablePackage.cs" />
+    <Compile Include="Workflow\PackageInfo.cs" />
     <Compile Include="Configuration\DeploymentConfigurationOptions.cs" />
     <Compile Include="Configuration\PackagesConfigurationOptions.cs" />
     <Compile Include="Configuration\PackageSourceOptions.cs" />
@@ -55,6 +55,7 @@
     <Compile Include="NuGet\ProjectLibraryProvider.cs" />
     <Compile Include="NuGet\SourceRepositoryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Workflow\FileTransaction.cs" />
     <Compile Include="Workflow\InstallationContext.cs" />
     <Compile Include="Workflow\InstallationWorkflow.cs" />
   </ItemGroup>

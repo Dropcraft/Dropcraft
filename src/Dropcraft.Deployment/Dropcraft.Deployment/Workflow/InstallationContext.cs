@@ -20,12 +20,12 @@ namespace Dropcraft.Deployment.Workflow
         /// <summary>
         /// Expected list of registered packages after the deployment
         /// </summary>
-        public List<ActionablePackage> ResultingProductPackages { get; } = new List<ActionablePackage>();
+        public List<PackageInfo> ResultingProductPackages { get; } = new List<PackageInfo>();
 
         /// <summary>
         /// Packages list to install
         /// </summary>
-        public List<ActionablePackage> PackagesForInstallation { get; } = new List<ActionablePackage>();
+        public List<PackageInfo> PackagesForInstallation { get; } = new List<PackageInfo>();
 
         /// <summary>
         /// Packages list to remove
@@ -35,13 +35,13 @@ namespace Dropcraft.Deployment.Workflow
         /// <summary>
         /// Temp cache
         /// </summary>
-        public Queue<Tuple<GraphNode<RemoteResolveResult>, ActionablePackage>> FlatteningCache { get; }
+        public Queue<Tuple<GraphNode<RemoteResolveResult>, PackageInfo>> FlatteningCache { get; }
 
         public InstallationContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
         {
             InputPackages = new List<PackageId>(newPackages);
             InputProductPackages = new List<PackageId>(productPackages);
-            FlatteningCache = new Queue<Tuple<GraphNode<RemoteResolveResult>, ActionablePackage>>();
+            FlatteningCache = new Queue<Tuple<GraphNode<RemoteResolveResult>, PackageInfo>>();
         }
     }
 }

@@ -5,7 +5,7 @@ namespace Dropcraft.Deployment.NuGet
 {
     public class NuGetLogger : ILogger
     {
-        private static readonly ILog Logger = LogProvider.For<NuGetLogger>();
+        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
         public void LogDebug(string data) => Logger.Debug(data);
 

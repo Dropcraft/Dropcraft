@@ -45,10 +45,17 @@ namespace Dropcraft.Deployment
             workflow.DownloadPackages(context, DeploymentContext.PackagesFolderPath);
             Logger.Trace($"All resolved packages are unpacked to {DeploymentContext.PackagesFolderPath}");
 
-            // delete files
-            // identify files to copy and filter
-            // copy new files
-            // create product.json
+            using (var transaction = new FileTransaction())
+            {
+                workflow.DeletePackages(transaction, context.ProductPackagesForDeletion, ProductConfigurationProvider);
+                Logger.Trace($"Uninstalled {context.ProductPackagesForDeletion.Count} package(s)");
+
+                workflow.InstallPackages(transaction, context.PackagesForInstallation, ProductConfigurationProvider, DeploymentStartegyProvider);
+                Logger.Trace($"Installed {context.PackagesForInstallation.Count} package(s)");
+
+                transaction.Commit();
+                // create product.json
+            }
         }
 
         protected virtual InstallationWorkflow GetInstallationWorkflow(InstallationContext context)

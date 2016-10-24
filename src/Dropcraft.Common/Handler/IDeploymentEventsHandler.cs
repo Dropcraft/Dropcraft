@@ -14,7 +14,7 @@ namespace Dropcraft.Common.Handler
     {
         public DeploymentContext Context { get; set; }
 
-        public PackageInfo PackageInfo { get; set; }
+        public PackageId PackageInfo { get; set; }
 
         public abstract void HandleEvent(IDeploymentEventsHandler eventHandler);
     }

@@ -1,10 +1,8 @@
-﻿using System;
-
-namespace Dropcraft.Common.Configuration
+﻿namespace Dropcraft.Common.Configuration
 {
     public class ExtensibilityPointInfo
     {
-        public PackageInfo PackageInfo { get; }
+        public PackageId PackageInfo { get; }
 
         public string ClassName { get; }
 
@@ -14,7 +12,7 @@ namespace Dropcraft.Common.Configuration
 
         public ICustomConfiguration CustomConfiguration { get; private set; }
 
-        public ExtensibilityPointInfo(PackageInfo packageInfo, string className, string id, 
+        public ExtensibilityPointInfo(PackageId packageInfo, string className, string id, 
                                         EntityActivationMode activationMode, ICustomConfiguration customConfiguration)
         {
             PackageInfo = packageInfo;

@@ -8,12 +8,12 @@
         /// <summary>
         /// Source file path, includes file name
         /// </summary>
-        public string FilePath { get; set; }
+        public string FileName { get; set; }
 
         /// <summary>
         /// Target file path, includes file name
         /// </summary>
-        public string TargetFilePath { get; set; }
+        public string TargetFileName { get; set; }
 
         /// <summary>
         /// Detected file type
@@ -24,11 +24,6 @@
         /// Deployment action
         /// </summary>
         public FileAction Action { get; set; }
-
-        /// <summary>
-        /// Is file in conflict state (i.e. target file already exists)? 
-        /// </summary>
-        public bool Conflict { get; set; }
 
         /// <summary>
         /// Conflict resolution strategy

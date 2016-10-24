@@ -2,11 +2,11 @@ namespace Dropcraft.Common.Configuration
 {
     public class DeploymentEventsHandlerInfo
     {
-        public PackageInfo PackageInfo { get; }
+        public PackageId PackageInfo { get; }
 
         public string ClassName { get; }
 
-        public DeploymentEventsHandlerInfo(PackageInfo packageInfo, string className)
+        public DeploymentEventsHandlerInfo(PackageId packageInfo, string className)
         {
             PackageInfo = packageInfo;
             ClassName = className;

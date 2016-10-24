@@ -4,11 +4,11 @@ using NuGet.DependencyResolver;
 
 namespace Dropcraft.Deployment.Workflow
 {
-    public class ActionablePackage
+    public class PackageInfo
     {
         public PackageId Id { get; set; }
         public RemoteMatch Match { get; set; }
-        public string TargetPath { get; set; }
-        public List<ActionablePackage> Dependencies { get; } = new List<ActionablePackage>();
+        public string PackagePath { get; set; }
+        public List<PackageInfo> Dependencies { get; } = new List<PackageInfo>();
     }
 }

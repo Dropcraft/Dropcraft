@@ -1,6 +1,6 @@
 ﻿namespace Dropcraft.Common
 {
-    public class PackageMetadata
+    public class PackageMetadataInfo
     {
         /// <summary>
         /// Title provides human-friendly package title 
@@ -37,7 +37,7 @@
         /// </summary>
         public string Copyright { get; }
 
-        public PackageMetadata(string title, string authors, string description, string projectUrl, string iconUrl, string licenseUrl, string copyright)
+        public PackageMetadataInfo(string title, string authors, string description, string projectUrl, string iconUrl, string licenseUrl, string copyright)
         {
             Title = title;
             Authors = authors;

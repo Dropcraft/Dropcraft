@@ -15,14 +15,15 @@ namespace Dropcraft.Runtime.Configuration
             _manifestNameTemplate = manifestNameTemplate;
         }
 
-        public IPackageConfiguration GetPackageConfiguration(PackageInfo packageInfo)
+        public IPackageConfiguration GetPackageConfiguration(PackageId packageId, string packagePath)
         {
-            var manifestName = string.Format(_manifestNameTemplate, packageInfo.PackageId.Id);
-            var manifestFile = packageInfo.Files.FirstOrDefault(x => x.EndsWith(manifestName));
+            var manifestName = string.Format(_manifestNameTemplate, packageId.Id);
+            var manifestFile = Directory.GetFiles(packagePath, manifestName, SearchOption.AllDirectories).FirstOrDefault();
+
             if (manifestFile != null)
             {
                 var text = File.ReadAllText(manifestFile);
-                return new PackageConfiguration(packageInfo, JObject.Parse(text));
+                return new PackageConfiguration(packageId, JObject.Parse(text));
             }
 
             return null;

@@ -66,8 +66,7 @@
     <Compile Include="IRuntimeEngine.cs" />
     <Compile Include="Logging\LibLog.cs" />
     <Compile Include="PackageFileInfo.cs" />
-    <Compile Include="PackageInfo.cs" />
-    <Compile Include="PackageMetadata.cs" />
+    <Compile Include="PackageMetadataInfo.cs" />
     <Compile Include="PackageId.cs" />
     <Compile Include="IProductContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

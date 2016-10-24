@@ -26,17 +26,6 @@ namespace Dropcraft.Deployment.Configuration
         }
 
         /// <summary>
-        /// Defines a default method of the file conflict resolution
-        /// </summary>
-        /// <param name="resolutionStrategy">Resolution strategy</param>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration ResolveFileConflictsUsing(FileConflictResolution resolutionStrategy)
-        {
-            _configuration.DefaultConflictResolution = resolutionStrategy;
-            return _configuration;
-        }
-
-        /// <summary>
         /// Instructs to use the provided .NET framework for installation
         /// </summary>
         /// <param name="frameworkId">Target framework</param>

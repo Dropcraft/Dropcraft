@@ -9,6 +9,8 @@ namespace Dropcraft.Common.Configuration
     {
         bool IsPackageEnabled();
 
+        PackageMetadataInfo GetPackageMetadata();
+
         EntityActivationMode GetPackageActivationMode();
 
         IEnumerable<PackageStartupHandlerInfo> GetPackageStartupHandlers();
@@ -20,5 +22,7 @@ namespace Dropcraft.Common.Configuration
         IEnumerable<ExtensibilityPointInfo> GetExtensibilityPoints();
 
         IEnumerable<DeploymentEventsHandlerInfo> GetPackageDeploymentHandlers();
+
+        IEnumerable<string> GetInstalledFiles(bool deletableFilesOnly);
     }
 }

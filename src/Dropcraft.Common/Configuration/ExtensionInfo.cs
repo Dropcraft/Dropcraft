@@ -1,12 +1,10 @@
-﻿using System;
-
-namespace Dropcraft.Common.Configuration
+﻿namespace Dropcraft.Common.Configuration
 {
     public class ExtensionInfo
     {
         public string Id { get; }
 
-        public PackageInfo PackageInfo { get; }
+        public PackageId PackageInfo { get; }
 
         public string ClassName { get; }
 
@@ -15,7 +13,7 @@ namespace Dropcraft.Common.Configuration
         public ICustomConfiguration CustomConfiguration { get; private set; }
 
 
-        public ExtensionInfo(PackageInfo packageInfo, string className, string extensibilityPointId,
+        public ExtensionInfo(PackageId packageInfo, string className, string extensibilityPointId,
                                         string id, ICustomConfiguration customConfiguration)
         {
             PackageInfo = packageInfo;

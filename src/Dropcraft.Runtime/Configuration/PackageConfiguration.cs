@@ -10,9 +10,9 @@ namespace Dropcraft.Runtime.Configuration
     public class PackageConfiguration : IPackageConfiguration
     {
         private readonly JObject _jsonObject;
-        private readonly PackageInfo _packageInfo;
+        private readonly PackageId _packageInfo;
 
-        public PackageConfiguration(PackageInfo packageInfo, JObject jsonObject)
+        public PackageConfiguration(PackageId packageInfo, JObject jsonObject)
         {
             _packageInfo = packageInfo;
             _jsonObject = jsonObject;
@@ -22,6 +22,11 @@ namespace Dropcraft.Runtime.Configuration
         {
             JToken token;
             return !_jsonObject.TryGetValue("enabled", out token) || token.Value<bool>();
+        }
+
+        public PackageMetadataInfo GetPackageMetadata()
+        {
+            throw new NotImplementedException(); // TODO
         }
 
         public EntityActivationMode GetPackageActivationMode()
@@ -137,6 +142,11 @@ namespace Dropcraft.Runtime.Configuration
             }
 
             return result;
+        }
+
+        public IEnumerable<string> GetInstalledFiles(bool deletableFilesOnly)
+        {
+            throw new NotImplementedException(); // TODO
         }
     }
 }

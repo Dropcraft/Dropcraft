@@ -28,7 +28,7 @@ namespace Dropcraft.Deployment.NuGet
         private readonly SourceRepositoryProvider _repositoryProvider;
         private readonly SourceRepository _localRepository;
         private readonly NuGetFramework _framework;
-        private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
+        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
         public NuGetEngine(DeploymentConfiguration configuration)
         {
@@ -206,6 +206,15 @@ namespace Dropcraft.Deployment.NuGet
         {
             var pathResolver = new VersionFolderPathResolver(path);
             return pathResolver.GetInstallPath(packageId, version);
+        }
+
+        public static string GetMostCompatibleFramework(string targetFramework, IEnumerable<string> candidateFrameworks)
+        {
+            var frameworkReducer = new FrameworkReducer();
+            var nearestFramework = frameworkReducer.GetNearest(NuGetFramework.Parse(targetFramework),
+                candidateFrameworks.Select(NuGetFramework.Parse));
+
+            return nearestFramework?.GetShortFolderName();
         }
 
     }

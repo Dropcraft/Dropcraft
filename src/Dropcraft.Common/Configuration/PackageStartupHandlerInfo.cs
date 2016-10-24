@@ -2,11 +2,11 @@
 {
     public class PackageStartupHandlerInfo
     {
-        public PackageInfo PackageInfo { get; }
+        public PackageId PackageInfo { get; }
 
         public string ClassName { get; }
 
-        public PackageStartupHandlerInfo(PackageInfo packageInfo, string className)
+        public PackageStartupHandlerInfo(PackageId packageInfo, string className)
         {
             PackageInfo = packageInfo;
             ClassName = className;

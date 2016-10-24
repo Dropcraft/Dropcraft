@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using NuGet.DependencyResolver;
@@ -12,6 +12,9 @@ using NuGet.Versioning;
 
 namespace Dropcraft.Deployment.Workflow
 {
+    /// <summary>
+    /// Low level deployment API 
+    /// </summary>
     public class InstallationWorkflow
     {
         private readonly NuGetEngine _nuGetEngine;
@@ -67,7 +70,7 @@ namespace Dropcraft.Deployment.Workflow
         }
 
         /// <summary>
-        /// Download and unpack packages to the destination folder
+        /// Downloads and unpacks packages to the destination folder
         /// </summary>
         /// <param name="context">Installation context</param>
         /// <param name="path">Destination path</param>
@@ -77,8 +80,44 @@ namespace Dropcraft.Deployment.Workflow
             foreach (var package in context.PackagesForInstallation)
             {
                 _nuGetEngine.InstallPackage(package.Match, path).GetAwaiter().GetResult();
-                package.TargetPath = _nuGetEngine.GetPackageTargetPath(package.Match.Library.Name,
+                package.PackagePath = _nuGetEngine.GetPackageTargetPath(package.Match.Library.Name,
                     package.Match.Library.Version, path);
+            }
+        }
+
+        /// <summary>
+        /// Deletes provided packages
+        /// </summary>
+        /// <param name="fileTransaction">Transaction to track file system changes</param>
+        /// <param name="packages">Packages to delete</param>
+        /// <param name="productConfig">Current product configuration</param>
+        public void DeletePackages(FileTransaction fileTransaction, IEnumerable<PackageId> packages, IProductConfigurationProvider productConfig)
+        {
+            foreach (var packageId in packages)
+            {
+                var packageConfig = productConfig.GetPackageConfiguration(packageId);
+                var files = packageConfig.GetInstalledFiles(true);
+                foreach (var file in files)
+                {
+                    fileTransaction.DeleteFile(file);
+                }
+
+                productConfig.RemovePackageConfiguration(packageId);
+            }
+        }
+
+        public void InstallPackages(FileTransaction fileTransaction, IEnumerable<PackageInfo> packages,
+            IProductConfigurationProvider productConfig, IDeploymentStartegyProvider deploymentStartegy)
+        {
+            foreach (var package in packages)
+            {
+                var files = deploymentStartegy.GetPackageFiles(package.Id, package.PackagePath);
+                foreach (var file in files)
+                {
+                    fileTransaction.InstallFile(file);
+                }
+
+                productConfig.SetPackageConfiguration(package.Id, null); //TODO
             }
         }
 
@@ -106,7 +145,7 @@ namespace Dropcraft.Deployment.Workflow
             context.PackagesForInstallation.Reverse();
         }
 
-        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, ActionablePackage parent, InstallationContext context)
+        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, PackageInfo parent, InstallationContext context)
         {
             if (node.Key.TypeConstraint != LibraryDependencyTarget.Package &&
                 node.Key.TypeConstraint != LibraryDependencyTarget.PackageProjectExternal)
@@ -115,7 +154,7 @@ namespace Dropcraft.Deployment.Workflow
                 throw exception;
             }
 
-            var package = new ActionablePackage
+            var package = new PackageInfo
             {
                 Id = new PackageId(node.Item.Key.Name, node.Item.Key.Version.ToNormalizedString(),
                         node.Item.Key.Version.IsPrerelease),
@@ -127,7 +166,7 @@ namespace Dropcraft.Deployment.Workflow
 
             foreach (var innerNode in node.InnerNodes)
             {
-                context.FlatteningCache.Enqueue(new Tuple<GraphNode<RemoteResolveResult>, ActionablePackage>(innerNode, package)); 
+                context.FlatteningCache.Enqueue(new Tuple<GraphNode<RemoteResolveResult>, PackageInfo>(innerNode, package)); 
             }
         }
 
