@@ -98,8 +98,8 @@ namespace Dropcraft.Deployment.Workflow
 
         class TestContext
         {
-            public InstallationContext Ctx { get; set; }
-            public InstallationWorkflow Workflow { get; set; }
+            public WorkflowContext Ctx { get; set; }
+            public DeploymentWorkflow Workflow { get; set; }
 
             public static async Task<TestContext> ExecuteResolveWorkflow(TestDeploymentHelper helper,
                 IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
@@ -108,8 +108,8 @@ namespace Dropcraft.Deployment.Workflow
 
                 var context = new TestContext()
                 {
-                    Ctx = new InstallationContext(newPackages, productPackages),
-                    Workflow = new InstallationWorkflow(engine)
+                    Ctx = new WorkflowContext(newPackages, productPackages),
+                    Workflow = new DeploymentWorkflow(engine)
                 };
 
                 await context.Workflow.EnsureAllPackagesAreVersioned(context.Ctx);

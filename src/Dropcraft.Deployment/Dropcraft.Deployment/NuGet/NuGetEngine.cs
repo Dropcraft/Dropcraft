@@ -28,7 +28,7 @@ namespace Dropcraft.Deployment.NuGet
         private readonly SourceRepositoryProvider _repositoryProvider;
         private readonly SourceRepository _localRepository;
         private readonly NuGetFramework _framework;
-        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
+        private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
 
         public NuGetEngine(DeploymentConfiguration configuration)
         {
@@ -47,12 +47,12 @@ namespace Dropcraft.Deployment.NuGet
                 _repositoryProvider.AddPackageRepository(packageSource);
             }
 
-            if (!string.IsNullOrWhiteSpace(configuration.TargetFramework))
+            if (!string.IsNullOrWhiteSpace(_deploymentContext.TargetFramework))
             {
-                _framework = NuGetFramework.Parse(configuration.TargetFramework);
+                _framework = NuGetFramework.Parse(_deploymentContext.TargetFramework);
                 if (_framework == null)
                 {
-                    var ex = new ArgumentException($"Framework {configuration.TargetFramework} is unknown");
+                    var ex = new ArgumentException($"Framework {_deploymentContext.TargetFramework} is unknown");
                     Logger.Trace(ex.Message);
                     throw ex;
                 }

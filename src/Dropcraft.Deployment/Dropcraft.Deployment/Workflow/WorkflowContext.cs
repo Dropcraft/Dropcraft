@@ -5,7 +5,10 @@ using NuGet.DependencyResolver;
 
 namespace Dropcraft.Deployment.Workflow
 {
-    public class InstallationContext
+    /// <summary>
+    /// Contains input, output and temporary information for the deployment workflow execution
+    /// </summary>
+    public class WorkflowContext
     {
         /// <summary>
         /// New package to be installed/updated
@@ -37,7 +40,7 @@ namespace Dropcraft.Deployment.Workflow
         /// </summary>
         public Queue<Tuple<GraphNode<RemoteResolveResult>, PackageInfo>> FlatteningCache { get; }
 
-        public InstallationContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
+        public WorkflowContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
         {
             InputPackages = new List<PackageId>(newPackages);
             InputProductPackages = new List<PackageId>(productPackages);

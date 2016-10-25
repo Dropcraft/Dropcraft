@@ -19,5 +19,7 @@ namespace Dropcraft.Common.Configuration
         void SetPackageConfiguration(PackageId packageId, IPackageConfiguration packageConfiguration);
 
         void RemovePackageConfiguration(PackageId packageId);
+
+        void Save();
     }
 }

@@ -27,17 +27,12 @@ namespace Dropcraft.Deployment
         internal bool AllowDowngrades { get; set; }
 
         /// <summary>
-        /// Defines target .NET framework
+        /// Package configuration source
         /// </summary>
-        internal string TargetFramework { get; set; }
+        internal IPackageConfigurationSource PackageConfigurationSource { get; set; }
 
         /// <summary>
-        /// Package configuration sources
-        /// </summary>
-        internal List<IPackageConfigurationSource> PackageConfigurationSources { get; } = new List<IPackageConfigurationSource>();
-
-        /// <summary>
-        /// Product configuration sources
+        /// Product configuration source
         /// </summary>
         internal IProductConfigurationSource ProductConfigurationSource { get; set; }
 
@@ -56,8 +51,9 @@ namespace Dropcraft.Deployment
         /// </summary>
         /// <param name="installPath">Path to deploy composed application</param>
         /// <param name="packagesFolderPath">Path to install packages</param>
-        public DeploymentConfiguration(string installPath, string packagesFolderPath)
-            : this(new DefaultDeploymentContext(installPath, packagesFolderPath))
+        /// <param name="targetFramework">Product target framework</param>
+        public DeploymentConfiguration(string installPath, string packagesFolderPath, string targetFramework)
+            : this(new DefaultDeploymentContext(installPath, packagesFolderPath, targetFramework))
         {
         }
 
@@ -70,6 +66,7 @@ namespace Dropcraft.Deployment
             DeploymentContext = deploymentContext;
 
             ProductConfigurationSource = new ProductConfigurationSource();
+            PackageConfigurationSource = new PackageConfigurationSource();
             DeploymentStrategySource = new DeploymentStrategySource();
         }
 

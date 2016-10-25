@@ -8,11 +8,17 @@ using Dropcraft.Deployment.Workflow;
 
 namespace Dropcraft.Deployment
 {
+    /// <summary>
+    /// Deployment engine responsible for the packages installation/uninstallation
+    /// </summary>
     public class DeploymentEngine : IDeploymentEngine
     {
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
+        private static readonly Task SuccessTask = Task.FromResult<object>(null);
+
         protected NuGetEngine NuGetEngine { get; }
         protected IProductConfigurationProvider ProductConfigurationProvider { get; }
+        protected IPackageConfigurationProvider PackageConfigurationProvider { get; }
         protected IDeploymentStartegyProvider DeploymentStartegyProvider { get; }
         public DeploymentContext DeploymentContext { get; }
 
@@ -23,19 +29,26 @@ namespace Dropcraft.Deployment
 
             ProductConfigurationProvider =
                 configuration.ProductConfigurationSource.GetProductConfigurationProvider(DeploymentContext);
+            PackageConfigurationProvider = configuration.PackageConfigurationSource.GetPackageConfigurationProvider(DeploymentContext);
+
             DeploymentStartegyProvider = configuration.DeploymentStrategySource.GetStartegyProvider(DeploymentContext);
 
             NuGetEngine = new NuGetEngine(configuration);
         }
 
+        /// <summary>
+        /// Installs provided packages
+        /// </summary>
+        /// <param name="packages">Packages to install</param>
+        /// <returns>Task</returns>
         public async Task InstallPackages(IEnumerable<PackageId> packages)
         {
             Logger.Trace("Installing packages");
             var productPackages = ProductConfigurationProvider.GetPackages();
-            var context = new InstallationContext(packages, productPackages);
+            var context = new WorkflowContext(packages, productPackages);
             Logger.Trace($"{context.InputProductPackages.Count} product packages and {context.InputPackages.Count} new packages are requested");
 
-            var workflow = GetInstallationWorkflow(context);
+            var workflow = GetDeploymentWorkflow(context);
             await workflow.EnsureAllPackagesAreVersioned(context);
             Logger.Trace("Versions are verified and updated when needed");
 
@@ -50,22 +63,45 @@ namespace Dropcraft.Deployment
                 workflow.DeletePackages(transaction, context.ProductPackagesForDeletion, ProductConfigurationProvider);
                 Logger.Trace($"Uninstalled {context.ProductPackagesForDeletion.Count} package(s)");
 
-                workflow.InstallPackages(transaction, context.PackagesForInstallation, ProductConfigurationProvider, DeploymentStartegyProvider);
+                workflow.InstallPackages(transaction, context.PackagesForInstallation, ProductConfigurationProvider,
+                    PackageConfigurationProvider, DeploymentStartegyProvider);
                 Logger.Trace($"Installed {context.PackagesForInstallation.Count} package(s)");
 
+                ProductConfigurationProvider.Save();
                 transaction.Commit();
-                // create product.json
             }
         }
 
-        protected virtual InstallationWorkflow GetInstallationWorkflow(InstallationContext context)
+        /// <summary>
+        /// Allows to define a custom deployment workflow
+        /// </summary>
+        /// <param name="context">Workflow context to carry</param>
+        /// <returns>Custom deployment workflow</returns>
+        protected virtual DeploymentWorkflow GetDeploymentWorkflow(WorkflowContext context)
         {
-            return new InstallationWorkflow(NuGetEngine);
+            return new DeploymentWorkflow(NuGetEngine);
         }
 
+        /// <summary>
+        /// Uninstalls provided packages
+        /// </summary>
+        /// <param name="packages">Packages to uninstall</param>
+        /// <returns>Task</returns>
         public async Task UninstallPackages(IEnumerable<PackageId> packages)
         {
-            throw new System.NotImplementedException();
+            Logger.Trace("Uninstalling packages");
+            var productPackages = ProductConfigurationProvider.GetPackages();
+            var context = new WorkflowContext(new PackageId[] {}, productPackages);
+            var workflow = GetDeploymentWorkflow(context);
+
+            using (var transaction = new FileTransaction())
+            {
+                workflow.DeletePackages(transaction, packages, ProductConfigurationProvider);
+                transaction.Commit();
+                Logger.Trace("Packages uninstalled");
+            }
+
+            await SuccessTask;
         }
 
     }

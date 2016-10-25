@@ -15,12 +15,12 @@ namespace Dropcraft.Deployment.Workflow
     /// <summary>
     /// Low level deployment API 
     /// </summary>
-    public class InstallationWorkflow
+    public class DeploymentWorkflow
     {
         private readonly NuGetEngine _nuGetEngine;
-        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
+        private static readonly ILog Logger = LogProvider.For<DeploymentWorkflow>();
 
-        public InstallationWorkflow(NuGetEngine nuGetEngine)
+        public DeploymentWorkflow(NuGetEngine nuGetEngine)
         {
             _nuGetEngine = nuGetEngine;
         }
@@ -28,15 +28,20 @@ namespace Dropcraft.Deployment.Workflow
         /// <summary>
         /// Ensures that all packages are versioned and versions are valid
         /// </summary>
-        /// <returns>Async Task</returns>
-        public async Task EnsureAllPackagesAreVersioned(InstallationContext context)
+        /// <returns>Task</returns>
+        public async Task EnsureAllPackagesAreVersioned(WorkflowContext context)
+        {
+            await OnEnsureAllPackagesAreVersioned(context);
+        }
+
+        protected virtual async Task OnEnsureAllPackagesAreVersioned(WorkflowContext context)
         {
             var tasks = new List<Task<PackageId>>();
 
             foreach (var packageId in context.InputPackages)
             {
                 if (string.IsNullOrWhiteSpace(packageId.Id))
-                    throw new ArgumentException("Package Id cannot be empty");
+                    throw LogException(new ArgumentException("Package Id cannot be empty"));
 
                 tasks.Add(ResolvePackageVersion(packageId));
             }
@@ -47,8 +52,13 @@ namespace Dropcraft.Deployment.Workflow
         /// <summary>
         /// Resolves dependencies for all packages
         /// </summary>
-        /// <returns>Async Task</returns>
-        public async Task ResolvePackages(InstallationContext context)
+        /// <returns>Task</returns>
+        public async Task ResolvePackages(WorkflowContext context)
+        {
+            await OnResolvePackages(context);
+        }
+
+        protected virtual async Task OnResolvePackages(WorkflowContext context)
         {
             MergeWithProductPackages(context);
 
@@ -74,8 +84,13 @@ namespace Dropcraft.Deployment.Workflow
         /// </summary>
         /// <param name="context">Installation context</param>
         /// <param name="path">Destination path</param>
-        /// <returns>Async Task</returns>
-        public void DownloadPackages(InstallationContext context, string path)
+        /// <returns>Task</returns>
+        public void DownloadPackages(WorkflowContext context, string path)
+        {
+            OnDownloadPackages(context, path);
+        }
+
+        protected virtual void OnDownloadPackages(WorkflowContext context, string path)
         {
             foreach (var package in context.PackagesForInstallation)
             {
@@ -93,6 +108,12 @@ namespace Dropcraft.Deployment.Workflow
         /// <param name="productConfig">Current product configuration</param>
         public void DeletePackages(FileTransaction fileTransaction, IEnumerable<PackageId> packages, IProductConfigurationProvider productConfig)
         {
+            OnDeletePackages(fileTransaction, packages, productConfig);
+        }
+
+        protected virtual void OnDeletePackages(FileTransaction fileTransaction, IEnumerable<PackageId> packages,
+            IProductConfigurationProvider productConfig)
+        {
             foreach (var packageId in packages)
             {
                 var packageConfig = productConfig.GetPackageConfiguration(packageId);
@@ -106,8 +127,27 @@ namespace Dropcraft.Deployment.Workflow
             }
         }
 
+        /// <summary>
+        /// Installs provided packages
+        /// </summary>
+        /// <param name="fileTransaction">File transaction to use</param>
+        /// <param name="packages">Packages to install</param>
+        /// <param name="productConfigProvider">Product configuration</param>
+        /// <param name="packageConfigProvider">Packages configuration</param>
+        /// <param name="deploymentStartegy">Deployment strategy to use</param>
         public void InstallPackages(FileTransaction fileTransaction, IEnumerable<PackageInfo> packages,
-            IProductConfigurationProvider productConfig, IDeploymentStartegyProvider deploymentStartegy)
+            IProductConfigurationProvider productConfigProvider,
+            IPackageConfigurationProvider packageConfigProvider,
+            IDeploymentStartegyProvider deploymentStartegy)
+        {
+            OnInstallPackages(fileTransaction, packages, productConfigProvider, packageConfigProvider,
+                deploymentStartegy);
+        }
+
+        protected virtual void OnInstallPackages(FileTransaction fileTransaction, IEnumerable<PackageInfo> packages,
+            IProductConfigurationProvider productConfigProvider,
+            IPackageConfigurationProvider packageConfigProvider,
+            IDeploymentStartegyProvider deploymentStartegy)
         {
             foreach (var package in packages)
             {
@@ -117,11 +157,12 @@ namespace Dropcraft.Deployment.Workflow
                     fileTransaction.InstallFile(file);
                 }
 
-                productConfig.SetPackageConfiguration(package.Id, null); //TODO
+                productConfigProvider.SetPackageConfiguration(package.Id,
+                    packageConfigProvider.GetPackageConfiguration(package.Id, package.PackagePath));
             }
         }
 
-        protected void PrepareInstallationAndDeletionLists(InstallationContext context)
+        protected void PrepareInstallationAndDeletionLists(WorkflowContext context)
         {
             foreach (var package in context.ResultingProductPackages)
             {
@@ -145,13 +186,13 @@ namespace Dropcraft.Deployment.Workflow
             context.PackagesForInstallation.Reverse();
         }
 
-        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, PackageInfo parent, InstallationContext context)
+        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, PackageInfo parent, WorkflowContext context)
         {
             if (node.Key.TypeConstraint != LibraryDependencyTarget.Package &&
                 node.Key.TypeConstraint != LibraryDependencyTarget.PackageProjectExternal)
             {
                 var exception = new ArgumentException($"Package {node.Key.Name} cannot be resolved from the sources");
-                throw exception;
+                throw LogException(exception);
             }
 
             var package = new PackageInfo
@@ -170,7 +211,7 @@ namespace Dropcraft.Deployment.Workflow
             }
         }
 
-        protected void MergeWithProductPackages(InstallationContext context)
+        protected void MergeWithProductPackages(WorkflowContext context)
         {
             var listForMerge = new List<PackageId>();
 

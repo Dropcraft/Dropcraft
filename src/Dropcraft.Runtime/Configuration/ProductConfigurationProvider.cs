@@ -66,5 +66,10 @@ namespace Dropcraft.Runtime.Configuration
             if (!IsProductConfigured)
                 return;
         }
+
+        public void Save()
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

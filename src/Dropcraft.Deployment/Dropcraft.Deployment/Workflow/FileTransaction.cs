@@ -13,7 +13,7 @@ namespace Dropcraft.Deployment.Workflow
         private readonly List<string> _installedFile = new List<string>();
         private readonly List<string> _createdFolder = new List<string>();
         private readonly List<FileRecord> _deletedFiles = new List<FileRecord>();
-        private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
+        private static readonly ILog Logger = LogProvider.For<FileTransaction>();
 
         public FileTransaction()
         {

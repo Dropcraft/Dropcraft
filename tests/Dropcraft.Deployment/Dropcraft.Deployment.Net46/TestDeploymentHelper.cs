@@ -17,9 +17,9 @@ namespace Dropcraft.Deployment
             InstallPath = Path.Combine(Path.GetTempPath(), "DropcraftTests", Path.GetRandomFileName());
         }
 
-        public TestDeploymentHelper WithConfiguration()
+        public TestDeploymentHelper WithConfiguration(string netFx = "net45")
         {
-            Configuration = new DeploymentConfiguration(InstallPath, PackagesPath);
+            Configuration = new DeploymentConfiguration(InstallPath, PackagesPath, netFx);
             return this;
         }
 

@@ -56,8 +56,8 @@
     <Compile Include="NuGet\SourceRepositoryProvider.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Workflow\FileTransaction.cs" />
-    <Compile Include="Workflow\InstallationContext.cs" />
-    <Compile Include="Workflow\InstallationWorkflow.cs" />
+    <Compile Include="Workflow\WorkflowContext.cs" />
+    <Compile Include="Workflow\DeploymentWorkflow.cs" />
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>

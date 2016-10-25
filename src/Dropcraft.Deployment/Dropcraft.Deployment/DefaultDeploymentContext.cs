@@ -9,10 +9,11 @@ namespace Dropcraft.Deployment
         private readonly object _eventsLock = new object();
         private readonly List<IDeploymentEventsHandler> _eventHandlers = new List<IDeploymentEventsHandler>();
 
-        public DefaultDeploymentContext(string productPath, string packagesFolderPath) 
+        public DefaultDeploymentContext(string productPath, string packagesFolderPath, string framework) 
         {
             ProductPath = productPath;
             PackagesFolderPath = packagesFolderPath;
+            TargetFramework = framework;
         }
 
         protected override void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent)

@@ -10,6 +10,11 @@ namespace Dropcraft.Runtime.Configuration
         /// </summary>
         public string ProductConfigurationFileName { get; set; } = "dropcraft.json";
 
+        /// <summary>
+        /// Returns product configuration for the provided folder
+        /// </summary>
+        /// <param name="context">Context defines product folder</param>
+        /// <returns></returns>
         public IProductConfigurationProvider GetProductConfigurationProvider(IProductContext context)
         {
             return new ProductConfigurationProvider(context, ProductConfigurationFileName);

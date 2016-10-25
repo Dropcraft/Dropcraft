@@ -26,17 +26,6 @@ namespace Dropcraft.Deployment.Configuration
         }
 
         /// <summary>
-        /// Instructs to use the provided .NET framework for installation
-        /// </summary>
-        /// <param name="frameworkId">Target framework</param>
-        /// <returns>Configuration object</returns>
-        public DeploymentConfiguration UseFramework(string frameworkId)
-        {
-            _configuration.TargetFramework = frameworkId;
-            return _configuration;
-        }
-
-        /// <summary>
         /// Instructs to allow package downgrades
         /// </summary>
         /// <param name="allowDowngrades">Are downgrades allowed</param>
