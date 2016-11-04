@@ -7,11 +7,13 @@ namespace Dropcraft.Common.Configuration
     /// </summary>
     public interface IPackageConfiguration
     {
-        bool IsPackageEnabled();
+        PackageId Id { get; }
 
-        PackageMetadataInfo GetPackageMetadata();
+        bool IsPackageEnabled { get; }
 
-        EntityActivationMode GetPackageActivationMode();
+        PackageMetadataInfo PackageMetadata { get; }
+
+        EntityActivationMode PackageActivationMode { get; }
 
         IEnumerable<PackageStartupHandlerInfo> GetPackageStartupHandlers();
 

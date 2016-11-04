@@ -32,5 +32,10 @@ namespace Dropcraft.Common
             AllowPrereleaseVersions = allowPrereleaseVersions;
             ResolvedVersion = string.Empty;
         }
+
+        public bool IsSamePackage(PackageId id)
+        {
+            return Id == id.Id && VersionRange == id.VersionRange;
+        }
     }
 }

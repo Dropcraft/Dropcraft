@@ -36,10 +36,10 @@ namespace Dropcraft.Runtime
 
             var deferredContext = new DeferredContext();
 
-            var packages = _configurationProvider.GetPackages();
-            foreach (var package in packages)
+            var configurations = _configurationProvider.GetPackageConfigurations();
+            foreach (var config in configurations)
             {
-                HandlePackage(package, deferredContext, false);
+                HandlePackage(config, deferredContext, false);
             }
 
             RaiseRuntimeEvent(new AllRegularPackagesLoadedEvent());
@@ -64,9 +64,9 @@ namespace Dropcraft.Runtime
         {
             var deferredContext = (DeferredContext)obj;
 
-            foreach (var package in deferredContext.Packages)
+            foreach (var config in deferredContext.PackageConfigurations)
             {
-                HandlePackage(package, deferredContext, true);
+                HandlePackage(config, deferredContext, true);
             }
 
             foreach (var extensibilityPointInfo in deferredContext.ExtensibilityPoints)
@@ -77,21 +77,20 @@ namespace Dropcraft.Runtime
             RaiseRuntimeEvent(new AllDeferredPackagesLoadedEvent());
         }
 
-        private void HandlePackage(PackageId package, DeferredContext deferredContext, bool ignoreEntityActivationMode)
+        private void HandlePackage(IPackageConfiguration config, DeferredContext deferredContext, bool ignoreEntityActivationMode)
         {
-            var configuration = _configurationProvider.GetPackageConfiguration(package);
-            if (configuration == null || !configuration.IsPackageEnabled())
+            if (!config.IsPackageEnabled)
                 return;
 
-            if (configuration.GetPackageActivationMode() == EntityActivationMode.Immediate)
+            if (config.PackageActivationMode == EntityActivationMode.Immediate)
             {
-                RaiseRuntimeEvent(new BeforePackageLoadedEvent {Package = package});
-                LoadPackageInfo(configuration, deferredContext, ignoreEntityActivationMode);
-                RaiseRuntimeEvent(new AfterPackageLoadedEvent { Package = package });
+                RaiseRuntimeEvent(new BeforePackageLoadedEvent {Package = config.Id});
+                LoadPackageInfo(config, deferredContext, ignoreEntityActivationMode);
+                RaiseRuntimeEvent(new AfterPackageLoadedEvent { Package = config.Id });
             }
             else
             {
-                deferredContext.Packages.Add(package);
+                deferredContext.PackageConfigurations.Add(config);
             }
         }
 

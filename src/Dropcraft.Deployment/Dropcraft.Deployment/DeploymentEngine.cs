@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
@@ -44,7 +45,7 @@ namespace Dropcraft.Deployment
         public async Task InstallPackages(IEnumerable<PackageId> packages)
         {
             Logger.Trace("Installing packages");
-            var productPackages = ProductConfigurationProvider.GetPackages();
+            var productPackages = ProductConfigurationProvider.GetPackageConfigurations().Select(x=>x.Id);
             var context = new WorkflowContext(packages, productPackages);
             Logger.Trace($"{context.InputProductPackages.Count} product packages and {context.InputPackages.Count} new packages are requested");
 
@@ -90,7 +91,7 @@ namespace Dropcraft.Deployment
         public async Task UninstallPackages(IEnumerable<PackageId> packages)
         {
             Logger.Trace("Uninstalling packages");
-            var productPackages = ProductConfigurationProvider.GetPackages();
+            var productPackages = ProductConfigurationProvider.GetPackageConfigurations().Select(x=>x.Id);
             var context = new WorkflowContext(new PackageId[] {}, productPackages);
             var workflow = GetDeploymentWorkflow(context);
 

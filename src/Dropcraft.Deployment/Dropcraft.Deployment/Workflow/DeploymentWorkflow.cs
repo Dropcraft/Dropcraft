@@ -157,8 +157,8 @@ namespace Dropcraft.Deployment.Workflow
                     fileTransaction.InstallFile(file);
                 }
 
-                productConfigProvider.SetPackageConfiguration(package.Id,
-                    packageConfigProvider.GetPackageConfiguration(package.Id, package.PackagePath));
+                productConfigProvider.SetPackageConfiguration(packageConfigProvider.GetPackageConfiguration(package.Id,
+                    package.PackagePath));
             }
         }
 

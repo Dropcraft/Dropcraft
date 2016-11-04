@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
 using Newtonsoft.Json;
@@ -10,6 +11,8 @@ namespace Dropcraft.Runtime.Configuration
     public class ProductConfigurationProvider : IProductConfigurationProvider
     {
         private readonly string _configPath;
+        private readonly List<IPackageConfiguration> _packages = new List<IPackageConfiguration>();
+
         public bool IsProductConfigured { get; private set; }
 
         public ProductConfigurationProvider(IProductContext context, string productConfigurationFileName)
@@ -40,31 +43,29 @@ namespace Dropcraft.Runtime.Configuration
             IsProductConfigured = true;
         }
 
-        public IEnumerable<PackageId> GetPackages()
+        public IEnumerable<IPackageConfiguration> GetPackageConfigurations()
         {
-            var packages = new List<PackageId>();
-            if (!IsProductConfigured)
-                return packages;
-            
-            return packages;
+            return _packages;
         }
 
         public IPackageConfiguration GetPackageConfiguration(PackageId packageId)
         {
-            if (!IsProductConfigured)
-                return null;
-
-            throw new System.NotImplementedException();
+            return _packages.FirstOrDefault(x => x.Id.IsSamePackage(packageId));
         }
 
-        public void SetPackageConfiguration(PackageId packageId, IPackageConfiguration packageConfiguration)
+        public void SetPackageConfiguration(IPackageConfiguration packageConfiguration)
         {
+            RemovePackageConfiguration(packageConfiguration.Id);
+            _packages.Add(packageConfiguration);
         }
 
         public void RemovePackageConfiguration(PackageId packageId)
         {
-            if (!IsProductConfigured)
-                return;
+            var configuration = GetPackageConfiguration(packageId);
+            if (configuration != null)
+            {
+                _packages.Remove(configuration);
+            }
         }
 
         public void Save()

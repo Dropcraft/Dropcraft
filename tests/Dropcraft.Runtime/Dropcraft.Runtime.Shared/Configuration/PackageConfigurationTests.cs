@@ -16,7 +16,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{}");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.IsPackageEnabled().Should().BeTrue();
+            manifest.IsPackageEnabled.Should().BeTrue();
         }
 
         [Fact]
@@ -25,7 +25,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{ \"enabled\": \"true\" }");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.IsPackageEnabled().Should().BeTrue();
+            manifest.IsPackageEnabled.Should().BeTrue();
         }
 
         [Fact]
@@ -34,7 +34,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{ \"enabled\": \"false\" }");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.IsPackageEnabled().Should().BeFalse();
+            manifest.IsPackageEnabled.Should().BeFalse();
         }
 
         [Fact]
@@ -43,7 +43,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{}");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.GetPackageActivationMode().Should().Be(EntityActivationMode.Immediate);
+            manifest.PackageActivationMode.Should().Be(EntityActivationMode.Immediate);
         }
 
         [Fact]
@@ -52,7 +52,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{ \"activation\": \"immediate\" }");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.GetPackageActivationMode().Should().Be(EntityActivationMode.Immediate);
+            manifest.PackageActivationMode.Should().Be(EntityActivationMode.Immediate);
         }
 
         [Fact]
@@ -61,7 +61,7 @@ namespace Dropship.Runtime.Configuration
             var obj = JObject.Parse("{ \"activation\": \"deferred\" }");
             var manifest = new PackageConfiguration(null, obj);
 
-            manifest.GetPackageActivationMode().Should().Be(EntityActivationMode.Deferred);
+            manifest.PackageActivationMode.Should().Be(EntityActivationMode.Deferred);
         }
 
         [Fact]

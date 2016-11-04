@@ -6,13 +6,13 @@ namespace Dropcraft.Runtime
 {
     class DeferredContext
     {
-        public List<PackageId> Packages { get; }
+        public List<IPackageConfiguration> PackageConfigurations { get; }
 
         public List<ExtensibilityPointInfo> ExtensibilityPoints { get; }
 
         public DeferredContext()
         {
-            Packages = new List<PackageId>();
+            PackageConfigurations = new List<IPackageConfiguration>();
             ExtensibilityPoints = new List<ExtensibilityPointInfo>();
         }
     }

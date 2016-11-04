@@ -8,15 +8,24 @@ namespace Dropcraft.Common.Configuration
     public interface IProductConfigurationProvider
     {
         /// <summary>
-        /// Indicates existance of the configured product in the product path
+        /// Indicates existence of the configured product in the product path
         /// </summary>
         bool IsProductConfigured { get; }
 
-        IEnumerable<PackageId> GetPackages();
+        /// <summary>
+        /// Returns configuration for all configured packages
+        /// </summary>
+        /// <returns>Package configurations list</returns>
+        IEnumerable<IPackageConfiguration> GetPackageConfigurations();
 
+        /// <summary>
+        /// Returns configuration for the selected package
+        /// </summary>
+        /// <param name="packageId">Selected Package ID</param>
+        /// <returns>Configuration for the selected package</returns>
         IPackageConfiguration GetPackageConfiguration(PackageId packageId);
 
-        void SetPackageConfiguration(PackageId packageId, IPackageConfiguration packageConfiguration);
+        void SetPackageConfiguration(IPackageConfiguration packageConfiguration);
 
         void RemovePackageConfiguration(PackageId packageId);
 

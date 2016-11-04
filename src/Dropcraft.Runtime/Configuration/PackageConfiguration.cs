@@ -10,35 +10,45 @@ namespace Dropcraft.Runtime.Configuration
     public class PackageConfiguration : IPackageConfiguration
     {
         private readonly JObject _jsonObject;
-        private readonly PackageId _packageInfo;
 
-        public PackageConfiguration(PackageId packageInfo, JObject jsonObject)
-        {
-            _packageInfo = packageInfo;
-            _jsonObject = jsonObject;
-        }
+        public PackageId Id { get; }
 
-        public bool IsPackageEnabled()
+        public bool IsPackageEnabled
         {
-            JToken token;
-            return !_jsonObject.TryGetValue("enabled", out token) || token.Value<bool>();
-        }
-
-        public PackageMetadataInfo GetPackageMetadata()
-        {
-            throw new NotImplementedException(); // TODO
-        }
-
-        public EntityActivationMode GetPackageActivationMode()
-        {
-            JToken token;
-            var result = EntityActivationMode.Immediate;
-            if (_jsonObject.TryGetValue("activation", out token))
+            get
             {
-                Enum.TryParse(token.ToString(), true, out result);
+                JToken token;
+                return !_jsonObject.TryGetValue("enabled", out token) || token.Value<bool>();
             }
+        }
 
-            return result;
+        public PackageMetadataInfo PackageMetadata
+        {
+            get
+            {
+                throw new NotImplementedException(); // TODO
+            }
+        }
+
+        public EntityActivationMode PackageActivationMode
+        {
+            get
+            {
+                JToken token;
+                var result = EntityActivationMode.Immediate;
+                if (_jsonObject.TryGetValue("activation", out token))
+                {
+                    Enum.TryParse(token.ToString(), true, out result);
+                }
+
+                return result;
+            }
+        }
+
+        public PackageConfiguration(PackageId packageId, JObject jsonObject)
+        {
+            Id = packageId;
+            _jsonObject = jsonObject;
         }
 
         public IEnumerable<PackageStartupHandlerInfo> GetPackageStartupHandlers()
@@ -49,7 +59,7 @@ namespace Dropcraft.Runtime.Configuration
             if (_jsonObject.TryGetValue("startupHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
-                var handlers = array.Select(x => new PackageStartupHandlerInfo(_packageInfo, x.ToString()));
+                var handlers = array.Select(x => new PackageStartupHandlerInfo(Id, x.ToString()));
                 result.AddRange(handlers);
             }
 
@@ -64,7 +74,7 @@ namespace Dropcraft.Runtime.Configuration
             if (_jsonObject.TryGetValue("eventHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
-                var handlers = array.Select(x => new RuntimeEventsHandlerInfo(_packageInfo, x.ToString()));
+                var handlers = array.Select(x => new RuntimeEventsHandlerInfo(Id, x.ToString()));
                 result.AddRange(handlers);
             }
 
@@ -86,7 +96,7 @@ namespace Dropcraft.Runtime.Configuration
                             var jsonConfig = x["configuration"];
                             ICustomConfiguration config = jsonConfig == null ? null : new JsonCustomConfiguration(jsonConfig);
 
-                            return new ExtensionInfo(_packageInfo, x.Value<string>("class"),
+                            return new ExtensionInfo(Id, x.Value<string>("class"),
                                 x.Value<string>("extensibilityPointId"),
                                 x.Value<string>("id"), config);
 
@@ -118,7 +128,7 @@ namespace Dropcraft.Runtime.Configuration
                             if (!String.IsNullOrWhiteSpace(activationSetting))
                                 Enum.TryParse(activationSetting, true, out activationMode);
 
-                            return new ExtensibilityPointInfo(_packageInfo, x.Value<string>("class"),
+                            return new ExtensibilityPointInfo(Id, x.Value<string>("class"),
                                 x.Value<string>("id"), activationMode, config);
 
                         });
@@ -137,7 +147,7 @@ namespace Dropcraft.Runtime.Configuration
             if (_jsonObject.TryGetValue("deploymentHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
-                var handlers = array.Select(x => new DeploymentEventsHandlerInfo(_packageInfo, x.ToString()));
+                var handlers = array.Select(x => new DeploymentEventsHandlerInfo(Id, x.ToString()));
                 result.AddRange(handlers);
             }
 
