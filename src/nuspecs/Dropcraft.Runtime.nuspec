@@ -22,6 +22,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Dropcraft.Runtime\bin\Release\Dropcraft.Runtime*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Runtime.NETStandard\bin\Release\Dropcraft.Runtime*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Runtime.NET46\bin\Release\Dropcraft.Runtime*.*" target="lib\net461\" exclude="**\*.pdb" />
   </files>
 </package>

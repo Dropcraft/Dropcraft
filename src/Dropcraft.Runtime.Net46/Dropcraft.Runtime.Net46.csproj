@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{812F6142-DC6C-42CB-8C53-5143A110C3AC}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Dropcraft.Runtime</RootNamespace>
+    <AssemblyName>Dropcraft.Runtime</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=9.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Newtonsoft.Json.9.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\JsonCustomConfiguration.cs">
+      <Link>Configuration\JsonCustomConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfiguration.cs">
+      <Link>Configuration\PackageConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfigurationProvider.cs">
+      <Link>Configuration\PackageConfigurationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfigurationSource.cs">
+      <Link>Configuration\PackageConfigurationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationProvider.cs">
+      <Link>Configuration\ProductConfigurationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationSource.cs">
+      <Link>Configuration\ProductConfigurationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductPackageInfo.cs">
+      <Link>Configuration\ProductPackageInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\DeferredContext.cs">
+      <Link>DeferredContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\ReflectionEntityActivator.cs">
+      <Link>ReflectionEntityActivator.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\RuntimeConfiguration.cs">
+      <Link>RuntimeConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\RuntimeContext.cs">
+      <Link>RuntimeContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\RuntimeEngine.cs">
+      <Link>RuntimeEngine.cs</Link>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Dropcraft.Common.NetStandard\Dropcraft.Common.csproj">
+      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
+      <Name>Dropcraft.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

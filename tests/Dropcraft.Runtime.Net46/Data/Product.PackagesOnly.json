@@ -1,0 +1,11 @@
+﻿{
+  "version": "1.0",
+  "packages": {
+    "ABC/1.0": {
+      "package" : {}
+    },
+    "XYZ/2.0": {
+      "package" : {} 
+    }
+  }
+}
