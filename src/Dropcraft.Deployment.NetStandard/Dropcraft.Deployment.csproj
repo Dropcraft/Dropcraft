@@ -39,6 +39,14 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CommandLineEngine.cs" />
+    <Compile Include="Commands\CommandHelper.cs" />
+    <Compile Include="Commands\DeploymentCommand.cs" />
+    <Compile Include="Commands\InstallCommand.cs" />
+    <Compile Include="Commands\ManifestCommand.cs" />
+    <Compile Include="Commands\RepairCommand.cs" />
+    <Compile Include="Commands\UninstallCommand.cs" />
+    <Compile Include="Commands\UpdateCommand.cs" />
     <Compile Include="Configuration\DeploymentStarategyProvider.cs" />
     <Compile Include="Configuration\DeploymentStrategySource.cs" />
     <Compile Include="Configuration\DeploymentStrategyOptions.cs" />

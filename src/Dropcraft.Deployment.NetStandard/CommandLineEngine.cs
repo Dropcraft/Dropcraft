@@ -1,0 +1,98 @@
+﻿using System;
+using System.Collections.Generic;
+using Dropcraft.Common;
+using Dropcraft.Common.Logging;
+using Dropcraft.Deployment.Commands;
+using Microsoft.Extensions.CommandLineUtils;
+
+namespace Dropcraft.Deployment
+{
+    public class CommandLineEngine
+    {
+        private static readonly ILog Logger = LogProvider.For<CommandLineEngine>();
+
+        protected CommandLineApplication App { get; }
+
+        public string AppName { get; set; }
+        public string AppVersion { get; set; }
+
+        public CommandLineEngine(bool throwOnUnexpectedArg = true)
+        {
+            App = new CommandLineApplication(throwOnUnexpectedArg);
+        }
+
+        public int Run(params string[] args)
+        {
+            ConfigureApps();
+            var commands = GetCommands();
+            ConfigureCommands(commands);
+
+            return Execute(args);
+        }
+
+        protected virtual void ConfigureApps()
+        {
+            App.FullName = AppName;
+            App.VersionOption("--version", AppVersion);
+            App.HelpOption(CommandHelper.HelpOption);
+        }
+
+        protected virtual IEnumerable<DeploymentCommand> GetCommands()
+        {
+            return new DeploymentCommand[]
+            {
+                new InstallCommand(),
+                new ManifestCommand(),
+                new RepairCommand(),
+                new UninstallCommand(),
+                new UpdateCommand()
+            };
+        }
+
+        protected virtual void ConfigureCommands(IEnumerable<DeploymentCommand> commands)
+        {
+            foreach (var command in commands)
+            {
+                command.Register(App);    
+            }
+        }
+
+        protected virtual DeploymentConfiguration ConfigureDeployment()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected virtual IDeploymentEngine CreateDeploymentEngine(DeploymentConfiguration configuration)
+        {
+            return configuration.CreatEngine();
+        }
+
+        protected virtual int Execute(params string[] args)
+        {
+            int exitCode;
+
+            App.OnExecute(() =>
+            {
+                App.ShowHelp();
+                return 0;
+            });
+
+            try
+            {
+                exitCode = App.Execute(args);
+                if (exitCode < 0 || exitCode > 255)
+                {
+                    exitCode = 1;
+                }
+            }
+            catch (Exception e)
+            {
+                Logger.Error(e.Message);
+                Logger.TraceException(e.Message, e);
+                exitCode = 1;
+            }
+
+            return exitCode;
+        }
+    }
+}
