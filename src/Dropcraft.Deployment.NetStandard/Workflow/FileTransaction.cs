@@ -101,6 +101,11 @@ namespace Dropcraft.Deployment.Workflow
 
         private void Rollback()
         {
+            if (_installedFile.Count == 0 && _deletedFiles.Count == 0 && _createdFolder.Count == 0)
+            {
+                return;
+            }
+
             Logger.Trace("Rolling back changes");
 
             foreach (var file in _installedFile)

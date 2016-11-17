@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Runtime.Net46", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Deployment.Net46", "src\Dropcraft.Deployment.Net46\Dropcraft.Deployment.Net46.csproj", "{B35C7FB4-5643-47F3-80FB-C55A0A04B736}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Dropcraft.Net46", "src\Dropcraft.Net46\Dropcraft.Net46.csproj", "{5FDA3117-C1E9-4294-8E09-894B173EE3B7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -57,6 +59,10 @@ Global
 		{B35C7FB4-5643-47F3-80FB-C55A0A04B736}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B35C7FB4-5643-47F3-80FB-C55A0A04B736}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B35C7FB4-5643-47F3-80FB-C55A0A04B736}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5FDA3117-C1E9-4294-8E09-894B173EE3B7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5FDA3117-C1E9-4294-8E09-894B173EE3B7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5FDA3117-C1E9-4294-8E09-894B173EE3B7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5FDA3117-C1E9-4294-8E09-894B173EE3B7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -69,5 +75,6 @@ Global
 		{8F2201EC-40E9-4736-87D7-0430150F35A0} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
 		{812F6142-DC6C-42CB-8C53-5143A110C3AC} = {B419F541-77CF-4AB6-A266-8169D91FF94C}
 		{B35C7FB4-5643-47F3-80FB-C55A0A04B736} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
+		{5FDA3117-C1E9-4294-8E09-894B173EE3B7} = {0D3543CF-984B-49DE-9ACB-08D078BD9F28}
 	EndGlobalSection
 EndGlobal

@@ -8,6 +8,6 @@ using System.Reflection;
 [assembly: AssemblyProduct("Dropcraft")]
 [assembly: AssemblyVersion("0.1.0.0")]
 [assembly: AssemblyFileVersion("0.1.0.0")]
-[assembly: AssemblyInformationalVersion("0.1.0+28.Branch.master.Sha.cae760eb97e5d22d7d7b7d4eba4dbe4d6593af20")]
+[assembly: AssemblyInformationalVersion("0.1.0+29.Branch.master.Sha.c1b34cabc3ccda238a79e50b1cceea264fe539b4")]
 [assembly: AssemblyCopyright("Copyright © Andrei Marukovich")]
 

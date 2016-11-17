@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Dropcraft.Common;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.Commands;
 using Microsoft.Extensions.CommandLineUtils;
@@ -14,7 +13,11 @@ namespace Dropcraft.Deployment
         protected CommandLineApplication App { get; }
 
         public string AppName { get; set; }
-        public string AppVersion { get; set; }
+
+        public string AppFullName { get; set; }
+
+        public string AppShortVersion { get; set; }
+        public string AppLongVersion { get; set; }
 
         public CommandLineEngine(bool throwOnUnexpectedArg = true)
         {
@@ -32,8 +35,13 @@ namespace Dropcraft.Deployment
 
         protected virtual void ConfigureApps()
         {
-            App.FullName = AppName;
-            App.VersionOption("--version", AppVersion);
+            App.Name = AppName;
+            App.FullName = AppFullName;
+
+            if (string.IsNullOrWhiteSpace(AppLongVersion))
+                AppLongVersion = AppShortVersion;
+
+            App.VersionOption("--version", AppShortVersion, AppLongVersion);
             App.HelpOption(CommandHelper.HelpOption);
         }
 
@@ -53,18 +61,8 @@ namespace Dropcraft.Deployment
         {
             foreach (var command in commands)
             {
-                command.Register(App);    
+                command.Register(App, x=>Logger.Error(x));
             }
-        }
-
-        protected virtual DeploymentConfiguration ConfigureDeployment()
-        {
-            throw new NotImplementedException();
-        }
-
-        protected virtual IDeploymentEngine CreateDeploymentEngine(DeploymentConfiguration configuration)
-        {
-            return configuration.CreatEngine();
         }
 
         protected virtual int Execute(params string[] args)

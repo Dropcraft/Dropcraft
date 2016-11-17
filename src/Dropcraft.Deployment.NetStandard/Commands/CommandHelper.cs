@@ -2,6 +2,6 @@
 {
     public class CommandHelper
     {
-        public static string HelpOption = "-h|--help";
+        public static string HelpOption = "--help";
     }
 }

@@ -88,7 +88,7 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Allows to setup the deployment startegy for product
         /// </summary>
-        public DeploymentConfigurationOptions ForDeployment => new DeploymentConfigurationOptions(this);
+        public DeploymentStrategyOptions ForDeployment => new DeploymentStrategyOptions(this);
 
         /// <summary>
         /// Allows to setup local and remote package sources

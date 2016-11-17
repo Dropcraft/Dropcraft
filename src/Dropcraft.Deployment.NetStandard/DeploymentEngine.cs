@@ -44,13 +44,13 @@ namespace Dropcraft.Deployment
         /// <returns>Task</returns>
         public async Task InstallPackages(IEnumerable<PackageId> packages)
         {
-            Logger.Trace("Installing packages");
+            Logger.Trace("Installing packages...");
             var productPackages = ProductConfigurationProvider
                                     .GetPackageConfigurations(DependencyOrdering.BottomToTop)
                                     .Select(x => x.Id);
 
             var context = new WorkflowContext(packages, productPackages);
-            Logger.Trace($"{context.InputProductPackages.Count} product packages and {context.InputPackages.Count} new packages are requested");
+            Logger.Trace($"{context.InputProductPackages.Count} product package(s) discovered and {context.InputPackages.Count} new package(s) are requested");
 
             var workflow = GetDeploymentWorkflow(context);
             await workflow.EnsureAllPackagesAreVersioned(context);
@@ -74,6 +74,8 @@ namespace Dropcraft.Deployment
                 ProductConfigurationProvider.Save();
                 transaction.Commit();
             }
+
+            Logger.Trace("Packages installation complete");
         }
 
         /// <summary>

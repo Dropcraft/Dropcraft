@@ -46,7 +46,7 @@ namespace Dropcraft.Deployment.Configuration
                 if (!Directory.Exists(libFxFolder))
                 {
                     var fxName = NuGetEngine.GetMostCompatibleFramework(_deploymentContext.TargetFramework,
-                        Directory.EnumerateDirectories(libFolder));
+                        Directory.EnumerateDirectories(libFolder).Select(Path.GetFileName));
                     libFxFolder = Path.Combine(libFolder, fxName);
                     if (!Directory.Exists(libFxFolder))
                     {
