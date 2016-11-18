@@ -123,6 +123,7 @@ namespace Dropcraft.Deployment.Workflow
                 }
 
                 productConfig.RemovePackageConfiguration(packageId);
+                Logger.Info($"Package {packageId} uninstalled");
             }
         }
 
@@ -168,6 +169,7 @@ namespace Dropcraft.Deployment.Workflow
 
                 var cfg = packageConfigProvider.GetPackageConfiguration(package.Id, package.PackagePath);
                 productConfigProvider.SetPackageConfiguration(cfg, installedFiles, package.Dependencies.Select(x => x.Id.ToString()));
+                Logger.Info($"Package {package.Id} installed");
             }
         }
 
@@ -267,7 +269,7 @@ namespace Dropcraft.Deployment.Workflow
                 throw LogException(new ArgumentException($"Version for package {packageId.Id} cannot be resolved"));
             }
 
-            Logger.Trace($"Package {packageId.Id} resolved as {packageId.Id},{packageId.Version}");
+            Logger.Trace($"Package {packageId.Id} resolved as {package.Id}/{package.Version}");
             return package;
         }
 

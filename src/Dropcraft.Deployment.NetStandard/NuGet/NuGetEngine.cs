@@ -22,37 +22,38 @@ namespace Dropcraft.Deployment.NuGet
     public class NuGetEngine
     {
         private readonly NuGetLogger _nuGetLogger;
-        private readonly DeploymentContext _deploymentContext;
         private readonly bool _updatePackages;
         private readonly bool _allowDowngrades;
         private readonly SourceRepositoryProvider _repositoryProvider;
         private readonly SourceRepository _localRepository;
         private readonly NuGetFramework _framework;
         private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
+        private readonly SourceCacheContext _cache;
 
         public NuGetEngine(DeploymentConfiguration configuration)
         {
-            _deploymentContext = configuration.DeploymentContext;
+            var deploymentContext = configuration.DeploymentContext;
             _updatePackages = configuration.UpdatePackages;
             _allowDowngrades = configuration.AllowDowngrades;
 
-            var settings = Settings.LoadDefaultSettings(_deploymentContext.PackagesFolderPath);
+            var settings = Settings.LoadDefaultSettings(deploymentContext.PackagesFolderPath);
             _nuGetLogger = new NuGetLogger();
+            _cache = new SourceCacheContext();
 
             _repositoryProvider = new SourceRepositoryProvider(settings);
-            _localRepository = _repositoryProvider.CreateRepository(_deploymentContext.PackagesFolderPath);
+            _localRepository = _repositoryProvider.CreateRepository(deploymentContext.PackagesFolderPath);
 
             foreach (var packageSource in configuration.RemotePackagesSources)
             {
                 _repositoryProvider.AddPackageRepository(packageSource);
             }
 
-            if (!string.IsNullOrWhiteSpace(_deploymentContext.TargetFramework))
+            if (!string.IsNullOrWhiteSpace(deploymentContext.TargetFramework))
             {
-                _framework = NuGetFramework.Parse(_deploymentContext.TargetFramework);
+                _framework = NuGetFramework.Parse(deploymentContext.TargetFramework);
                 if (_framework == null)
                 {
-                    var ex = new ArgumentException($"Framework {_deploymentContext.TargetFramework} is unknown");
+                    var ex = new ArgumentException($"Framework {deploymentContext.TargetFramework} is unknown");
                     Logger.Trace(ex.Message);
                     throw ex;
                 }
@@ -83,17 +84,16 @@ namespace Dropcraft.Deployment.NuGet
 
         public async Task<GraphNode<RemoteResolveResult>> ResolvePackages(List<PackageId> packages)
         {
-            var cache = new SourceCacheContext();
-            var walkerContext = new RemoteWalkContext();
+            var walkerContext = new RemoteWalkContext(_cache, _nuGetLogger);
 
             foreach (var sourceRepository in _repositoryProvider.Repositories)
             {
-                var provider = new SourceRepositoryDependencyProvider(sourceRepository, _nuGetLogger, cache, true);
+                var provider = new SourceRepositoryDependencyProvider(sourceRepository, _nuGetLogger, _cache, true, true);
                 walkerContext.RemoteLibraryProviders.Add(provider);
             }
 
             walkerContext.ProjectLibraryProviders.Add(new ProjectLibraryProvider(packages));
-            var localProvider = new SourceRepositoryDependencyProvider(_localRepository, _nuGetLogger, cache, true);
+            var localProvider = new SourceRepositoryDependencyProvider(_localRepository, _nuGetLogger, _cache, true, true);
             walkerContext.LocalLibraryProviders.Add(localProvider);
 
             var fakeLib = new LibraryRange("Dropcraft", VersionRange.Parse("1.0.0"), LibraryDependencyTarget.Project);
@@ -197,6 +197,8 @@ namespace Dropcraft.Deployment.NuGet
                 stream => match.Provider.CopyToAsync(
                     match.Library,
                     stream,
+                    _cache, 
+                    _nuGetLogger,
                     CancellationToken.None),
                 versionFolderPathContext,
                 CancellationToken.None);

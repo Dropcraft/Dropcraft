@@ -26,14 +26,14 @@ namespace Dropcraft.Deployment
 
         public int Run(params string[] args)
         {
-            ConfigureApps();
+            ConfigureApp();
             var commands = GetCommands();
             ConfigureCommands(commands);
 
             return Execute(args);
         }
 
-        protected virtual void ConfigureApps()
+        protected virtual void ConfigureApp()
         {
             App.Name = AppName;
             App.FullName = AppFullName;

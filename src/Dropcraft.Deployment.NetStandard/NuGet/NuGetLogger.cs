@@ -11,7 +11,7 @@ namespace Dropcraft.Deployment.NuGet
 
         public void LogVerbose(string data) => Logger.Trace(data);
 
-        public void LogInformation(string data) => Logger.Info(data);
+        public void LogInformation(string data) => Logger.Trace(data);
 
         public void LogMinimal(string data) => Logger.Trace(data);
 

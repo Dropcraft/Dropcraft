@@ -1,6 +1,9 @@
-﻿using System.Reflection;
-using Dropcraft.Deployment;
+﻿using System;
+using System.Diagnostics;
+using System.Linq;
+using System.Reflection;
 using Serilog;
+using Serilog.Events;
 
 namespace Dropcraft
 {
@@ -8,18 +11,25 @@ namespace Dropcraft
     {
         static int Main(string[] args)
         {
+            if (args.Contains("--debug"))
+            {
+                Console.WriteLine("Waiting for debugger to attach.");
+                Console.WriteLine($"Process ID: {Process.GetCurrentProcess().Id}");
+
+                while (!Debugger.IsAttached)
+                {
+                    System.Threading.Thread.Sleep(100);
+                }
+
+                Debugger.Break();
+            }
+
             Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Verbose()
+                .MinimumLevel.Is(args.Contains("--verbose") ? LogEventLevel.Verbose : LogEventLevel.Information)
                 .WriteTo.ColoredConsole(outputTemplate:"{Message}{NewLine}{Exception}")
                 .CreateLogger();
 
-            var engine = new CommandLineEngine
-            {
-                AppFullName = "Dropcraft",
-                AppName = "dropcraft",
-                AppShortVersion = Assembly.GetCallingAssembly().GetName().Version.ToString(),
-            };
-
+            var engine = new DropcraftCommandLine();
             return engine.Run(args);
         }
     }

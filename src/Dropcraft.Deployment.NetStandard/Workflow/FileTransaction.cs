@@ -106,7 +106,7 @@ namespace Dropcraft.Deployment.Workflow
                 return;
             }
 
-            Logger.Trace("Rolling back changes");
+            Logger.Warn("Rolling back changes");
 
             foreach (var file in _installedFile)
             {
