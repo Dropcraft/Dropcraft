@@ -19,6 +19,8 @@ namespace Dropcraft.Common
         /// </summary>
         public string PackagesFolderPath { get; protected set; }
 
+        public bool DontCachePackages { get; protected set; }
+
         /// <summary>
         /// Register a handler for deployment events
         /// </summary>

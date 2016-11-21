@@ -16,8 +16,10 @@ namespace Dropcraft.Deployment.Workflow
             {
                 var newPackages = new[] {new PackageId("bootstrap", "[3.3.7]", false)};
                 var productPackages = new PackageId[] {};
+                var topLevelProductPackages = new PackageId[] {};
 
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages);
+                var context = await
+                        TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
 
                 context.Ctx.PackagesForInstallation.Count.Should().Be(2);
                 context.Ctx.PackagesForInstallation[0].Id.Id.Should().Be("jQuery");
@@ -32,7 +34,9 @@ namespace Dropcraft.Deployment.Workflow
             {
                 var newPackages = new[] { new PackageId("bootstrap", string.Empty, false) };
                 var productPackages = new[] { new PackageId("Newtonsoft.Json", "9.0.1", false) };
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages);
+                var topLevelProductPackages = new[] { new PackageId("Newtonsoft.Json", "9.0.1", false) };
+
+                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
 
                 context.Ctx.PackagesForInstallation.Count.Should().Be(2);
             }
@@ -45,7 +49,9 @@ namespace Dropcraft.Deployment.Workflow
             {
                 var newPackages = new[] { new PackageId("bootstrap", "[3.3.7]", false) };
                 var productPackages = new[] { new PackageId("bootstrap", "3.2.0", false) };
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages);
+                var topLevelProductPackages = new[] { new PackageId("bootstrap", "3.2.0", false) };
+
+                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
 
                 context.Ctx.PackagesForInstallation.Count.Should().Be(2);
                 context.Ctx.PackagesForInstallation[0].Id.Id.Should().Be("jQuery");
@@ -67,7 +73,9 @@ namespace Dropcraft.Deployment.Workflow
 
                 var productPackages = new[] { new PackageId("bootstrap", "3.3.7", false) };
                 var newPackages = new[] { new PackageId("bootstrap", "[3.2.0]", false) };
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages);
+                var topLevelProductPackages = new[] { new PackageId("bootstrap", "3.3.7", false) };
+
+                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
 
                 context.Ctx.PackagesForInstallation.Count.Should().Be(2);
                 context.Ctx.PackagesForInstallation[0].Id.Id.Should().Be("jQuery");
@@ -87,7 +95,9 @@ namespace Dropcraft.Deployment.Workflow
             {
                 var productPackages = new[] { new PackageId("Newtonsoft.Json", "9.0.1", false) };
                 var newPackages = new[] { new PackageId("bootstrap", "[3.3.7]", false) };
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages);
+                var topLevelProductPackages = new[] { new PackageId("Newtonsoft.Json", "9.0.1", false) };
+
+                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
                 context.ExecuteInstall(helper.PackagesPath);
 
                 helper.IsPackageExists("bootstrap", "3.3.7").Should().Be(true);
@@ -102,13 +112,14 @@ namespace Dropcraft.Deployment.Workflow
             private DeploymentWorkflow Workflow { get; set; }
 
             public static async Task<TestContext> ExecuteResolveWorkflow(TestDeploymentHelper helper,
-                IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
+                IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages,
+                IEnumerable<PackageId> topLevelProductPackages)
             {
                 var engine = new NuGetEngine(helper.Configuration);
 
                 var context = new TestContext()
                 {
-                    Ctx = new WorkflowContext(newPackages, productPackages),
+                    Ctx = new WorkflowContext(newPackages, productPackages, topLevelProductPackages),
                     Workflow = new DeploymentWorkflow(engine)
                 };
 

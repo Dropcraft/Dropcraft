@@ -42,7 +42,7 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Dropcraft.Deployment.NetStandard\bin\Release\Dropcraft.Deployment.*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
-    <file src="..\Dropcraft.Deployment.Net46\bin\Release\Dropcraft.Deployment.*.*" target="lib\net461\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Deployment.NetStandard\bin\Release\Dropcraft.Deployment*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Deployment.Net46\bin\Release\Dropcraft.Deployment*.*" target="lib\net461\" exclude="**\*.pdb" />
   </files>
 </package>

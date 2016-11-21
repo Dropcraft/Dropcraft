@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using Dropcraft.Common;
 using Dropcraft.Common.Handler;
 
@@ -9,11 +11,25 @@ namespace Dropcraft.Deployment
         private readonly object _eventsLock = new object();
         private readonly List<IDeploymentEventsHandler> _eventHandlers = new List<IDeploymentEventsHandler>();
 
+        public DefaultDeploymentContext(string productPath)
+            : this(productPath, string.Empty, string.Empty)
+        {
+        }
+
         public DefaultDeploymentContext(string productPath, string packagesFolderPath, string framework) 
         {
             ProductPath = productPath;
-            PackagesFolderPath = packagesFolderPath;
             TargetFramework = framework;
+
+            if (string.IsNullOrWhiteSpace(packagesFolderPath))
+            {
+                PackagesFolderPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
+                DontCachePackages = true;
+            }
+            else
+            {
+                PackagesFolderPath = packagesFolderPath;
+            }
         }
 
         protected override void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent)

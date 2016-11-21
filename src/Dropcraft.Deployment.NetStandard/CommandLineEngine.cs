@@ -50,10 +50,11 @@ namespace Dropcraft.Deployment
             return new DeploymentCommand[]
             {
                 new InstallCommand(),
-                new ManifestCommand(),
-                new RepairCommand(),
                 new UninstallCommand(),
-                new UpdateCommand()
+                new UpdateCommand(),
+                new RepairCommand(),
+                new ManifestCommand(),
+                new InspectCommand(), 
             };
         }
 

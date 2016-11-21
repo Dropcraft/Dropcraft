@@ -5,7 +5,8 @@ namespace Dropcraft.Common.Configuration
     public enum DependencyOrdering
     {
         TopToBottom,
-        BottomToTop
+        BottomToTop,
+        TopPackagesOnly
     }
 
     /// <summary>
@@ -37,6 +38,8 @@ namespace Dropcraft.Common.Configuration
         void RemovePackageConfiguration(PackageId packageId);
 
         IEnumerable<string> GetInstalledFiles(PackageId packageId, bool deletableFilesOnly);
+
+        IEnumerable<string> GetPackageDependencies(PackageId packageId);
 
         void Save();
     }

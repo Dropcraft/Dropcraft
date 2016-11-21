@@ -60,6 +60,15 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="installPath">Path to deploy composed application</param>
+        public DeploymentConfiguration(string installPath)
+            : this(new DefaultDeploymentContext(installPath))
+        {
+        }
+
+        /// <summary>
+        /// Constructor
+        /// </summary>
         /// <param name="deploymentContext">Configured custom deployment context to use</param>
         public DeploymentConfiguration(DeploymentContext deploymentContext)
         {
@@ -86,7 +95,7 @@ namespace Dropcraft.Deployment
         public ProductConfigurationOptions ForProductConfiguration => new ProductConfigurationOptions(this);
 
         /// <summary>
-        /// Allows to setup the deployment startegy for product
+        /// Allows to setup the deployment strategy for product
         /// </summary>
         public DeploymentStrategyOptions ForDeployment => new DeploymentStrategyOptions(this);
 

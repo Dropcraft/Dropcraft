@@ -48,23 +48,11 @@ namespace Dropcraft.Deployment.Commands
             if (MissedOption(_productPath, logErrorAction))
                 return 1;
 
-            if (MissedOption(_packagePath, logErrorAction))
-                return 1;
-
             if (MissedOption(_framework, logErrorAction))
                 return 1;
 
             if (MissedOption(_source, logErrorAction))
                 return 1;
-
-            var configuration = GetConfiguration(cmdApp, _productPath.Value(), _packagePath.Value(), _framework.Value())
-                .ConfigureTo.UpdatePackagesFromSource(_updatePackages.HasValue())
-                .ConfigureTo.AllowDowngrades(_allowDowngrades.HasValue());
-
-            foreach (var sourceValue in _source.Values)
-            {
-                configuration.ForPackages.AddRemoteSource(sourceValue);
-            }
 
             var packageIds = new List<PackageId>();
             foreach (var packageValue in _package.Values)
@@ -83,10 +71,26 @@ namespace Dropcraft.Deployment.Commands
                 }
             }
 
-            var engine = GetDeploymentEngine(cmdApp, configuration);
+            var engine = GetDeploymentEngine(cmdApp);
             await engine.InstallPackages(packageIds);
 
             return 0;
         }
+
+        protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
+        {
+            var configuration = CommandHelper.GetConfiguration(_productPath.Value(),
+                    _packagePath.HasValue() ? _packagePath.Value() : string.Empty, _framework.Value())
+                .ConfigureTo.UpdatePackagesFromSource(_updatePackages.HasValue())
+                .ConfigureTo.AllowDowngrades(_allowDowngrades.HasValue());
+
+            foreach (var sourceValue in _source.Values)
+            {
+                configuration.ForPackages.AddRemoteSource(sourceValue);
+            }
+
+            return configuration.CreatEngine();
+        }
+
     }
 }

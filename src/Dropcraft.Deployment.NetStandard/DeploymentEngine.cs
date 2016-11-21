@@ -49,7 +49,11 @@ namespace Dropcraft.Deployment
                                     .GetPackageConfigurations(DependencyOrdering.BottomToTop)
                                     .Select(x => x.Id);
 
-            var context = new WorkflowContext(packages, productPackages);
+            var topLevelProductPackages = ProductConfigurationProvider
+                                    .GetPackageConfigurations(DependencyOrdering.TopPackagesOnly)
+                                    .Select(x => x.Id);
+
+            var context = new WorkflowContext(packages, productPackages, topLevelProductPackages);
             Logger.Info($"{context.InputProductPackages.Count} product package(s) discovered and {context.InputPackages.Count} new package(s) requested");
 
             var workflow = GetDeploymentWorkflow(context);
@@ -57,7 +61,9 @@ namespace Dropcraft.Deployment
             Logger.Info("Versions are verified and updated when needed");
 
             await workflow.ResolvePackages(context);
-            Logger.Info($"Packages are resolved: {context.PackagesForInstallation.Count} to be installed or updated and {context.ProductPackagesForDeletion.Count} to be deleted");
+            Logger.Info($"Packages are resolved");
+            Logger.Info($"\t{context.PackagesForInstallation.Count(x=> !context.PackagesAffectedByUpdate.Contains(x.Id))} package(s) to install");
+            Logger.Info($"\t{context.PackagesAffectedByUpdate.Count} package(s) to update");
 
             workflow.DownloadPackages(context, DeploymentContext.PackagesFolderPath);
             Logger.Info($"All resolved packages are unpacked to {DeploymentContext.PackagesFolderPath}");
@@ -99,7 +105,12 @@ namespace Dropcraft.Deployment
             var productPackages = ProductConfigurationProvider
                                     .GetPackageConfigurations(DependencyOrdering.TopToBottom)
                                     .Select(x=>x.Id);
-            var context = new WorkflowContext(new PackageId[] {}, productPackages);
+
+            var topLevelProductPackages = ProductConfigurationProvider
+                                    .GetPackageConfigurations(DependencyOrdering.TopPackagesOnly)
+                                    .Select(x => x.Id);
+
+            var context = new WorkflowContext(new PackageId[] {}, productPackages, topLevelProductPackages);
             var workflow = GetDeploymentWorkflow(context);
 
             using (var transaction = new FileTransaction())

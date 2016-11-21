@@ -89,12 +89,25 @@ namespace Dropcraft.Runtime.Configuration
 
         public IEnumerable<IPackageConfiguration> GetPackageConfigurations(DependencyOrdering dependencyOrdering)
         {
-            if (dependencyOrdering == DependencyOrdering.BottomToTop)
-                return Packages;
+            if (dependencyOrdering == DependencyOrdering.TopPackagesOnly)
+            {
+                var dependencies = new List<string>();
+                foreach (var info in ProductPackagesInfo)
+                {
+                    dependencies.AddRange(info.Value.Dependencies);
+                }
 
-            var packages = new List<IPackageConfiguration>(Packages);
-            packages.Reverse();
-            return packages;
+                return Packages.Where(x => !dependencies.Contains(x.Id.ToString()));
+            }
+
+            if (dependencyOrdering == DependencyOrdering.TopToBottom)
+            {
+                var packages = new List<IPackageConfiguration>(Packages);
+                packages.Reverse();
+                return packages;
+            }
+
+            return Packages;
         }
 
         public IPackageConfiguration GetPackageConfiguration(PackageId packageId)
@@ -136,6 +149,14 @@ namespace Dropcraft.Runtime.Configuration
 
             return packageInfo.Files.Where(
                     file => !ProductPackagesInfo.Any(x => x.Key != id && x.Value.Files.Contains(file))).ToList();
+        }
+
+        public IEnumerable<string> GetPackageDependencies(PackageId packageId)
+        {
+            var id = packageId.ToString();
+            var packageInfo = ProductPackagesInfo[id];
+
+            return packageInfo.Dependencies;
         }
 
         public void Save()

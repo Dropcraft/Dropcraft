@@ -21,6 +21,11 @@ namespace Dropcraft.Deployment.Workflow
         public List<PackageId> InputProductPackages { get; set; }
 
         /// <summary>
+        /// List of the top level packages (no other packages depend on them)
+        /// </summary>
+        public List<PackageId> TopLevelProductPackages { get; set; }
+
+        /// <summary>
         /// Expected list of registered packages after the deployment
         /// </summary>
         public List<PackageInfo> ResultingProductPackages { get; } = new List<PackageInfo>();
@@ -29,6 +34,11 @@ namespace Dropcraft.Deployment.Workflow
         /// Packages list to install
         /// </summary>
         public List<PackageInfo> PackagesForInstallation { get; } = new List<PackageInfo>();
+
+        /// <summary>
+        /// List with the IDs of the packages to update
+        /// </summary>
+        public List<PackageId> PackagesAffectedByUpdate { get; } = new List<PackageId>();
 
         /// <summary>
         /// Packages list to remove
@@ -40,10 +50,11 @@ namespace Dropcraft.Deployment.Workflow
         /// </summary>
         public Queue<Tuple<GraphNode<RemoteResolveResult>, PackageInfo>> FlatteningCache { get; }
 
-        public WorkflowContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages)
+        public WorkflowContext(IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages, IEnumerable<PackageId> topLevelProductPackages)
         {
             InputPackages = new List<PackageId>(newPackages);
             InputProductPackages = new List<PackageId>(productPackages);
+            TopLevelProductPackages = new List<PackageId>(topLevelProductPackages);
             FlatteningCache = new Queue<Tuple<GraphNode<RemoteResolveResult>, PackageInfo>>();
         }
     }

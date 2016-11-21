@@ -11,9 +11,10 @@ namespace Dropcraft.Deployment.Commands
             Name = "manifest";
         }
 
-        protected override void Define(CommandLineApplication app, Action<string> logErrorAction)
+        protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
-            
+            cmdApp.Description = "Creates an empty package manifest";
+            cmdApp.HelpOption(CommandHelper.HelpOption);
         }
 
         protected override Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)

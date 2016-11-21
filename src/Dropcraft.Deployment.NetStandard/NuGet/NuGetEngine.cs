@@ -109,8 +109,8 @@ namespace Dropcraft.Deployment.NuGet
             {
                 foreach (var downgrade in packagesAnalysis.Downgrades)
                 {
-                    Logger.Trace($"Downgrade from {downgrade.DowngradedFrom.Item.Key.Name},{downgrade.DowngradedFrom.Item.Key.Version.ToNormalizedString()} to "
-                        + $"{downgrade.DowngradedTo.Item.Key.Name},{downgrade.DowngradedTo.Item.Key.Version.ToNormalizedString()}");
+                    Logger.Warn($"Downgrade from {downgrade.DowngradedFrom.Key} to "
+                        + $"{downgrade.DowngradedTo.Key}");
                 }
 
                 if (!_allowDowngrades)

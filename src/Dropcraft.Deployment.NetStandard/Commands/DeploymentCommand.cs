@@ -23,16 +23,6 @@ namespace Dropcraft.Deployment.Commands
 
         protected abstract Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction);
 
-        protected virtual DeploymentConfiguration GetConfiguration(CommandLineApplication app, string productPath, string packagesPath, string framework)
-        {
-            return new DeploymentConfiguration(productPath, packagesPath, framework);
-        }
-
-        protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app, DeploymentConfiguration configuration)
-        {
-            return configuration.CreatEngine();
-        }
-
         protected bool MissedOption(CommandOption option, Action<string> logErrorAction)
         {
             if (option.HasValue())

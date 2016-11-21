@@ -185,6 +185,7 @@ namespace Dropcraft.Deployment.Workflow
                     {
                         context.ProductPackagesForDeletion.Add(packageMatch);
                         context.PackagesForInstallation.Add(package);
+                        context.PackagesAffectedByUpdate.Add(package.Id);
                     }
                 }
                 else
@@ -226,12 +227,12 @@ namespace Dropcraft.Deployment.Workflow
         {
             var listForMerge = new List<PackageId>();
 
-            foreach (var productPackage in context.InputProductPackages)
+            foreach (var productPackage in context.TopLevelProductPackages)
             {
                 var addPackage = true;
                 foreach (var newPackage in context.InputPackages)
                 {
-                    if (newPackage.Id == productPackage.Id)
+                    if (string.Equals(newPackage.Id, productPackage.Id, StringComparison.CurrentCultureIgnoreCase))
                         addPackage = false;
                 }
 

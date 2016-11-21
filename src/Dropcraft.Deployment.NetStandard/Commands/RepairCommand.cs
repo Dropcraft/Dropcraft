@@ -11,9 +11,10 @@ namespace Dropcraft.Deployment.Commands
             Name = "repair";
         }
 
-        protected override void Define(CommandLineApplication app, Action<string> logErrorAction)
+        protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
-            
+            cmdApp.Description = "Repairs the product by reinstalling all the packages";
+            cmdApp.HelpOption(CommandHelper.HelpOption);
         }
 
         protected override Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)
