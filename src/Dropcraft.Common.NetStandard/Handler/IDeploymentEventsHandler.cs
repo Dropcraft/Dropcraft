@@ -3,7 +3,7 @@ namespace Dropcraft.Common.Handler
     public interface IDeploymentEventsHandler
     {
         void BeforePackageInstalled(BeforePackageInstalledEvent e);
-        void AfterPackageInstalled(AfterPackageDeployedEvent e);
+        void AfterPackageInstalled(AfterPackageInstalledEvent e);
         void BeforePackageUpdated(BeforePackageUpdatedEvent e);
         void AfterPackageUpdated(AfterPackageUpdatedEvent e);
         void BeforePackageUninstalled(BeforePackageUninstalledEvent e);
@@ -21,14 +21,18 @@ namespace Dropcraft.Common.Handler
 
     public class BeforePackageInstalledEvent : DeploymentEvent
     {
+        public bool CausedByUpdate { get; set; }
+
         public override void HandleEvent(IDeploymentEventsHandler eventHandler)
         {
             eventHandler.BeforePackageInstalled(this);
         }
     }
 
-    public class AfterPackageDeployedEvent : DeploymentEvent
+    public class AfterPackageInstalledEvent : DeploymentEvent
     {
+        public bool CausedByUpdate { get; set; }
+
         public override void HandleEvent(IDeploymentEventsHandler eventHandler)
         {
             eventHandler.AfterPackageInstalled(this);
@@ -53,6 +57,8 @@ namespace Dropcraft.Common.Handler
 
     public class BeforePackageUninstalledEvent : DeploymentEvent
     {
+        public bool CausedByUpdate { get; set; }
+
         public override void HandleEvent(IDeploymentEventsHandler eventHandler)
         {
             eventHandler.BeforePackageUninstalled(this);
@@ -61,6 +67,8 @@ namespace Dropcraft.Common.Handler
 
     public class AfterPackageUninstalledEvent : DeploymentEvent
     {
+        public bool CausedByUpdate { get; set; }
+
         public override void HandleEvent(IDeploymentEventsHandler eventHandler)
         {
             eventHandler.AfterPackageUninstalled(this);
