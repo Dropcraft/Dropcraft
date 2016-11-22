@@ -115,23 +115,25 @@ namespace Dropcraft.Deployment.Workflow
                 IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages,
                 IEnumerable<PackageId> topLevelProductPackages)
             {
-                var engine = new NuGetEngine(helper.Configuration);
+                var deploymentEngine = helper.CreatEngine();
+                var engine = helper.CreatNuGetEngine();
 
-                var context = new TestContext()
+                var workflowContext = new WorkflowContext(newPackages, productPackages, topLevelProductPackages);
+                var context = new TestContext
                 {
-                    Ctx = new WorkflowContext(newPackages, productPackages, topLevelProductPackages),
-                    Workflow = new DeploymentWorkflow(engine)
+                    Ctx = workflowContext,
+                    Workflow = new DeploymentWorkflow(deploymentEngine.DeploymentContext, workflowContext, engine)
                 };
 
-                await context.Workflow.EnsureAllPackagesAreVersioned(context.Ctx);
-                await context.Workflow.ResolvePackages(context.Ctx);
+                await context.Workflow.EnsureAllPackagesAreVersioned();
+                await context.Workflow.ResolvePackages();
 
                 return context;
             }
 
             public TestContext ExecuteInstall(string path)
             {
-                Workflow.DownloadPackages(Ctx, path);
+                Workflow.DownloadPackages(path);
                 return this;
             }
 

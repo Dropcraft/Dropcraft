@@ -79,8 +79,8 @@ namespace Dropcraft.Deployment.Commands
 
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
-            var configuration = CommandHelper.GetConfiguration(_productPath.Value(),
-                    _packagePath.HasValue() ? _packagePath.Value() : string.Empty, _framework.Value())
+            var configuration = CommandHelper.GetConfiguration()
+                .ForPackages.Cache(_packagePath.HasValue() ? _packagePath.Value() : string.Empty)
                 .ConfigureTo.UpdatePackagesFromSource(_updatePackages.HasValue())
                 .ConfigureTo.AllowDowngrades(_allowDowngrades.HasValue());
 
@@ -89,8 +89,7 @@ namespace Dropcraft.Deployment.Commands
                 configuration.ForPackages.AddRemoteSource(sourceValue);
             }
 
-            return configuration.CreatEngine();
+            return configuration.CreatEngine(_productPath.Value(), _framework.Value());
         }
-
     }
 }

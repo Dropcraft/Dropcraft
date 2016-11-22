@@ -12,9 +12,9 @@ namespace Dropcraft.Deployment
     public class DeploymentConfiguration
     {
         /// <summary>
-        /// Assigned deployment context
+        /// Path to install/uninstall packages 
         /// </summary>
-        public DeploymentContext DeploymentContext { get; }
+        internal string PackagesFolderPath { get; set; }
 
         /// <summary>
         /// Instructs to always try to update packages from the remote sources
@@ -49,31 +49,8 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Constructor
         /// </summary>
-        /// <param name="installPath">Path to deploy composed application</param>
-        /// <param name="packagesFolderPath">Path to install packages</param>
-        /// <param name="targetFramework">Product target framework</param>
-        public DeploymentConfiguration(string installPath, string packagesFolderPath, string targetFramework)
-            : this(new DefaultDeploymentContext(installPath, packagesFolderPath, targetFramework))
+        public DeploymentConfiguration()
         {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="installPath">Path to deploy composed application</param>
-        public DeploymentConfiguration(string installPath)
-            : this(new DefaultDeploymentContext(installPath))
-        {
-        }
-
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        /// <param name="deploymentContext">Configured custom deployment context to use</param>
-        public DeploymentConfiguration(DeploymentContext deploymentContext)
-        {
-            DeploymentContext = deploymentContext;
-
             ProductConfigurationSource = new ProductConfigurationSource();
             PackageConfigurationSource = new PackageConfigurationSource();
             DeploymentStrategySource = new DeploymentStrategySource();
@@ -107,10 +84,23 @@ namespace Dropcraft.Deployment
         /// <summary>
         /// Creates <see cref="IDeploymentEngine"/> instances.
         /// </summary>
+        /// <param name="deploymentContext">Custom deployment context</param>
         /// <returns><see cref="IDeploymentEngine"/></returns>
-        public IDeploymentEngine CreatEngine()
+        public IDeploymentEngine CreatEngine(DeploymentContext deploymentContext)
         {
-            return new DeploymentEngine(this);
+            var deploymentStartegyProvider = DeploymentStrategySource.GetStartegyProvider(deploymentContext);
+            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackagesFolderPath,
+                RemotePackagesSources, UpdatePackages, AllowDowngrades);
+        }
+
+        public IDeploymentEngine CreatEngine(string productPath, string framework)
+        {
+            var packageConfigurationProvider = PackageConfigurationSource.GetPackageConfigurationProvider();
+            var productConfigurationProvider = ProductConfigurationSource.GetProductConfigurationProvider(productPath);
+            var deploymentContext = new DefaultDeploymentContext(productPath, framework, packageConfigurationProvider,
+                productConfigurationProvider);
+
+            return CreatEngine(deploymentContext);
         }
     }
 }

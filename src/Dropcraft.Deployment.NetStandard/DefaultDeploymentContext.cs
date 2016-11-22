@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
+﻿using System.Collections.Generic;
 using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Deployment
@@ -11,29 +10,22 @@ namespace Dropcraft.Deployment
         private readonly object _eventsLock = new object();
         private readonly List<IDeploymentEventsHandler> _eventHandlers = new List<IDeploymentEventsHandler>();
 
-        public DefaultDeploymentContext(string productPath)
-            : this(productPath, string.Empty, string.Empty)
-        {
-        }
-
-        public DefaultDeploymentContext(string productPath, string packagesFolderPath, string framework) 
+        public DefaultDeploymentContext(string productPath, string framework,
+            IPackageConfigurationProvider packageConfigurationProvider,
+            IProductConfigurationProvider productConfigurationProvider)
         {
             ProductPath = productPath;
             TargetFramework = framework;
 
-            if (string.IsNullOrWhiteSpace(packagesFolderPath))
-            {
-                PackagesFolderPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
-                DontCachePackages = true;
-            }
-            else
-            {
-                PackagesFolderPath = packagesFolderPath;
-            }
+            PackageConfigurationProvider = packageConfigurationProvider;
+            ProductConfigurationProvider = productConfigurationProvider;
         }
 
         protected override void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent)
         {
+            if (deploymentEvent.Context == null)
+                deploymentEvent.Context = this;
+
             lock (_eventsLock)
             {
                 foreach (var eventHandler in _eventHandlers)

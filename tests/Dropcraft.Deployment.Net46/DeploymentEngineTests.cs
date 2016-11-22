@@ -13,7 +13,7 @@ namespace Dropcraft.Deployment
         {
             using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
             {
-                var engine = helper.Configuration.CreatEngine();
+                var engine = helper.CreatEngine();
                 await engine.InstallPackages(new[] {new PackageId("Newtonsoft.Json/9.0.1"), new PackageId("bootstrap/3.3.7") });
 
                 var files = Directory.GetFiles(helper.InstallPath);
@@ -22,13 +22,13 @@ namespace Dropcraft.Deployment
                 var dirs = Directory.GetDirectories(helper.InstallPath);
                 dirs.Length.Should().Be(3);
 
-                engine = helper.Configuration.CreatEngine();
+                engine = helper.CreatEngine();
                 await engine.UninstallPackages(new[] {new PackageId("Newtonsoft.Json/9.0.1")});
 
                 files = Directory.GetFiles(helper.InstallPath);
                 files.Length.Should().Be(1, "because Newtonsoft.Json is uninstalled");
 
-                engine = helper.Configuration.CreatEngine();
+                engine = helper.CreatEngine();
                 await engine.UninstallPackages(new[] { new PackageId("bootstrap/3.3.7") });
 
                 dirs = Directory.GetDirectories(helper.InstallPath);

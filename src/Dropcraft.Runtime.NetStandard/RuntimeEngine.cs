@@ -16,7 +16,7 @@ namespace Dropcraft.Runtime
             RuntimeContext = configuration.RuntimeContext;
             _configurationProvider = configuration
                                     .ProductConfigurationSource
-                                    .GetProductConfigurationProvider(RuntimeContext);
+                                    .GetProductConfigurationProvider(RuntimeContext.ProductPath);
         }
 
         public Task Start()

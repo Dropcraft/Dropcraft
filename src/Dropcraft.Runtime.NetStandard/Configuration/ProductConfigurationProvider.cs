@@ -26,8 +26,8 @@ namespace Dropcraft.Runtime.Configuration
 
         public bool IsProductConfigured { get; private set; }
 
-        public ProductConfigurationProvider(IProductContext context, string productConfigurationFileName)
-            : this(Path.Combine(context.ProductPath, productConfigurationFileName))
+        public ProductConfigurationProvider(string productPath, string productConfigurationFileName)
+            : this(Path.Combine(productPath, productConfigurationFileName))
         {
         }
 

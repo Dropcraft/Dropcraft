@@ -10,7 +10,7 @@ namespace Dropcraft.Runtime.Configuration
     {
         private readonly string _manifestNameTemplate;
 
-        public PackageConfigurationProvider(IProductContext context, string manifestNameTemplate)
+        public PackageConfigurationProvider(string manifestNameTemplate)
         {
             _manifestNameTemplate = manifestNameTemplate;
         }

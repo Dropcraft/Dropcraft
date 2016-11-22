@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Dropcraft.Common;
+using Dropcraft.Deployment.NuGet;
 
 namespace Dropcraft.Deployment
 {
@@ -8,6 +11,12 @@ namespace Dropcraft.Deployment
     {
         public string InstallPath { get; set; }
         public string PackagesPath { get; set; }
+        public string Framework { get; set; }
+
+        public bool AllowDowngrades { get; set; }
+        public bool UpdatePackages { get; set; }
+
+        public List<string> Sources { get; } = new List<string>();
 
         public DeploymentConfiguration Configuration { get; set; }
 
@@ -19,14 +28,27 @@ namespace Dropcraft.Deployment
 
         public TestDeploymentHelper WithConfiguration(string netFx = "net45")
         {
-            Configuration = new DeploymentConfiguration(InstallPath, PackagesPath, netFx);
+            Configuration = new DeploymentConfiguration().ForPackages.Cache(PackagesPath);
+            Framework = netFx;
             return this;
         }
 
         public TestDeploymentHelper AndNuGetSource()
         {
+            Sources.Add("https://api.nuget.org/v3/index.json");
             Configuration.ForPackages.AddRemoteSource("https://api.nuget.org/v3/index.json");
             return this;
+        }
+
+        public IDeploymentEngine CreatEngine()
+        {
+            return Configuration.CreatEngine(InstallPath, Framework);
+        }
+
+        public NuGetEngine CreatNuGetEngine()
+        {
+            var deploymentEngine = CreatEngine();
+            return new NuGetEngine(deploymentEngine.DeploymentContext, PackagesPath, Sources, UpdatePackages, AllowDowngrades);
         }
 
         public bool IsPackageExists(string packageName, string ver)

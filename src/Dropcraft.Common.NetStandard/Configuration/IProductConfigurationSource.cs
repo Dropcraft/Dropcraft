@@ -5,6 +5,6 @@
     /// </summary>
     public interface IProductConfigurationSource
     {
-        IProductConfigurationProvider GetProductConfigurationProvider(IProductContext context);
+        IProductConfigurationProvider GetProductConfigurationProvider(string productPath);
     }
 }

@@ -1,3 +1,4 @@
+using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Common
@@ -14,12 +15,10 @@ namespace Dropcraft.Common
         /// </summary>
         public string ProductPath { get; protected set; }
 
-        /// <summary>
-        /// Path to install/uninstall packages 
-        /// </summary>
-        public string PackagesFolderPath { get; protected set; }
+        public IProductConfigurationProvider ProductConfigurationProvider { get; protected set; }
 
-        public bool DontCachePackages { get; protected set; }
+        public IPackageConfigurationProvider PackageConfigurationProvider { get; protected set; }
+
 
         /// <summary>
         /// Register a handler for deployment events

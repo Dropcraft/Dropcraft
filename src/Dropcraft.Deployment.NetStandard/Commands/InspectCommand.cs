@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
@@ -26,7 +28,25 @@ namespace Dropcraft.Deployment.Commands
             if (MissedOption(_productPath, logErrorAction))
                 return 1;
 
+            var configurationProvider = GetDeploymentEngine(app).DeploymentContext.ProductConfigurationProvider;
+            if (!configurationProvider.IsProductConfigured)
+            {
+                logErrorAction($"Configuration not found at {_productPath}");
+            }
+
+            var packages = configurationProvider.GetPackageConfigurations(DependencyOrdering.BottomToTop);
+            foreach (var packageConfiguration in packages)
+            {
+                Console.WriteLine(packageConfiguration.Id.ToString());
+            }
+
             return await Task.FromResult(0);
         }
+
+        protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
+        {
+            return CommandHelper.GetConfiguration().CreatEngine(_productPath.Value(), string.Empty);
+        }
+
     }
 }

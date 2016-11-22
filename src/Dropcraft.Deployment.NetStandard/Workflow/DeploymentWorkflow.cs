@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Handler;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using NuGet.DependencyResolver;
@@ -17,28 +18,33 @@ namespace Dropcraft.Deployment.Workflow
     /// </summary>
     public class DeploymentWorkflow
     {
-        private readonly NuGetEngine _nuGetEngine;
+        public NuGetEngine NuGetEngine { get; protected set; }
+        public DeploymentContext DeploymentContext { get; protected set; }
+        public WorkflowContext WorkflowContext { get; protected set; }
+
         private static readonly ILog Logger = LogProvider.For<DeploymentWorkflow>();
 
-        public DeploymentWorkflow(NuGetEngine nuGetEngine)
+        public DeploymentWorkflow(DeploymentContext deploymentContext, WorkflowContext workflowContext, NuGetEngine nuGetEngine)
         {
-            _nuGetEngine = nuGetEngine;
+            DeploymentContext = deploymentContext;
+            WorkflowContext = workflowContext;
+            NuGetEngine = nuGetEngine;
         }
 
         /// <summary>
         /// Ensures that all packages are versioned and versions are valid
         /// </summary>
         /// <returns>Task</returns>
-        public async Task EnsureAllPackagesAreVersioned(WorkflowContext context)
+        public async Task EnsureAllPackagesAreVersioned()
         {
-            await OnEnsureAllPackagesAreVersioned(context);
+            await OnEnsureAllPackagesAreVersioned();
         }
 
-        protected virtual async Task OnEnsureAllPackagesAreVersioned(WorkflowContext context)
+        protected virtual async Task OnEnsureAllPackagesAreVersioned()
         {
             var tasks = new List<Task<PackageId>>();
 
-            foreach (var packageId in context.InputPackages)
+            foreach (var packageId in WorkflowContext.InputPackages)
             {
                 if (string.IsNullOrWhiteSpace(packageId.Id))
                     throw LogException(new ArgumentException("Package Id cannot be empty"));
@@ -46,58 +52,72 @@ namespace Dropcraft.Deployment.Workflow
                 tasks.Add(ResolvePackageVersion(packageId));
             }
 
-            context.InputPackages = (await Task.WhenAll(tasks)).ToList();
+            WorkflowContext.InputPackages = (await Task.WhenAll(tasks)).ToList();
         }
 
         /// <summary>
         /// Resolves dependencies for all packages
         /// </summary>
         /// <returns>Task</returns>
-        public async Task ResolvePackages(WorkflowContext context)
+        public async Task ResolvePackages()
         {
-            await OnResolvePackages(context);
+            await OnResolvePackages();
         }
 
-        protected virtual async Task OnResolvePackages(WorkflowContext context)
+        protected virtual async Task OnResolvePackages()
         {
-            MergeWithProductPackages(context);
+            MergeWithProductPackages();
 
-            var resolvedPackages = await _nuGetEngine.ResolvePackages(context.InputPackages);
-            _nuGetEngine.AnalysePackages(resolvedPackages);
+            var resolvedPackages = await NuGetEngine.ResolvePackages(WorkflowContext.InputPackages);
+            NuGetEngine.AnalysePackages(resolvedPackages);
 
             foreach (var innerNode in resolvedPackages.InnerNodes)
             {
-                FlattenPackageNode(innerNode, null, context);
+                FlattenPackageNode(innerNode, null);
             }
 
-            while (context.FlatteningCache.Any())
+            while (WorkflowContext.FlatteningCache.Any())
             {
-                var nextNode = context.FlatteningCache.Dequeue();
-                FlattenPackageNode(nextNode.Item1, nextNode.Item2, context);
+                var nextNode = WorkflowContext.FlatteningCache.Dequeue();
+                FlattenPackageNode(nextNode.Item1, nextNode.Item2);
             }
 
-            PrepareInstallationAndDeletionLists(context);
+            PrepareInstallationAndDeletionLists();
         }
 
         /// <summary>
         /// Downloads and unpacks packages to the destination folder
         /// </summary>
-        /// <param name="context">Installation context</param>
         /// <param name="path">Destination path</param>
         /// <returns>Task</returns>
-        public void DownloadPackages(WorkflowContext context, string path)
+        public void DownloadPackages(string path)
         {
-            OnDownloadPackages(context, path);
+            OnDownloadPackages(path);
         }
 
-        protected virtual void OnDownloadPackages(WorkflowContext context, string path)
+        protected virtual void OnDownloadPackages(string path)
         {
-            foreach (var package in context.PackagesForInstallation)
+            foreach (var package in WorkflowContext.PackagesForInstallation)
             {
-                _nuGetEngine.InstallPackage(package.Match, path).GetAwaiter().GetResult();
-                package.PackagePath = _nuGetEngine.GetPackageTargetPath(package.Match.Library.Name,
+                NuGetEngine.InstallPackage(package.Match, path).GetAwaiter().GetResult();
+                package.PackagePath = NuGetEngine.GetPackageTargetPath(package.Match.Library.Name,
                     package.Match.Library.Version, path);
+
+                RaiseDeploymentEvent(new AfterPackageDownloadedEvent {PackagePath = package.PackagePath}, package.Id);
             }
+        }
+
+        private bool IsUpdateInProgressForPackage(PackageId id)
+        {
+            return WorkflowContext.PackagesAffectedByUpdate.Any(
+                    x => string.Equals(x, id.Id, StringComparison.CurrentCultureIgnoreCase));
+        }
+
+        private void RaiseDeploymentEvent(PackageDeploymentEvent e, PackageId id)
+        {
+            e.Id = id;
+            e.IsUpdateInProgress = IsUpdateInProgressForPackage(id);
+            DeploymentContext.RaiseDeploymentEvent(e);
         }
 
         /// <summary>
@@ -117,12 +137,19 @@ namespace Dropcraft.Deployment.Workflow
             foreach (var packageId in packages)
             {
                 var files = productConfig.GetInstalledFiles(packageId, true);
-                foreach (var file in files)
+
+                var deleteEvent = new BeforePackageUninstalledEvent();
+                deleteEvent.FilesToDelete.AddRange(files);
+                RaiseDeploymentEvent(deleteEvent, packageId);
+
+                foreach (var file in deleteEvent.FilesToDelete)
                 {
                     fileTransaction.DeleteFile(file);
                 }
 
                 productConfig.RemovePackageConfiguration(packageId);
+
+                RaiseDeploymentEvent(new AfterPackageUninstalledEvent(), packageId);
                 Logger.Info($"Package {packageId} uninstalled");
             }
         }
@@ -154,7 +181,11 @@ namespace Dropcraft.Deployment.Workflow
                 var files = deploymentStartegy.GetPackageFiles(package.Id, package.PackagePath).ToList();
                 var installedFiles = new List<string>();
 
-                foreach (var file in files)
+                var e = new BeforePackageInstalledEvent();
+                e.FilesToInstall.AddRange(files);
+                RaiseDeploymentEvent(e, package.Id);
+
+                foreach (var file in e.FilesToInstall)
                 {
                     if (file.Action == FileAction.Copy)
                     {
@@ -169,36 +200,38 @@ namespace Dropcraft.Deployment.Workflow
 
                 var cfg = packageConfigProvider.GetPackageConfiguration(package.Id, package.PackagePath);
                 productConfigProvider.SetPackageConfiguration(cfg, installedFiles, package.Dependencies.Select(x => x.Id.ToString()));
+
+                RaiseDeploymentEvent(new AfterPackageInstalledEvent(), package.Id);
                 Logger.Info($"Package {package.Id} installed");
             }
         }
 
-        protected void PrepareInstallationAndDeletionLists(WorkflowContext context)
+        protected void PrepareInstallationAndDeletionLists()
         {
-            foreach (var package in context.ResultingProductPackages)
+            foreach (var package in WorkflowContext.ResultingProductPackages)
             {
-                var packageMatch = context.InputProductPackages.FirstOrDefault(x => x.Id == package.Id.Id);
+                var packageMatch = WorkflowContext.InputProductPackages.FirstOrDefault(x => x.Id == package.Id.Id);
 
                 if (packageMatch != null)
                 {
                     if (packageMatch.Version != package.Id.Version)
                     {
-                        context.ProductPackagesForDeletion.Add(packageMatch);
-                        context.PackagesForInstallation.Add(package);
-                        context.PackagesAffectedByUpdate.Add(package.Id);
+                        WorkflowContext.ProductPackagesForDeletion.Add(packageMatch);
+                        WorkflowContext.PackagesForInstallation.Add(package);
+                        WorkflowContext.PackagesAffectedByUpdate.Add(package.Id.Id);
                     }
                 }
                 else
                 {
-                    context.PackagesForInstallation.Add(package);
+                    WorkflowContext.PackagesForInstallation.Add(package);
                 }
             }
 
-            context.ResultingProductPackages.Reverse();
-            context.PackagesForInstallation.Reverse();
+            WorkflowContext.ResultingProductPackages.Reverse();
+            WorkflowContext.PackagesForInstallation.Reverse();
         }
 
-        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, PackageInfo parent, WorkflowContext context)
+        protected void FlattenPackageNode(GraphNode<RemoteResolveResult> node, PackageInfo parent)
         {
             if (node.Key.TypeConstraint != LibraryDependencyTarget.Package &&
                 node.Key.TypeConstraint != LibraryDependencyTarget.PackageProjectExternal)
@@ -214,23 +247,23 @@ namespace Dropcraft.Deployment.Workflow
                 Match = node.Item.Data.Match
             };
 
-            context.ResultingProductPackages.Add(package);
+            WorkflowContext.ResultingProductPackages.Add(package);
             parent?.Dependencies.Add(package);
 
             foreach (var innerNode in node.InnerNodes)
             {
-                context.FlatteningCache.Enqueue(new Tuple<GraphNode<RemoteResolveResult>, PackageInfo>(innerNode, package)); 
+                WorkflowContext.FlatteningCache.Enqueue(new Tuple<GraphNode<RemoteResolveResult>, PackageInfo>(innerNode, package)); 
             }
         }
 
-        protected void MergeWithProductPackages(WorkflowContext context)
+        protected void MergeWithProductPackages()
         {
             var listForMerge = new List<PackageId>();
 
-            foreach (var productPackage in context.TopLevelProductPackages)
+            foreach (var productPackage in WorkflowContext.TopLevelProductPackages)
             {
                 var addPackage = true;
-                foreach (var newPackage in context.InputPackages)
+                foreach (var newPackage in WorkflowContext.InputPackages)
                 {
                     if (string.Equals(newPackage.Id, productPackage.Id, StringComparison.CurrentCultureIgnoreCase))
                         addPackage = false;
@@ -240,7 +273,7 @@ namespace Dropcraft.Deployment.Workflow
                     listForMerge.Add(productPackage);
             }
 
-            context.InputPackages.AddRange(listForMerge);
+            WorkflowContext.InputPackages.AddRange(listForMerge);
         }
 
         protected async Task<PackageId> ResolvePackageVersion(PackageId packageId)
@@ -258,7 +291,7 @@ namespace Dropcraft.Deployment.Workflow
             }
             else
             {
-                var version = await _nuGetEngine.ResolveNuGetVersion(packageId);
+                var version = await NuGetEngine.ResolveNuGetVersion(packageId);
                 if (version != null)
                 {
                     package = new PackageId(packageId.Id, version, packageId.AllowPrereleaseVersions);

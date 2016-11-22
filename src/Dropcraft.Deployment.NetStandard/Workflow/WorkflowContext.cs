@@ -38,7 +38,7 @@ namespace Dropcraft.Deployment.Workflow
         /// <summary>
         /// List with the IDs of the packages to update
         /// </summary>
-        public List<PackageId> PackagesAffectedByUpdate { get; } = new List<PackageId>();
+        public List<string> PackagesAffectedByUpdate { get; } = new List<string>();
 
         /// <summary>
         /// Packages list to remove

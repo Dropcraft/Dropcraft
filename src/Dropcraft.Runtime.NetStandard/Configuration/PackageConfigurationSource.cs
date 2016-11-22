@@ -15,9 +15,9 @@ namespace Dropcraft.Runtime.Configuration
         /// </summary>
         public string ManifestNameTemplate { get; set; } = "manifest.json";
 
-        public IPackageConfigurationProvider GetPackageConfigurationProvider(IProductContext context)
+        public IPackageConfigurationProvider GetPackageConfigurationProvider()
         {
-            return new PackageConfigurationProvider(context, ManifestNameTemplate);
+            return new PackageConfigurationProvider(ManifestNameTemplate);
         }
     }
 }

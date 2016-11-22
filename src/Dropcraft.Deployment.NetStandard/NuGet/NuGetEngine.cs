@@ -30,20 +30,20 @@ namespace Dropcraft.Deployment.NuGet
         private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
         private readonly SourceCacheContext _cache;
 
-        public NuGetEngine(DeploymentConfiguration configuration)
+        public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath,
+            List<string> remotePackagesSources, bool updatePackages, bool allowDowngrades)
         {
-            var deploymentContext = configuration.DeploymentContext;
-            _updatePackages = configuration.UpdatePackages;
-            _allowDowngrades = configuration.AllowDowngrades;
+            _updatePackages = updatePackages;
+            _allowDowngrades = allowDowngrades;
 
-            var settings = Settings.LoadDefaultSettings(deploymentContext.PackagesFolderPath);
+            var settings = Settings.LoadDefaultSettings(packagesFolderPath);
             _nuGetLogger = new NuGetLogger();
             _cache = new SourceCacheContext();
 
             _repositoryProvider = new SourceRepositoryProvider(settings);
-            _localRepository = _repositoryProvider.CreateRepository(deploymentContext.PackagesFolderPath);
+            _localRepository = _repositoryProvider.CreateRepository(packagesFolderPath);
 
-            foreach (var packageSource in configuration.RemotePackagesSources)
+            foreach (var packageSource in remotePackagesSources)
             {
                 _repositoryProvider.AddPackageRepository(packageSource);
             }
@@ -62,7 +62,6 @@ namespace Dropcraft.Deployment.NuGet
             {
                 _framework = GetCurrentFramework();
             }
-            
         }
 
         public async Task<string> ResolveNuGetVersion(PackageId packageId)

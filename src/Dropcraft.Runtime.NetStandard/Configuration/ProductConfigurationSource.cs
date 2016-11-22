@@ -13,11 +13,11 @@ namespace Dropcraft.Runtime.Configuration
         /// <summary>
         /// Returns product configuration for the provided folder
         /// </summary>
-        /// <param name="context">Context defines product folder</param>
+        /// <param name="productPath">Defines product folder</param>
         /// <returns></returns>
-        public IProductConfigurationProvider GetProductConfigurationProvider(IProductContext context)
+        public IProductConfigurationProvider GetProductConfigurationProvider(string productPath)
         {
-            return new ProductConfigurationProvider(context, ProductConfigurationFileName);
+            return new ProductConfigurationProvider(productPath, ProductConfigurationFileName);
         }
     }
 }

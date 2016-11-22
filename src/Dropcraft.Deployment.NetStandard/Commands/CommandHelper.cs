@@ -9,8 +9,6 @@ namespace Dropcraft.Deployment.Commands
         /// <summary>
         /// Returns configuration for the commands
         /// </summary>
-        public static Func<string, string, string, DeploymentConfiguration> GetConfiguration =
-            (installPath, packagesFolderPath, targetFramework) =>
-                    new DeploymentConfiguration(installPath, packagesFolderPath, targetFramework);
+        public static Func<DeploymentConfiguration> GetConfiguration = () => new DeploymentConfiguration();
     }
 }

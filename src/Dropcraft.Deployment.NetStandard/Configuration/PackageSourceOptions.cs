@@ -20,5 +20,16 @@
             return _configuration;
         }
 
+        /// <summary>
+        /// Configure engine to cache downloaded in the provided folder
+        /// </summary>
+        /// <param name="folderPath">Target folder</param>
+        /// <returns>Configuration object</returns>
+        public DeploymentConfiguration Cache(string folderPath)
+        {
+            _configuration.PackagesFolderPath = folderPath;
+            return _configuration;
+        }
+
     }
 }

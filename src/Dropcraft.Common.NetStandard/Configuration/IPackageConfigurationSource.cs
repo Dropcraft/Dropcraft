@@ -5,6 +5,6 @@
     /// </summary>
     public interface IPackageConfigurationSource
     {
-        IPackageConfigurationProvider GetPackageConfigurationProvider(IProductContext context);
+        IPackageConfigurationProvider GetPackageConfigurationProvider();
     }
 }
