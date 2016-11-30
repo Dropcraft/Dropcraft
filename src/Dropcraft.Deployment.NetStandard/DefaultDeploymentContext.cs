@@ -1,14 +1,16 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Threading;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
 
 namespace Dropcraft.Deployment
 {
     public class DefaultDeploymentContext : DeploymentContext
     {
-        private readonly object _eventsLock = new object();
-        private readonly List<IDeploymentEventsHandler> _eventHandlers = new List<IDeploymentEventsHandler>();
+        private readonly ConcurrentDictionary<string, object> _handlers = new ConcurrentDictionary<string, object>();
+        private readonly ReaderWriterLockSlim _eventLock = new ReaderWriterLockSlim();
 
         public DefaultDeploymentContext(string productPath, string framework,
             IPackageConfigurationProvider packageConfigurationProvider,
@@ -21,33 +23,61 @@ namespace Dropcraft.Deployment
             ProductConfigurationProvider = productConfigurationProvider;
         }
 
-        protected override void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent)
+        protected override void OnRegisterEventHandler<T>(Action<T> handler)
         {
-            if (deploymentEvent.Context == null)
-                deploymentEvent.Context = this;
+            var list = (List<Action<T>>)_handlers.GetOrAdd(typeof(T).Name, x => new List<Action<T>>());
+            list.Remove(handler);
 
-            lock (_eventsLock)
+            try
             {
-                foreach (var eventHandler in _eventHandlers)
+                _eventLock.EnterWriteLock();
+                list.Add(handler);
+            }
+            finally
+            {
+                _eventLock.ExitWriteLock();
+            }
+        }
+
+        protected override void OnUnregisterEventHandler<T>(Action<T> handler)
+        {
+            object listObject;
+            if (_handlers.TryGetValue(typeof(T).Name, out listObject))
+            {
+                var list = (List<Action<T>>)listObject;
+                try
                 {
-                    deploymentEvent.HandleEvent(eventHandler);
+                    _eventLock.EnterWriteLock();
+                    list.Remove(handler);
+                }
+                finally
+                {
+                    _eventLock.ExitWriteLock();
                 }
             }
         }
 
-        protected override void OnRegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
+        protected override void OnRaiseDeploymentEvent<T>(T deploymentEvent)
         {
-            lock (_eventsLock)
-            {
-                _eventHandlers.Add(deploymentEventsHandler);
-            }
-        }
+            if (deploymentEvent.Context == null)
+                deploymentEvent.Context = this;
 
-        protected override void OnUnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
-        {
-            lock (_eventsLock)
+            object listObject;
+            if (_handlers.TryGetValue(typeof(T).Name, out listObject))
             {
-                _eventHandlers.Remove(deploymentEventsHandler);
+                var list = (List<Action<T>>)listObject;
+                try
+                {
+                    _eventLock.EnterReadLock();
+                    foreach (var handler in list)
+                    {
+                        handler(deploymentEvent);
+                    }
+                }
+                finally
+                {
+                    _eventLock.ExitReadLock();
+                }
             }
         }
     }

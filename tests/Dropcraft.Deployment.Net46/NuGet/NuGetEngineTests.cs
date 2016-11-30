@@ -29,8 +29,8 @@ namespace Dropcraft.Deployment.NuGet
         {
             using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
             {
-                helper.Configuration.ConfigureTo.UpdatePackagesFromSource(true);
                 var engine = helper.CreatNuGetEngine();
+                engine.UpdatePackages = true;
                 var result = await engine.ResolveNuGetVersion(new PackageId("bootstrap", "", false) );
 
                 result.Should().NotBeNullOrWhiteSpace();

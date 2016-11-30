@@ -1,28 +1,27 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Handlers;
 
 namespace Dropcraft.Runtime
 {
     public class DefaultRuntimeContext : RuntimeContext
     {
-        private readonly object _eventsLock;
-        private readonly List<IRuntimeEventsHandler> _eventHandlers;
-
         private readonly object _extensionLock;
         private readonly Dictionary<string, IExtensibilityPointHandler> _extensibilityPoints;
         private readonly List<ExtensionInfo> _extensions;
+
+        private readonly ConcurrentDictionary<string, object> _handlers = new ConcurrentDictionary<string, object>();
+        private readonly ReaderWriterLockSlim _eventLock = new ReaderWriterLockSlim();
 
         private readonly Dictionary<Type, Func<object>> _serviceFactories;
 
         public DefaultRuntimeContext(string productPath)
         {
             ProductPath = productPath;
-
-            _eventsLock = new object();
-            _eventHandlers = new List<IRuntimeEventsHandler>();
 
             _extensionLock = new object();
             _extensibilityPoints = new Dictionary<string, IExtensibilityPointHandler>();
@@ -81,29 +80,60 @@ namespace Dropcraft.Runtime
             }
         }
 
-        protected override void OnRegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
+        protected override void OnRegisterEventHandler<T>(Action<T> handler)
         {
-            lock (_eventsLock)
+            var list = (List<Action<T>>)_handlers.GetOrAdd(typeof(T).Name, x => new List<Action<T>>());
+            list.Remove(handler);
+
+            try
             {
-                _eventHandlers.Add(runtimeEventsHandler);
+                _eventLock.EnterWriteLock();
+                list.Add(handler);
+            }
+            finally
+            {
+                _eventLock.ExitWriteLock();
             }
         }
 
-        protected override void OnUnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
+        protected override void OnUnregisterEventHandler<T>(Action<T> handler)
         {
-            lock (_eventsLock)
+            object listObject;
+            if (_handlers.TryGetValue(typeof(T).Name, out listObject))
             {
-                _eventHandlers.Remove(runtimeEventsHandler);
-            }
-        }
-
-        protected override void OnRaiseRuntimeEvent(RuntimeEvent runtimeEvent)
-        {
-            lock (_eventsLock)
-            {
-                foreach (var eventHandler in _eventHandlers)
+                var list = (List<Action<T>>) listObject;
+                try
                 {
-                    runtimeEvent.HandleEvent(eventHandler);
+                    _eventLock.EnterWriteLock();
+                    list.Remove(handler);
+                }
+                finally
+                {
+                    _eventLock.ExitWriteLock();
+                }
+            }
+        }
+
+        protected override void OnRaiseRuntimeEvent<T>(T runtimeEvent)
+        {
+            if (runtimeEvent.Context == null)
+                runtimeEvent.Context = this;
+
+            object listObject;
+            if (_handlers.TryGetValue(typeof(T).Name, out listObject))
+            {
+                var list = (List<Action<T>>)listObject;
+                try
+                {
+                    _eventLock.EnterReadLock();
+                    foreach (var handler in list)
+                    {
+                        handler(runtimeEvent);
+                    }
+                }
+                finally
+                {
+                    _eventLock.ExitReadLock();
                 }
             }
         }

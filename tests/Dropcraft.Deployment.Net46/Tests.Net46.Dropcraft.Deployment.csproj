@@ -136,9 +136,9 @@
     <Compile Include="Workflow\InstallationWorkflowTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Dropcraft.Common.NetStandard\Dropcraft.Common.csproj">
-      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
-      <Name>Dropcraft.Common</Name>
+    <ProjectReference Include="..\..\src\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
+      <Project>{d0e6dbe0-49b1-4ea8-b1ed-c449fb853c1f}</Project>
+      <Name>Dropcraft.Common.Net46</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Dropcraft.Deployment.Net46\Dropcraft.Deployment.Net46.csproj">
       <Project>{b35c7fb4-5643-47f3-80fb-c55a0a04b736}</Project>

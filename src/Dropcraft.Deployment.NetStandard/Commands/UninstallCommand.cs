@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using Dropcraft.Common;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
@@ -23,10 +25,10 @@ namespace Dropcraft.Deployment.Commands
             _package = cmdApp.Argument("[package]", "Package to install", true);
             _productPath = cmdApp.Option("--path <installationPath>", "Product installation path", CommandOptionType.SingleValue);
 
-            _removeDependencies = cmdApp.Option("-r|--remove-deps", "Remove any dependent packages if they are not referenced elsewhere ", CommandOptionType.NoValue);
+            _removeDependencies = cmdApp.Option("-r|--remove-deps", "Remove any dependent packages if they are not referenced elsewhere", CommandOptionType.NoValue);
         }
 
-        protected override async Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)
+        protected override async Task<int> Execute(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             if (_package.Values.Count == 0)
             {
@@ -37,7 +39,19 @@ namespace Dropcraft.Deployment.Commands
             if (MissedOption(_productPath, logErrorAction))
                 return 1;
 
+            var engine = GetDeploymentEngine(cmdApp);
+
+            var packageIds = _package.Values.Select(x => new PackageId(x));
+            await engine.UninstallPackages(packageIds, _removeDependencies.HasValue());
+
             return await Task.FromResult(0);
         }
+
+        protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
+        {
+            var configuration = CommandHelper.GetConfiguration();
+            return configuration.CreatEngine(_productPath.Value(), string.Empty);
+        }
+
     }
 }

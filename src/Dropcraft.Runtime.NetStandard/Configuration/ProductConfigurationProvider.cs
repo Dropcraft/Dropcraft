@@ -19,6 +19,8 @@ namespace Dropcraft.Runtime.Configuration
         private readonly string _version = "1.0";
         private readonly string _configPath;
 
+        //TODO: package metadata
+
         protected List<IPackageConfiguration> Packages { get; }
         protected Dictionary<string, ProductPackageInfo> ProductPackagesInfo { get; }
 

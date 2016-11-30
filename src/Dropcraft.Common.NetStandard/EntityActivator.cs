@@ -1,5 +1,5 @@
 ﻿using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Handlers;
 using Dropcraft.Common.Logging;
 
 namespace Dropcraft.Common
@@ -76,5 +76,18 @@ namespace Dropcraft.Common
         }
 
         protected abstract IRuntimeEventsHandler OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo);
+
+        /// <summary>
+        /// Instantiates deployment events handler using provided DeploymentEventsHandlerInfo
+        /// </summary>
+        /// <param name="handlerInfo">Information about the handler to construct</param>
+        public IDeploymentEventsHandler GetDeploymentEventsHandler(DeploymentEventsHandlerInfo handlerInfo)
+        {
+            Logger.TraceFormat("GetDeploymentEventsHandler for {info}", handlerInfo);
+            return OnGetDeploymentEventsHandler(handlerInfo);
+        }
+
+        protected abstract IDeploymentEventsHandler OnGetDeploymentEventsHandler(DeploymentEventsHandlerInfo handlerInfo);
+
     }
 }

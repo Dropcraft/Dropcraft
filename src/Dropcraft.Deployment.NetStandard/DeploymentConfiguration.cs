@@ -17,16 +17,6 @@ namespace Dropcraft.Deployment
         internal string PackagesFolderPath { get; set; }
 
         /// <summary>
-        /// Instructs to always try to update packages from the remote sources
-        /// </summary>
-        internal bool UpdatePackages { get; set; }
-
-        /// <summary>
-        /// Instructs to allow packages downgrades
-        /// </summary>
-        internal bool AllowDowngrades { get; set; }
-
-        /// <summary>
         /// Package configuration source
         /// </summary>
         internal IPackageConfigurationSource PackageConfigurationSource { get; set; }
@@ -57,11 +47,6 @@ namespace Dropcraft.Deployment
         }
 
         /// <summary>
-        /// Allows to setup additional options
-        /// </summary>
-        public DeploymentConfigurationOptions ConfigureTo => new DeploymentConfigurationOptions(this);
-
-        /// <summary>
         /// Allows to setup the configuration sources for packages
         /// </summary>
         public PackagesConfigurationOptions ForPackagesConfiguration => new PackagesConfigurationOptions(this);
@@ -89,8 +74,7 @@ namespace Dropcraft.Deployment
         public IDeploymentEngine CreatEngine(DeploymentContext deploymentContext)
         {
             var deploymentStartegyProvider = DeploymentStrategySource.GetStartegyProvider(deploymentContext);
-            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackagesFolderPath,
-                RemotePackagesSources, UpdatePackages, AllowDowngrades);
+            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackagesFolderPath, RemotePackagesSources);
         }
 
         public IDeploymentEngine CreatEngine(string productPath, string framework)

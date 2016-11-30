@@ -139,9 +139,6 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\UpdateCommand.cs">
       <Link>Commands\UpdateCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentConfigurationOptions.cs">
-      <Link>Configuration\DeploymentConfigurationOptions.cs</Link>
-    </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentStarategyProvider.cs">
       <Link>Configuration\DeploymentStarategyProvider.cs</Link>
     </Compile>
@@ -200,9 +197,9 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Dropcraft.Common.NetStandard\Dropcraft.Common.csproj">
-      <Project>{f93f5ccb-bacd-4e5f-9ed5-3db77e2206fa}</Project>
-      <Name>Dropcraft.Common</Name>
+    <ProjectReference Include="..\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">
+      <Project>{d0e6dbe0-49b1-4ea8-b1ed-c449fb853c1f}</Project>
+      <Name>Dropcraft.Common.Net46</Name>
     </ProjectReference>
     <ProjectReference Include="..\Dropcraft.Runtime.Net46\Dropcraft.Runtime.Net46.csproj">
       <Project>{812f6142-dc6c-42cb-8c53-5143a110c3ac}</Project>

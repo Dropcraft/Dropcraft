@@ -34,7 +34,7 @@ namespace Dropcraft.Common
             var parts = idString.Split('/');
             if (parts.Length != 2)
             {
-                throw new ArgumentException("Incorrect package ID format");
+                throw new ArgumentException("Incorrect package ID format (<name>/<version>)");
             }
 
             Id = parts[0];

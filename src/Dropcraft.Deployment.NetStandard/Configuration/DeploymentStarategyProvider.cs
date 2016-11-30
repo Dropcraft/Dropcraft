@@ -63,7 +63,7 @@ namespace Dropcraft.Deployment.Configuration
         protected void AddFiles(string path, string targetPath, FileAction action, FileType fileType, List<PackageFileInfo> files)
         {
             var fileEntries = Directory.EnumerateFiles(path);
-            files.AddRange(fileEntries.Select(fileEntry => new PackageFileInfo
+            files.AddRange(fileEntries.Where(f=>Path.GetFileName(f) != "_._").Select(fileEntry => new PackageFileInfo
             {
                 Action = action,
                 ConflictResolution = DefaultConflictResolution,

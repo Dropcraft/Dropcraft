@@ -1,6 +1,7 @@
 ﻿using System;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Events;
+using Dropcraft.Common.Handlers;
 
 namespace Dropcraft.Common
 {
@@ -20,11 +21,11 @@ namespace Dropcraft.Common
         public void RegisterExtension(ExtensionInfo extensionInfo)
             => OnRegisterExtension(extensionInfo);
 
-        public void RegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
-            => OnRegisterRuntimeEventHandler(runtimeEventsHandler);
+        public void RegisterEventHandler<T>(Action<T> handler) where T: RuntimeEvent
+            => OnRegisterEventHandler(handler);
 
-        public void UnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler)
-            => OnUnregisterRuntimeEventHandler(runtimeEventsHandler);
+        public void UnregisterEventHandler<T>(Action<T> handler) where T : RuntimeEvent
+            => OnUnregisterEventHandler(handler);
 
         public void RaiseRuntimeEvent(RuntimeEvent runtimeEvent)
             => OnRaiseRuntimeEvent(runtimeEvent);
@@ -43,11 +44,10 @@ namespace Dropcraft.Common
 
         protected abstract void OnRegisterExtension(ExtensionInfo extensionInfo);
 
-        protected abstract void OnRegisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler);
+        protected abstract void OnRegisterEventHandler<T>(Action<T> handler) where T : RuntimeEvent;
+        protected abstract void OnUnregisterEventHandler<T>(Action<T> handler) where T : RuntimeEvent;
 
-        protected abstract void OnUnregisterRuntimeEventHandler(IRuntimeEventsHandler runtimeEventsHandler);
-
-        protected abstract void OnRaiseRuntimeEvent(RuntimeEvent runtimeEvent);
+        protected abstract void OnRaiseRuntimeEvent<T>(T runtimeEvent) where T : RuntimeEvent;
 
         protected abstract T OnGetHostService<T>() where T : class;
 

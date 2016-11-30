@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Events;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using Dropcraft.Deployment.Workflow;
@@ -22,8 +22,6 @@ namespace Dropcraft.Deployment
         protected NuGetEngine NuGetEngine { get; }
         protected IDeploymentStartegyProvider DeploymentStartegyProvider { get; }
         protected string PackagesFolderPath { get; }
-        protected bool UpdatePackages { get; }
-        protected bool AllowDowngrades { get; }
         protected bool DontCachePackages { get; }
 
         /// <summary>
@@ -31,15 +29,19 @@ namespace Dropcraft.Deployment
         /// </summary>
         public DeploymentContext DeploymentContext { get; }
 
-
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="deploymentContext">Deployment context to use</param>
+        /// <param name="deploymentStartegyProvider">Deployment strategy to use</param>
+        /// <param name="packagesFolderPath">Path to cache packages</param>
+        /// <param name="remotePackagesSources">Package sources</param>
         public DeploymentEngine(DeploymentContext deploymentContext,
             IDeploymentStartegyProvider deploymentStartegyProvider, string packagesFolderPath,
-            List<string> remotePackagesSources, bool updatePackages, bool allowDowngrades)
+            List<string> remotePackagesSources)
         {
             DeploymentContext = deploymentContext;
             DeploymentStartegyProvider = deploymentStartegyProvider;
-            UpdatePackages = updatePackages;
-            AllowDowngrades = allowDowngrades;
 
             if (string.IsNullOrWhiteSpace(packagesFolderPath))
             {
@@ -52,18 +54,23 @@ namespace Dropcraft.Deployment
             }
 
 
-            NuGetEngine = new NuGetEngine(deploymentContext, PackagesFolderPath, remotePackagesSources, updatePackages,
-                allowDowngrades);
+            NuGetEngine = new NuGetEngine(deploymentContext, PackagesFolderPath, remotePackagesSources);
         }
 
         /// <summary>
         /// Installs provided packages
         /// </summary>
         /// <param name="packages">Packages to install</param>
+        /// <param name="allowDowngrades">Instructs to allow packages downgrades</param>
+        /// <param name="updatePackages">Instructs to always try to update packages from the remote sources</param>
         /// <returns>Task</returns>
-        public async Task InstallPackages(IEnumerable<PackageId> packages)
+        public async Task InstallPackages(IEnumerable<PackageId> packages, bool allowDowngrades, bool updatePackages)
         {
             Logger.Info("Installing packages...");
+
+            NuGetEngine.AllowDowngrades = allowDowngrades;
+            NuGetEngine.UpdatePackages = updatePackages;
+
             var productPackages = DeploymentContext.ProductConfigurationProvider
                                     .GetPackageConfigurations(DependencyOrdering.BottomToTop)
                                     .Select(x => x.Id);
@@ -126,8 +133,9 @@ namespace Dropcraft.Deployment
         /// Uninstalls provided packages
         /// </summary>
         /// <param name="packages">Packages to uninstall</param>
+        /// <param name="removeDependencies">Remove dependent packages if they are not referenced elsewhere</param>
         /// <returns>Task</returns>
-        public async Task UninstallPackages(IEnumerable<PackageId> packages)
+        public async Task UninstallPackages(IEnumerable<PackageId> packages, bool removeDependencies)
         {
             Logger.Info("Uninstalling packages");
             var productPackages = DeploymentContext.ProductConfigurationProvider
@@ -137,6 +145,8 @@ namespace Dropcraft.Deployment
             var topLevelProductPackages = DeploymentContext.ProductConfigurationProvider
                                     .GetPackageConfigurations(DependencyOrdering.TopPackagesOnly)
                                     .Select(x => x.Id);
+
+            //TODO: implement removeDependencies
 
             var workflowContext = new WorkflowContext(new PackageId[] {}, productPackages, topLevelProductPackages);
             var workflow = GetDeploymentWorkflow(DeploymentContext, workflowContext, NuGetEngine);

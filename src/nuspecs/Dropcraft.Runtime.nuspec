@@ -19,6 +19,10 @@
         <dependency id="Newtonsoft.Json" version="9.0.1" />
         <dependency id="Dropcraft.Common" version="$version$" />
       </group>
+      <group targetFramework="net461">
+        <dependency id="Newtonsoft.Json" version="9.0.1" />
+        <dependency id="Dropcraft.Common" version="$version$" />
+      </group>
     </dependencies>
   </metadata>
   <files>

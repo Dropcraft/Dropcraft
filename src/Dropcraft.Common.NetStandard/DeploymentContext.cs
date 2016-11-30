@@ -1,5 +1,6 @@
+using System;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Events;
 
 namespace Dropcraft.Common
 {
@@ -23,26 +24,27 @@ namespace Dropcraft.Common
         /// <summary>
         /// Register a handler for deployment events
         /// </summary>
-        /// <param name="deploymentEventsHandler">Events handler</param>
-        public void RegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
-            => OnRegisterDeploymentEventHandler(deploymentEventsHandler);
+        /// <param name="handler">Event handler</param>
+        public void RegisterEventHandler<T>(Action<T> handler) where T: DeploymentEvent
+            => OnRegisterEventHandler(handler);
 
         /// <summary>
-        /// Unregister the events handler
+        /// Unregister a handler for deployment events
         /// </summary>
-        /// <param name="deploymentEventsHandler">Events handler</param>
-        public void UnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler)
-            => OnUnregisterDeploymentEventHandler(deploymentEventsHandler);
+        /// <param name="handler">Event handler</param>
+        public void UnregisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent
+            => OnUnregisterEventHandler(handler);
 
         /// <summary>
         /// Raise a deployment event
         /// </summary>
         /// <param name="deploymentEvent">Deployment event</param>
-        public void RaiseDeploymentEvent(DeploymentEvent deploymentEvent)
+        public void RaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent
             => OnRaiseDeploymentEvent(deploymentEvent);
 
-        protected abstract void OnRegisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler);
-        protected abstract void OnUnregisterDeploymentEventHandler(IDeploymentEventsHandler deploymentEventsHandler);
-        protected abstract void OnRaiseDeploymentEvent(DeploymentEvent deploymentEvent);
+        protected abstract void OnRegisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
+        protected abstract void OnUnregisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
+
+        protected abstract void OnRaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent;
     }
 }

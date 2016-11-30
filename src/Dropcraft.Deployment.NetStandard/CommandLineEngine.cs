@@ -54,7 +54,8 @@ namespace Dropcraft.Deployment
                 new UpdateCommand(),
                 new RepairCommand(),
                 new ManifestCommand(),
-                new InspectCommand(), 
+                new InspectCommand(),
+                new DryRunCommand(), 
             };
         }
 

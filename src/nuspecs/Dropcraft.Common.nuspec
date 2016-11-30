@@ -19,9 +19,12 @@
         <dependency id="Microsoft.CSharp" version="4.0.1" />
         <dependency id="System.Dynamic.Runtime" version="4.0.11" />
       </group>
+      <group targetFramework="net461">
+      </group>      
     </dependencies>
   </metadata>
   <files>
-    <file src="..\Dropcraft.Common.NetStandard\bin\Release\*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Common.NetStandard\bin\Release\Dropcraft.Common*.*" target="lib\netstandard1.3\" exclude="**\*.pdb" />
+    <file src="..\Dropcraft.Common.Net46\bin\Release\Dropcraft.Common*.*" target="lib\net461\" exclude="**\*.pdb" />
   </files>
 </package>

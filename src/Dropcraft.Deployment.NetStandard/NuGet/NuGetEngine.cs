@@ -22,20 +22,17 @@ namespace Dropcraft.Deployment.NuGet
     public class NuGetEngine
     {
         private readonly NuGetLogger _nuGetLogger;
-        private readonly bool _updatePackages;
-        private readonly bool _allowDowngrades;
         private readonly SourceRepositoryProvider _repositoryProvider;
         private readonly SourceRepository _localRepository;
         private readonly NuGetFramework _framework;
         private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
         private readonly SourceCacheContext _cache;
 
-        public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath,
-            List<string> remotePackagesSources, bool updatePackages, bool allowDowngrades)
-        {
-            _updatePackages = updatePackages;
-            _allowDowngrades = allowDowngrades;
+        public bool UpdatePackages { get; set; }
+        public bool AllowDowngrades { get; set; }
 
+        public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath, List<string> remotePackagesSources)
+        {
             var settings = Settings.LoadDefaultSettings(packagesFolderPath);
             _nuGetLogger = new NuGetLogger();
             _cache = new SourceCacheContext();
@@ -68,7 +65,7 @@ namespace Dropcraft.Deployment.NuGet
         {
             NuGetVersion resolvedVersion = null;
 
-            if (!_updatePackages)
+            if (!UpdatePackages)
             {
                 resolvedVersion = await GetLatestMatchingVersion(packageId, _localRepository, _nuGetLogger);
             }
@@ -112,7 +109,7 @@ namespace Dropcraft.Deployment.NuGet
                         + $"{downgrade.DowngradedTo.Key}");
                 }
 
-                if (!_allowDowngrades)
+                if (!AllowDowngrades)
                 {
                     var name = packagesAnalysis.Downgrades.First().DowngradedFrom.Item.Key.Name;
                     throw new InvalidOperationException($"At least one package requires downgrade and downgrade is not allowed: {name}");

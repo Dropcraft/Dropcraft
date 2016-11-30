@@ -1,7 +1,7 @@
 ﻿using System;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Handlers;
 
 namespace Dropcraft.Runtime
 {
@@ -36,6 +36,11 @@ namespace Dropcraft.Runtime
         protected override IRuntimeEventsHandler OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
         {
             return Instantiate<IRuntimeEventsHandler>(handlerInfo.ClassName);
+        }
+
+        protected override IDeploymentEventsHandler OnGetDeploymentEventsHandler(DeploymentEventsHandlerInfo handlerInfo)
+        {
+            return Instantiate<IDeploymentEventsHandler>(handlerInfo.ClassName);
         }
     }
 }

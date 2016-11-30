@@ -1,4 +1,4 @@
-namespace Dropcraft.Common.Handler
+namespace Dropcraft.Common.Handlers
 {
     public interface IPackageStartupHandler
     {

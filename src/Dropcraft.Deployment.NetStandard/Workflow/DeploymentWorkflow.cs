@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handler;
+using Dropcraft.Common.Events;
 using Dropcraft.Common.Logging;
 using Dropcraft.Deployment.NuGet;
 using NuGet.DependencyResolver;

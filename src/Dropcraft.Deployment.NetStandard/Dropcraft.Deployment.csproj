@@ -53,7 +53,6 @@
     <Compile Include="Configuration\DeploymentStrategySource.cs" />
     <Compile Include="Configuration\DeploymentStrategyOptions.cs" />
     <Compile Include="Workflow\PackageInfo.cs" />
-    <Compile Include="Configuration\DeploymentConfigurationOptions.cs" />
     <Compile Include="Configuration\PackagesConfigurationOptions.cs" />
     <Compile Include="Configuration\PackageSourceOptions.cs" />
     <Compile Include="Configuration\ProductConfigurationOptions.cs" />

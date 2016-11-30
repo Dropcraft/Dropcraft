@@ -1,7 +1,7 @@
 
 using Dropcraft.Common.Configuration;
 
-namespace Dropcraft.Common.Handler
+namespace Dropcraft.Common.Handlers
 {
     public interface IExtensibilityPointHandler
     {

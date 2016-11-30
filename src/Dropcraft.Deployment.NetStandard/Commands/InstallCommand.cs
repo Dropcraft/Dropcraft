@@ -72,7 +72,7 @@ namespace Dropcraft.Deployment.Commands
             }
 
             var engine = GetDeploymentEngine(cmdApp);
-            await engine.InstallPackages(packageIds);
+            await engine.InstallPackages(packageIds, _allowDowngrades.HasValue(), _updatePackages.HasValue());
 
             return 0;
         }
@@ -80,9 +80,7 @@ namespace Dropcraft.Deployment.Commands
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
             var configuration = CommandHelper.GetConfiguration()
-                .ForPackages.Cache(_packagePath.HasValue() ? _packagePath.Value() : string.Empty)
-                .ConfigureTo.UpdatePackagesFromSource(_updatePackages.HasValue())
-                .ConfigureTo.AllowDowngrades(_allowDowngrades.HasValue());
+                .ForPackages.Cache(_packagePath.HasValue() ? _packagePath.Value() : string.Empty);
 
             foreach (var sourceValue in _source.Values)
             {

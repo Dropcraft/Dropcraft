@@ -13,9 +13,6 @@ namespace Dropcraft.Deployment
         public string PackagesPath { get; set; }
         public string Framework { get; set; }
 
-        public bool AllowDowngrades { get; set; }
-        public bool UpdatePackages { get; set; }
-
         public List<string> Sources { get; } = new List<string>();
 
         public DeploymentConfiguration Configuration { get; set; }
@@ -48,7 +45,7 @@ namespace Dropcraft.Deployment
         public NuGetEngine CreatNuGetEngine()
         {
             var deploymentEngine = CreatEngine();
-            return new NuGetEngine(deploymentEngine.DeploymentContext, PackagesPath, Sources, UpdatePackages, AllowDowngrades);
+            return new NuGetEngine(deploymentEngine.DeploymentContext, PackagesPath, Sources);
         }
 
         public bool IsPackageExists(string packageName, string ver)

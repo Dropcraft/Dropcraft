@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Deployment.NuGet;
 using FluentAssertions;
 using Xunit;
 
@@ -69,13 +68,11 @@ namespace Dropcraft.Deployment.Workflow
         {
             using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
             {
-                helper.Configuration.ConfigureTo.AllowDowngrades(true);
-
                 var productPackages = new[] { new PackageId("bootstrap", "3.3.7", false) };
                 var newPackages = new[] { new PackageId("bootstrap", "[3.2.0]", false) };
                 var topLevelProductPackages = new[] { new PackageId("bootstrap", "3.3.7", false) };
 
-                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
+                var context = await TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages, true);
 
                 context.Ctx.PackagesForInstallation.Count.Should().Be(2);
                 context.Ctx.PackagesForInstallation[0].Id.Id.Should().Be("jQuery");
@@ -113,10 +110,11 @@ namespace Dropcraft.Deployment.Workflow
 
             public static async Task<TestContext> ExecuteResolveWorkflow(TestDeploymentHelper helper,
                 IEnumerable<PackageId> newPackages, IEnumerable<PackageId> productPackages,
-                IEnumerable<PackageId> topLevelProductPackages)
+                IEnumerable<PackageId> topLevelProductPackages, bool allowDowngrades = false)
             {
                 var deploymentEngine = helper.CreatEngine();
                 var engine = helper.CreatNuGetEngine();
+                engine.AllowDowngrades = allowDowngrades;
 
                 var workflowContext = new WorkflowContext(newPackages, productPackages, topLevelProductPackages);
                 var context = new TestContext

@@ -55,7 +55,7 @@ namespace Dropcraft.Deployment.Commands
                     DependencyOrdering.TopPackagesOnly)
                 .Select(x => new PackageId(x.Id.Id, string.Empty, _allowPrerelease.HasValue()));
 
-            await engine.InstallPackages(packages);
+            await engine.InstallPackages(packages, false, true);
 
             return 0;
         }
@@ -63,8 +63,7 @@ namespace Dropcraft.Deployment.Commands
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
             var configuration = CommandHelper.GetConfiguration()
-                .ForPackages.Cache(_packagePath.HasValue() ? _packagePath.Value() : string.Empty)
-                .ConfigureTo.UpdatePackagesFromSource(true);
+                .ForPackages.Cache(_packagePath.HasValue() ? _packagePath.Value() : string.Empty);
 
             foreach (var sourceValue in _source.Values)
             {
