@@ -4,6 +4,10 @@ var configuration = Argument("configuration", "Release");
 #Tool "xunit.runner.console"
 #Tool "GitVersion.CommandLine"
 
+#Addin "Cake.DocFx"
+#Tool "docfx.console"
+
+
 //////////////////////////////////////////////////////////////////////
 // PREPARATION
 //////////////////////////////////////////////////////////////////////
@@ -118,6 +122,8 @@ Task("Package")
     }    
 });
 
+Task("Doc").Does(() => DocFx("./docs/docfx.json"));
+
 ///////////////////////////////////////////////////////////////////////////////
 // PRIMARY TARGETS
 ///////////////////////////////////////////////////////////////////////////////
@@ -129,7 +135,8 @@ Task("Build")
     .IsDependentOn("Update-AppVeyor-Build-Number")
     .IsDependentOn("Build-Solutions")
     .IsDependentOn("Run-Tests")
-    .IsDependentOn("Package");
+    .IsDependentOn("Package")
+    .IsDependentOn("Doc");
 
 Task("Default")
     .IsDependentOn("Build");
