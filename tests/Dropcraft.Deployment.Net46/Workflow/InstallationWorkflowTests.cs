@@ -6,6 +6,7 @@ using Xunit;
 
 namespace Dropcraft.Deployment.Workflow
 {
+    /*
     public class InstallationWorkflowTests
     {
         [Fact]
@@ -137,5 +138,5 @@ namespace Dropcraft.Deployment.Workflow
 
         }
 
-    }
+    }*/
 }

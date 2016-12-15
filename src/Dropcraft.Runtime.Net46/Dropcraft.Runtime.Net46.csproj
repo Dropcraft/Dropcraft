@@ -56,6 +56,15 @@
     <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfigurationSource.cs">
       <Link>Configuration\PackageConfigurationSource.cs</Link>
     </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraph.cs">
+      <Link>Configuration\PackageGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraphBuilder.cs">
+      <Link>Configuration\PackageGraphBuilder.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraphNode.cs">
+      <Link>Configuration\PackageGraphNode.cs</Link>
+    </Compile>
     <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationProvider.cs">
       <Link>Configuration\ProductConfigurationProvider.cs</Link>
     </Compile>

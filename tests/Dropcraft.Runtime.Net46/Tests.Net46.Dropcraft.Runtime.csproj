@@ -72,6 +72,7 @@
   <ItemGroup>
     <Compile Include="Configuration\JsonCustomConfigurationTests.cs" />
     <Compile Include="Configuration\PackageConfigurationTests.cs" />
+    <Compile Include="Configuration\PackageGraphTests.cs" />
     <Compile Include="Configuration\ProductConfigurationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

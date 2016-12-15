@@ -61,6 +61,43 @@ namespace Dropcraft.Deployment.NuGet
             }
         }
 
+        protected Exception LogException(Exception exception)
+        {
+            Logger.Trace(exception.Message);
+            return exception;
+        }
+
+        public async Task<PackageId> ResolvePackageVersion(PackageId packageId)
+        {
+            PackageId package = null;
+            if (!string.IsNullOrWhiteSpace(packageId.Version))
+            {
+                var resolvedVer = VersionRange.Parse(packageId.Version);
+                if (resolvedVer == null)
+                {
+                    throw LogException(new ArgumentException($"Provided package version is incorrect: {packageId.Version}"));
+                }
+
+                package = packageId;
+            }
+            else
+            {
+                var version = await ResolveNuGetVersion(packageId);
+                if (version != null)
+                {
+                    package = new PackageId(packageId.Id, version, packageId.AllowPrereleaseVersions);
+                }
+            }
+
+            if (package == null)
+            {
+                throw LogException(new ArgumentException($"Version for package {packageId.Id} cannot be resolved"));
+            }
+
+            Logger.Trace($"Package {packageId.Id} resolved as {package.Id}/{package.Version}");
+            return package;
+        }
+
         public async Task<string> ResolveNuGetVersion(PackageId packageId)
         {
             NuGetVersion resolvedVersion = null;

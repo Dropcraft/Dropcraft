@@ -49,6 +49,8 @@
     <Compile Include="Configuration\IDeploymentStartegyProvider.cs" />
     <Compile Include="Configuration\IDeploymentStrategySource.cs" />
     <Compile Include="Configuration\IPackageConfigurationProvider.cs" />
+    <Compile Include="Configuration\IPackageGraph.cs" />
+    <Compile Include="Configuration\IPackageGraphNode.cs" />
     <Compile Include="Configuration\IProductConfigurationProvider.cs" />
     <Compile Include="Configuration\IProductConfigurationSource.cs" />
     <Compile Include="Configuration\IPackageConfiguration.cs" />

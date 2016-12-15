@@ -70,6 +70,12 @@
     <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageConfigurationSource.cs">
       <Link>Configuration\IPackageConfigurationSource.cs</Link>
     </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageGraph.cs">
+      <Link>Configuration\IPackageGraph.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageGraphNode.cs">
+      <Link>Configuration\IPackageGraphNode.cs</Link>
+    </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IProductConfigurationProvider.cs">
       <Link>Configuration\IProductConfigurationProvider.cs</Link>
     </Compile>

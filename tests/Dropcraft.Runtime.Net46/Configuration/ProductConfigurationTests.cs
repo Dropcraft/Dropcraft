@@ -39,11 +39,11 @@ namespace Dropcraft.Runtime.Configuration
             using (var helper = new ProductConfigurationHelper("Product.PackagesOnly.json"))
             {
                 helper.Configuration.IsProductConfigured.Should().BeTrue();
-                var packages = helper.Configuration.GetPackageConfigurations(DependencyOrdering.BottomToTop).ToList();
+                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst();
 
                 packages.Count.Should().Be(2);
-                packages[0].Id.ToString().Should().Be("ABC/1.0");
-                packages[1].Id.ToString().Should().Be("XYZ/2.0");
+                packages[0].ToString().Should().Be("ABC/1.0");
+                packages[1].ToString().Should().Be("XYZ/2.0");
             }
         }
 
@@ -53,16 +53,19 @@ namespace Dropcraft.Runtime.Configuration
             using (var helper = new ProductConfigurationHelper("Product.json"))
             {
                 helper.Configuration.IsProductConfigured.Should().BeTrue();
-                var packages = helper.Configuration.GetPackageConfigurations(DependencyOrdering.BottomToTop).ToList();
+                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst();
 
                 packages.Count.Should().Be(3);
-                packages[0].Id.ToString().Should().Be("ABC/1.0");
-                packages[0].IsPackageEnabled.Should().BeTrue();
+                packages[0].ToString().Should().Be("ABC/1.0");
 
-                packages[1].Id.ToString().Should().Be("XYZ/2.0");
-                packages[1].GetPackageActivationMode().Should().Be(EntityActivationMode.Deferred);
+                var config = helper.Configuration.GetPackageConfiguration(packages[0]);
+                config.IsPackageEnabled.Should().BeTrue();
 
-                packages[2].Id.ToString().Should().Be("QQQ/3.0");
+                packages[1].ToString().Should().Be("QQQ/3.0");
+
+                packages[2].ToString().Should().Be("XYZ/2.0");
+                config = helper.Configuration.GetPackageConfiguration(packages[2]);
+                config.GetPackageActivationMode().Should().Be(EntityActivationMode.Deferred);
 
                 var files = helper.Configuration.GetInstalledFiles(new PackageId("XYZ/2.0"), true);
                 files.Count().Should().Be(2);
@@ -78,7 +81,6 @@ namespace Dropcraft.Runtime.Configuration
 
         public ProductConfigurationHelper(string testFile)
         {
-            string filePath;
             _path = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             if (!Directory.Exists(_path))
                 Directory.CreateDirectory(_path);
@@ -86,6 +88,9 @@ namespace Dropcraft.Runtime.Configuration
             var assembly = Assembly.GetExecutingAssembly();
             using (var stream = assembly.GetManifestResourceStream("Dropcraft.Runtime.Data."+testFile))
             {
+                if (stream == null) return;
+
+                string filePath;
                 using (var sr = new StreamReader(stream))
                 {
                     filePath = Path.Combine(_path, "project.json");
@@ -95,9 +100,9 @@ namespace Dropcraft.Runtime.Configuration
                         sw.Flush();
                     }
                 }
-            }
 
-            Configuration = new ProductConfigurationProvider(filePath);
+                Configuration = new ProductConfigurationProvider(filePath);
+            }
         }
 
         public void Dispose()

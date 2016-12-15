@@ -2,13 +2,6 @@ using System.Collections.Generic;
 
 namespace Dropcraft.Common.Configuration
 {
-    public enum DependencyOrdering
-    {
-        TopToBottom,
-        BottomToTop,
-        TopPackagesOnly
-    }
-
     /// <summary>
     /// Provides configurations for the product
     /// </summary>
@@ -20,10 +13,10 @@ namespace Dropcraft.Common.Configuration
         bool IsProductConfigured { get; }
 
         /// <summary>
-        /// Returns configuration for all configured packages
+        /// Returns all configured packages
         /// </summary>
-        /// <returns>Package configurations list</returns>
-        IEnumerable<IPackageConfiguration> GetPackageConfigurations(DependencyOrdering dependencyOrdering);
+        /// <returns>Package graph</returns>
+        IPackageGraph GetPackages();
 
         /// <summary>
         /// Returns configuration for the selected package
@@ -32,15 +25,26 @@ namespace Dropcraft.Common.Configuration
         /// <returns>Configuration for the selected package</returns>
         IPackageConfiguration GetPackageConfiguration(PackageId packageId);
 
-        void SetPackageConfiguration(IPackageConfiguration packageConfiguration, IEnumerable<string> files,
-            IEnumerable<string> dependencies);
+        /// <summary>
+        /// Reconfigures product configuration by replacing it with the provided configuration
+        /// </summary>
+        /// <param name="packages">New list of the packages</param>
+        /// <param name="packageGraph">Package dependencies</param>
+        /// <param name="files">Package files</param>
+        void Reconfigure(IEnumerable<IPackageConfiguration> packages, IPackageGraph packageGraph,
+            IDictionary<PackageId, IEnumerable<string>> files);
 
-        void RemovePackageConfiguration(PackageId packageId);
+        /// <summary>
+        /// Removes package from a list of the configured packages
+        /// </summary>
+        /// <param name="packageId">Package to remove</param>
+        void RemovePackage(PackageId packageId);
 
-        IEnumerable<string> GetInstalledFiles(PackageId packageId, bool deletableFilesOnly);
+        IEnumerable<string> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly);
 
-        IEnumerable<string> GetPackageDependencies(PackageId packageId);
-
+        /// <summary>
+        /// Saves configuration to file
+        /// </summary>
         void Save();
     }
 }

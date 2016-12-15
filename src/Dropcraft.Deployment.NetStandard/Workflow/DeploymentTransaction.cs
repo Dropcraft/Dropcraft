@@ -3,19 +3,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Dropcraft.Common;
+using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Logging;
+using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Deployment.Workflow
 {
-    public class FileTransaction : IDisposable
+    public class DeploymentTransaction : IDisposable
     {
         private readonly string _backupFolder;
         private readonly List<string> _installedFile = new List<string>();
         private readonly List<string> _createdFolder = new List<string>();
         private readonly List<FileRecord> _deletedFiles = new List<FileRecord>();
-        private static readonly ILog Logger = LogProvider.For<FileTransaction>();
+        private static readonly ILog Logger = LogProvider.For<DeploymentTransaction>();
 
-        public FileTransaction()
+        public List<PackageId> DeletedPackages { get; } = new List<PackageId>();
+        public List<ProductPackageInfo> InstalledPackages { get; } = new List<ProductPackageInfo>();
+
+        public DeploymentTransaction()
         {
             _backupFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
             if (!Directory.Exists(_backupFolder))
@@ -82,11 +87,26 @@ namespace Dropcraft.Deployment.Workflow
             Logger.Trace($"File {fileInfo.TargetFileName} copied");
         }
 
+        public void TrackDeletedPackage(PackageId packageId)
+        {
+            DeletedPackages.Add(packageId);
+        }
+
+        public void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<string> packageFiles)
+        {
+            var packageInfo = new ProductPackageInfo {Configuration = packageConfiguration};
+            packageInfo.Files.AddRange(packageFiles);
+            InstalledPackages.Add(packageInfo);
+        }
+
         public void Commit()
         {
             _installedFile.Clear();
             _deletedFiles.Clear();
             _createdFolder.Clear();
+
+            DeletedPackages.Clear();
+            InstalledPackages.Clear();
         }
 
         public void Dispose()

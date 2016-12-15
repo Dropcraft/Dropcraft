@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
@@ -51,9 +50,10 @@ namespace Dropcraft.Deployment.Commands
                 return 1;
             }
 
-            var packages = engine.DeploymentContext.ProductConfigurationProvider.GetPackageConfigurations(
-                    DependencyOrdering.TopPackagesOnly)
-                .Select(x => new PackageId(x.Id.Id, string.Empty, _allowPrerelease.HasValue()));
+            var packages =
+                engine.DeploymentContext.ProductConfigurationProvider.GetPackages()
+                    .Packages.Select(x => new PackageId(x.Package.Id, string.Empty, _allowPrerelease.HasValue()))
+                    .ToArray();
 
             await engine.InstallPackages(packages, false, true);
 

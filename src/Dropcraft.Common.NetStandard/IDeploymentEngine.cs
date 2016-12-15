@@ -17,7 +17,7 @@ namespace Dropcraft.Common
         /// <param name="allowDowngrades">Instructs to allow packages downgrades.</param>
         /// <param name="updatePackages">When true, packages will be always updated from the remote source, even if they can be resolved from the installed path.</param>
         /// <returns>Task</returns>
-        Task InstallPackages(IEnumerable<PackageId> packages, bool allowDowngrades, bool updatePackages);
+        Task InstallPackages(ICollection<PackageId> packages, bool allowDowngrades, bool updatePackages);
 
         /// <summary>
         /// Uninstalls provided packages
@@ -25,6 +25,6 @@ namespace Dropcraft.Common
         /// <param name="packages">Packages to uninstall</param>
         /// <param name="removeDependencies">Remove dependent packages if they are not referenced elsewhere</param>
         /// <returns>Task</returns>
-        Task UninstallPackages(IEnumerable<PackageId> packages, bool removeDependencies);
+        Task UninstallPackages(ICollection<PackageId> packages, bool removeDependencies);
     }
 }

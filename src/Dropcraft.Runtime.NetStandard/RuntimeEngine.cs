@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Configuration;
 using Dropcraft.Common.Events;
@@ -9,36 +10,56 @@ namespace Dropcraft.Runtime
     {
         public RuntimeContext RuntimeContext { get; }
 
-        private readonly IProductConfigurationProvider _configurationProvider;
+        protected IProductConfigurationProvider ConfigurationProvider { get; }
 
         public RuntimeEngine(RuntimeConfiguration configuration)
         {
             RuntimeContext = configuration.RuntimeContext;
-            _configurationProvider = configuration
+            ConfigurationProvider = configuration
                                     .ProductConfigurationSource
                                     .GetProductConfigurationProvider(RuntimeContext.ProductPath);
         }
 
         public Task Start()
         {
+            return Start(null);
+        }
+
+        public Task Start(ICollection<PackageId> packages)
+        {
+            RaiseRuntimeEvent(new BeforeRuntimeStartedEvent());
+
             OnInitializePlatformServices();
-            return OnStart();
+            var packagesGraph = ConfigurationProvider.GetPackages();
+
+            IEnumerable<PackageId> packagesForLoading = packages != null
+                ? packagesGraph.SliceWithDependencies(packages, false).FlattenLeastDependentFirst()
+                : packagesGraph.FlattenLeastDependentFirst();
+
+            return OnStart(packagesForLoading);
         }
 
         public void Stop()
         {
             OnStop();
+            RaiseRuntimeEvent(new AfterRuntimeStoppedEvent());
         }
 
-        protected virtual Task OnStart()
+        protected virtual void OnInitializePlatformServices()
         {
-            RaiseRuntimeEvent(new RuntimeStartedEvent());
+            if (EntityActivator.Current == null)
+            {
+                EntityActivator.InitializeEntityActivator(new ReflectionEntityActivator());
+            }
+        }
 
+        protected virtual Task OnStart(IEnumerable<PackageId> packages)
+        {
             var deferredContext = new DeferredContext();
 
-            var configurations = _configurationProvider.GetPackageConfigurations(DependencyOrdering.BottomToTop);
-            foreach (var config in configurations)
+            foreach (var package in packages)
             {
+                var config = ConfigurationProvider.GetPackageConfiguration(package);
                 HandlePackage(config, deferredContext, false);
             }
 
@@ -49,15 +70,6 @@ namespace Dropcraft.Runtime
 
         protected virtual void OnStop()
         {
-            RaiseRuntimeEvent(new RuntimeStoppedEvent());
-        }
-
-        protected virtual void OnInitializePlatformServices()
-        {
-            if (EntityActivator.Current == null)
-            {
-                EntityActivator.InitializeEntityActivator(new ReflectionEntityActivator());
-            }
         }
 
         private void HandleDeferredContext(object obj)

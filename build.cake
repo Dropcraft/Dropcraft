@@ -122,7 +122,7 @@ Task("Package")
     }    
 });
 
-Task("Doc").Does(() => DocFx("./docs/docfx.json"));
+Task("Document").Does(() => DocFx("./docs/docfx.json"));
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRIMARY TARGETS
@@ -136,7 +136,7 @@ Task("Build")
     .IsDependentOn("Build-Solutions")
     .IsDependentOn("Run-Tests")
     .IsDependentOn("Package")
-    .IsDependentOn("Doc");
+    /*.IsDependentOn("Document")*/;
 
 Task("Default")
     .IsDependentOn("Build");

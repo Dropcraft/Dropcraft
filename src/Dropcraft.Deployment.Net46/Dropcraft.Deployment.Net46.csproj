@@ -178,17 +178,14 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\NuGet\SourceRepositoryProvider.cs">
       <Link>NuGet\SourceRepositoryProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentWorkflow.cs">
-      <Link>Workflow\DeploymentWorkflow.cs</Link>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentAction.cs">
+      <Link>Workflow\DeploymentAction.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\FileTransaction.cs">
-      <Link>Workflow\FileTransaction.cs</Link>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentPackageInfo.cs">
+      <Link>Workflow\DeploymentPackageInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\PackageInfo.cs">
-      <Link>Workflow\PackageInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\WorkflowContext.cs">
-      <Link>Workflow\WorkflowContext.cs</Link>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentTransaction.cs">
+      <Link>Workflow\DeploymentTransaction.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

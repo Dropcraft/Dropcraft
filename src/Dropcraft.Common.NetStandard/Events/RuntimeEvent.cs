@@ -5,11 +5,11 @@ namespace Dropcraft.Common.Events
         public RuntimeContext Context { get; set; }
     }
 
-    public class RuntimeStartedEvent : RuntimeEvent
+    public class BeforeRuntimeStartedEvent : RuntimeEvent
     {
     }
 
-    public class RuntimeStoppedEvent : RuntimeEvent
+    public class AfterRuntimeStoppedEvent : RuntimeEvent
     {
     }
 

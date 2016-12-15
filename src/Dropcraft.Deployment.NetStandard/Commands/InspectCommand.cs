@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
@@ -34,7 +33,7 @@ namespace Dropcraft.Deployment.Commands
                 logErrorAction($"Configuration not found at {_productPath}");
             }
 
-            var packages = configurationProvider.GetPackageConfigurations(DependencyOrdering.BottomToTop);
+            var packages = configurationProvider.GetPackages().FlattenLeastDependentFirst();
             foreach (var packageConfiguration in packages)
             {
                 Console.WriteLine(packageConfiguration.Id.ToString());

@@ -21,8 +21,8 @@ namespace Dropcraft.Runtime.Configuration
 
         //TODO: package metadata
 
-        protected List<IPackageConfiguration> Packages { get; }
-        protected Dictionary<string, ProductPackageInfo> ProductPackagesInfo { get; }
+        protected IPackageGraph Packages { get; private set; }
+        protected List<ProductPackageInfo> ProductPackages { get; }
 
         private JObject _jsonObject;
 
@@ -36,8 +36,8 @@ namespace Dropcraft.Runtime.Configuration
         public ProductConfigurationProvider(string configPath)
         {
             _configPath = configPath;
-            Packages = new List<IPackageConfiguration>();
-            ProductPackagesInfo = new Dictionary<string, ProductPackageInfo>();
+            Packages = PackageGraph.Empty();
+            ProductPackages = new List<ProductPackageInfo>();
 
             TryParseConfiguration();
         }
@@ -55,6 +55,7 @@ namespace Dropcraft.Runtime.Configuration
                 JToken token;
                 if (_jsonObject.TryGetValue(_packagesTag, out token))
                 {
+                    var builder = new PackageGraphBuilder();
                     foreach (var package in token.Children())
                     {
                         var packageProp = (JProperty) package;
@@ -66,99 +67,97 @@ namespace Dropcraft.Runtime.Configuration
                         if (packageObject.TryGetValue(_packageTag, out token))
                         {
                             var packageConfigObject = (JObject) token;
-                            Packages.Add(new PackageConfiguration(packageId, packageConfigObject));
+                            info.Configuration = new PackageConfiguration(packageId, packageConfigObject);
 
                             if (packageObject.TryGetValue(_filesTag, out token) && token.HasValues)
                             {
-                                var array = (JArray)token;
+                                var array = (JArray) token;
                                 info.Files.AddRange(array.Select(x => x.ToString()));
                             }
-
+                            
+                            List<PackageId> dependencies = new List<PackageId>();
                             if (packageObject.TryGetValue(_dependenciesTag, out token) && token.HasValues)
                             {
-                                var array = (JArray)token;
-                                info.Dependencies.AddRange(array.Select(x => x.ToString()));
+                                var array = (JArray) token;
+                                dependencies.AddRange(array.Select(x => new PackageId(x.ToString())));
                             }
 
-                            ProductPackagesInfo.Add(packageId.ToString(), info);
+                            builder.Append(packageId, dependencies);
+                            ProductPackages.Add(info);
                         }
                     }
 
+                    Packages = builder.Build();
                     IsProductConfigured = true;
                 }
             }
         }
 
-        public IEnumerable<IPackageConfiguration> GetPackageConfigurations(DependencyOrdering dependencyOrdering)
+        public IPackageGraph GetPackages()
         {
-            if (dependencyOrdering == DependencyOrdering.TopPackagesOnly)
-            {
-                var dependencies = new List<string>();
-                foreach (var info in ProductPackagesInfo)
-                {
-                    dependencies.AddRange(info.Value.Dependencies);
-                }
-
-                return Packages.Where(x => !dependencies.Contains(x.Id.ToString()));
-            }
-
-            if (dependencyOrdering == DependencyOrdering.TopToBottom)
-            {
-                var packages = new List<IPackageConfiguration>(Packages);
-                packages.Reverse();
-                return packages;
-            }
-
             return Packages;
         }
 
         public IPackageConfiguration GetPackageConfiguration(PackageId packageId)
         {
-            return Packages.FirstOrDefault(x => x.Id.IsSamePackage(packageId));
+            return ProductPackages.FirstOrDefault(x => x.Configuration.Id.IsSamePackage(packageId))?.Configuration;
         }
 
-        public void SetPackageConfiguration(IPackageConfiguration packageConfiguration, IEnumerable<string> files,
-            IEnumerable<string> dependencies)
+        public void Reconfigure(IEnumerable<IPackageConfiguration> packages, IPackageGraph packageGraph,
+            IDictionary<PackageId, IEnumerable<string>> files)
         {
-            RemovePackageConfiguration(packageConfiguration.Id);
+            Packages = packageGraph;
 
-            Packages.Add(packageConfiguration);
-
-            var info = new ProductPackageInfo();
-            info.Files.AddRange(files);
-            info.Dependencies.AddRange(dependencies);
-            ProductPackagesInfo.Add(packageConfiguration.Id.ToString(), info);
-        }
-
-        public void RemovePackageConfiguration(PackageId packageId)
-        {
-            var configuration = GetPackageConfiguration(packageId);
-            if (configuration != null)
+            ProductPackages.Clear();
+            foreach (var package in packages)
             {
-                Packages.Remove(configuration);
+                var info = new ProductPackageInfo
+                {
+                    Configuration = package
+                };
+
+                var packageFiles = files.FirstOrDefault(f => f.Key.IsSamePackage(package.Id)).Value;
+                if (packageFiles != null)
+                    info.Files.AddRange(packageFiles);
+
+                ProductPackages.Add(info);
+            }
+        }
+
+        public void RemovePackage(PackageId packageId)
+        {
+            var packageInfo = ProductPackages.FirstOrDefault(x=>x.Configuration.Id.IsSamePackage(packageId));
+            if (packageInfo != null)
+            {
+                ProductPackages.Remove(packageInfo);
             }
 
-            ProductPackagesInfo.Remove(packageId.ToString());
+            var allPackages = Packages.GetNodes(new PackageId[] {});
+            var builder = new PackageGraphBuilder();
+
+            foreach (var packageNode in allPackages)
+            {
+                if (packageNode.Package.IsSamePackage(packageId))
+                    continue;
+
+                builder.Append(packageNode.Package,
+                    packageNode.Dependencies.Where(x => !x.Package.IsSamePackage(packageId)).Select(p => p.Package));
+            }
+
+            Packages = builder.Build();
         }
 
-        public IEnumerable<string> GetInstalledFiles(PackageId packageId, bool deletableFilesOnly)
+        public IEnumerable<string> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly)
         {
-            var id = packageId.ToString();
-            var packageInfo = ProductPackagesInfo[id];
+            var packageInfo = ProductPackages.FirstOrDefault(x => x.Configuration.Id.IsSamePackage(packageId));
+            if (packageInfo == null)
+                return new string[] {};
 
-            if (!deletableFilesOnly)
+            if (!nonSharedFilesOnly)
                 return packageInfo.Files;
 
             return packageInfo.Files.Where(
-                    file => !ProductPackagesInfo.Any(x => x.Key != id && x.Value.Files.Contains(file))).ToList();
-        }
-
-        public IEnumerable<string> GetPackageDependencies(PackageId packageId)
-        {
-            var id = packageId.ToString();
-            var packageInfo = ProductPackagesInfo[id];
-
-            return packageInfo.Dependencies;
+                    file => !ProductPackages.Any(x => x != packageInfo && x.Files.Contains(file))).ToList();
         }
 
         public void Save()
@@ -170,20 +169,26 @@ namespace Dropcraft.Runtime.Configuration
                 {_packagesTag, packagesObject}
             };
 
-            foreach (var package in Packages)
+            var allPackages = Packages.GetNodes(new PackageId[] { });
+
+            foreach (var packageInfo in ProductPackages)
             {
-                var packageInfo = ProductPackagesInfo[package.Id.ToString()];
+                var packageId = packageInfo.Configuration.Id;
                 var filesArray = new JArray(packageInfo.Files);
-                var dependenciesArray = new JArray(packageInfo.Dependencies);
+
+                var dependencies =
+                    allPackages.FirstOrDefault(x => x.Package.IsSamePackage(packageId))?
+                        .Dependencies.Select(d => d.Package.ToString()) ?? new string[] {};
+                var dependenciesArray = new JArray(dependencies);
                 
                 var packageObject = new JObject
                 {
-                    {_packageTag, JObject.Parse(package.AsJson())},
+                    {_packageTag, JObject.Parse(packageInfo.Configuration.AsJson())},
                     {_filesTag, filesArray},
                     {_dependenciesTag, dependenciesArray}
                 };
 
-                packagesObject.Add(package.Id.ToString(), packageObject);
+                packagesObject.Add(packageId.ToString(), packageObject);
             }
 
             var str = jsonObject.ToString();
