@@ -5,7 +5,9 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Dropcraft.Common;
+using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Logging;
+using Dropcraft.Common.Package;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.DependencyResolver;
@@ -19,7 +21,7 @@ using NuGet.Versioning;
 
 namespace Dropcraft.Deployment.NuGet
 {
-    public class NuGetEngine
+    public class NuGetEngine : INuGetEngine
     {
         private readonly NuGetLogger _nuGetLogger;
         private readonly SourceRepositoryProvider _repositoryProvider;
@@ -98,7 +100,7 @@ namespace Dropcraft.Deployment.NuGet
             return package;
         }
 
-        public async Task<string> ResolveNuGetVersion(PackageId packageId)
+        private async Task<string> ResolveNuGetVersion(PackageId packageId)
         {
             NuGetVersion resolvedVersion = null;
 
@@ -115,7 +117,7 @@ namespace Dropcraft.Deployment.NuGet
             return resolvedVersion == null ? null : resolvedVersion.ToFullString();
         }
 
-        public async Task<GraphNode<RemoteResolveResult>> ResolvePackages(List<PackageId> packages)
+        public async Task<GraphNode<RemoteResolveResult>> ResolvePackages(ICollection<PackageId> packages)
         {
             var walkerContext = new RemoteWalkContext(_cache, _nuGetLogger);
 

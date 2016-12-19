@@ -40,101 +40,101 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\DeploymentEventsHandlerInfo.cs">
-      <Link>Configuration\DeploymentEventsHandlerInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\DeploymentContext.cs">
+      <Link>Deployment\DeploymentContext.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\EntityActivationMode.cs">
-      <Link>Configuration\EntityActivationMode.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\DeploymentEvent.cs">
+      <Link>Deployment\DeploymentEvent.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\ExtensibilityPointInfo.cs">
-      <Link>Configuration\ExtensibilityPointInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentEngine.cs">
+      <Link>Deployment\IDeploymentEngine.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\ExtensionInfo.cs">
-      <Link>Configuration\ExtensionInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStartegyProvider.cs">
+      <Link>Deployment\IDeploymentStartegyProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\ICustomConfiguration.cs">
-      <Link>Configuration\ICustomConfiguration.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStrategySource.cs">
+      <Link>Deployment\IDeploymentStrategySource.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IDeploymentStartegyProvider.cs">
-      <Link>Configuration\IDeploymentStartegyProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\PackageFileInfo.cs">
+      <Link>Deployment\PackageFileInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IDeploymentStrategySource.cs">
-      <Link>Configuration\IDeploymentStrategySource.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\IPackageGraph.cs">
+      <Link>IPackageGraph.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageConfiguration.cs">
-      <Link>Configuration\IPackageConfiguration.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\IPackageGraphNode.cs">
+      <Link>IPackageGraphNode.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageConfigurationProvider.cs">
-      <Link>Configuration\IPackageConfigurationProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\IProductConfigurationProvider.cs">
+      <Link>IProductConfigurationProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageConfigurationSource.cs">
-      <Link>Configuration\IPackageConfigurationSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageGraph.cs">
-      <Link>Configuration\IPackageGraph.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IPackageGraphNode.cs">
-      <Link>Configuration\IPackageGraphNode.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IProductConfigurationProvider.cs">
-      <Link>Configuration\IProductConfigurationProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\IProductConfigurationSource.cs">
-      <Link>Configuration\IProductConfigurationSource.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\PackageStartupHandlerInfo.cs">
-      <Link>Configuration\PackageStartupHandlerInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Configuration\RuntimeEventsHandlerInfo.cs">
-      <Link>Configuration\RuntimeEventsHandlerInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\DeploymentContext.cs">
-      <Link>DeploymentContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\EntityActivator.cs">
-      <Link>EntityActivator.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Events\DeploymentEvent.cs">
-      <Link>Events\DeploymentEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Events\RuntimeEvent.cs">
-      <Link>Events\RuntimeEvent.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Handlers\IDeploymentEventsHandler.cs">
-      <Link>Handlers\IDeploymentEventsHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Handlers\IExtensibilityPointHandler.cs">
-      <Link>Handlers\IExtensibilityPointHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Handlers\IPackageStartupHandler.cs">
-      <Link>Handlers\IPackageStartupHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Handlers\IRuntimeEventsHandler.cs">
-      <Link>Handlers\IRuntimeEventsHandler.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\IDeploymentEngine.cs">
-      <Link>IDeploymentEngine.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\IProductConfigurationSource.cs">
+      <Link>IProductConfigurationSource.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\IProductContext.cs">
       <Link>IProductContext.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\IRuntimeEngine.cs">
-      <Link>IRuntimeEngine.cs</Link>
-    </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Logging\LibLog.cs">
       <Link>Logging\LibLog.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\PackageFileInfo.cs">
-      <Link>PackageFileInfo.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\PackageId.cs">
       <Link>PackageId.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\PackageMetadataInfo.cs">
-      <Link>PackageMetadataInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\DeploymentEventsHandlerInfo.cs">
+      <Link>Package\DeploymentEventsHandlerInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\RuntimeContext.cs">
-      <Link>RuntimeContext.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\EntityActivationMode.cs">
+      <Link>Package\EntityActivationMode.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\EntityActivator.cs">
+      <Link>Package\EntityActivator.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\ExtensibilityPointInfo.cs">
+      <Link>Package\ExtensibilityPointInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\ExtensionInfo.cs">
+      <Link>Package\ExtensionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\ICustomConfiguration.cs">
+      <Link>Package\ICustomConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IDeploymentEventsHandler.cs">
+      <Link>Package\IDeploymentEventsHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IExtensibilityPointHandler.cs">
+      <Link>Package\IExtensibilityPointHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageConfiguration.cs">
+      <Link>Package\IPackageConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageConfigurationProvider.cs">
+      <Link>Package\IPackageConfigurationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageConfigurationSource.cs">
+      <Link>Package\IPackageConfigurationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageStartupHandler.cs">
+      <Link>Package\IPackageStartupHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IRuntimeEventsHandler.cs">
+      <Link>Package\IRuntimeEventsHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\PackageMetadataInfo.cs">
+      <Link>Package\PackageMetadataInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\PackageStartupHandlerInfo.cs">
+      <Link>Package\PackageStartupHandlerInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\RuntimeEventsHandlerInfo.cs">
+      <Link>Package\RuntimeEventsHandlerInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Runtime\IRuntimeEngine.cs">
+      <Link>Runtime\IRuntimeEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Runtime\RuntimeContext.cs">
+      <Link>Runtime\RuntimeContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Runtime\RuntimeEvent.cs">
+      <Link>Runtime\RuntimeEvent.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

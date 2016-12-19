@@ -139,14 +139,8 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\UpdateCommand.cs">
       <Link>Commands\UpdateCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentStarategyProvider.cs">
-      <Link>Configuration\DeploymentStarategyProvider.cs</Link>
-    </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentStrategyOptions.cs">
       <Link>Configuration\DeploymentStrategyOptions.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentStrategySource.cs">
-      <Link>Configuration\DeploymentStrategySource.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\PackagesConfigurationOptions.cs">
       <Link>Configuration\PackagesConfigurationOptions.cs</Link>
@@ -157,14 +151,53 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\ProductConfigurationOptions.cs">
       <Link>Configuration\ProductConfigurationOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\DefaultDeploymentContext.cs">
-      <Link>DefaultDeploymentContext.cs</Link>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DefaultDeploymentContext.cs">
+      <Link>Core\DefaultDeploymentContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentAction.cs">
+      <Link>Core\DeploymentAction.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentPackageInfo.cs">
+      <Link>Core\DeploymentPackageInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentStarategyProvider.cs">
+      <Link>Core\DeploymentStarategyProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentStrategySource.cs">
+      <Link>Core\DeploymentStrategySource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentTransaction.cs">
+      <Link>Core\DeploymentTransaction.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentTransactionSource.cs">
+      <Link>Core\DeploymentTransactionSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\IDeploymentTransaction.cs">
+      <Link>Core\IDeploymentTransaction.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\IDeploymentTransactionSource.cs">
+      <Link>Core\IDeploymentTransactionSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\IPackageDeployer.cs">
+      <Link>Core\IPackageDeployer.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\IPackageDiscoverer.cs">
+      <Link>Core\IPackageDiscoverer.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\PackageDeployer.cs">
+      <Link>Core\PackageDeployer.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\PackageDiscoverer.cs">
+      <Link>Core\PackageDiscoverer.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\DeploymentConfiguration.cs">
       <Link>DeploymentConfiguration.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\DeploymentEngine.cs">
       <Link>DeploymentEngine.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\NuGet\INuGetEngine.cs">
+      <Link>NuGet\INuGetEngine.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\NuGet\NuGetEngine.cs">
       <Link>NuGet\NuGetEngine.cs</Link>
@@ -177,15 +210,6 @@
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\NuGet\SourceRepositoryProvider.cs">
       <Link>NuGet\SourceRepositoryProvider.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentAction.cs">
-      <Link>Workflow\DeploymentAction.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentPackageInfo.cs">
-      <Link>Workflow\DeploymentPackageInfo.cs</Link>
-    </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Workflow\DeploymentTransaction.cs">
-      <Link>Workflow\DeploymentTransaction.cs</Link>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

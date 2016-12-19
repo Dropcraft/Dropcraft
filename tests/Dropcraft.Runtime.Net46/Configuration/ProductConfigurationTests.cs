@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 using FluentAssertions;
 using Xunit;
 

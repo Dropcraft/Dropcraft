@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Events;
+using Dropcraft.Common.Package;
+using Dropcraft.Common.Runtime;
 
 namespace Dropcraft.Runtime
 {

@@ -2,7 +2,7 @@
 using System.IO;
 using System.Linq;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 

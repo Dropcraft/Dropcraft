@@ -1,4 +1,4 @@
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common;
 
 namespace Dropcraft.Deployment.Configuration
 {

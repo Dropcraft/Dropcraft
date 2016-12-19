@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Dropcraft.Common;
+using Dropcraft.Common.Package;
 using NuGet.DependencyResolver;
 using NuGet.Frameworks;
 using NuGet.LibraryModel;
@@ -9,9 +10,9 @@ namespace Dropcraft.Deployment.NuGet
 {
     public class ProjectLibraryProvider : IProjectDependencyProvider
     {
-        private readonly List<PackageId> _packages;
+        private readonly ICollection<PackageId> _packages;
 
-        public ProjectLibraryProvider(List<PackageId> packages)
+        public ProjectLibraryProvider(ICollection<PackageId> packages)
         {
             _packages = packages;
         }

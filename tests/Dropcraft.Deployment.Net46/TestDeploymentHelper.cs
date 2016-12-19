@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Dropcraft.Common;
-using Dropcraft.Deployment.NuGet;
+using Dropcraft.Common.Deployment;
 
 namespace Dropcraft.Deployment
 {
@@ -37,15 +36,9 @@ namespace Dropcraft.Deployment
             return this;
         }
 
-        public IDeploymentEngine CreatEngine()
+        public DeploymentEngine CreatEngine()
         {
-            return Configuration.CreatEngine(InstallPath, Framework);
-        }
-
-        public NuGetEngine CreatNuGetEngine()
-        {
-            var deploymentEngine = CreatEngine();
-            return new NuGetEngine(deploymentEngine.DeploymentContext, PackagesPath, Sources);
+            return Configuration.CreatEngine(InstallPath, Framework) as DeploymentEngine;
         }
 
         public bool IsPackageExists(string packageName, string ver)

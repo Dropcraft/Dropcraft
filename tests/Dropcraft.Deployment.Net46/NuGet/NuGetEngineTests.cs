@@ -14,8 +14,8 @@ namespace Dropcraft.Deployment.NuGet
         {
             using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
             {
-                var engine = helper.CreatNuGetEngine();
-                var result = await engine.ResolvePackages(new List<PackageId> {new PackageId("bootstrap", "[3.3.7]", false)});
+                var engine = helper.CreatEngine();
+                var result = await engine.NuGetEngine.ResolvePackages(new List<PackageId> {new PackageId("bootstrap", "[3.3.7]", false)});
 
                 result.InnerNodes.Count.Should().Be(1);
                 result.InnerNodes[0].Item.Key.Name.Should().Be("bootstrap");
@@ -29,11 +29,11 @@ namespace Dropcraft.Deployment.NuGet
         {
             using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
             {
-                var engine = helper.CreatNuGetEngine();
-                engine.UpdatePackages = true;
-                var result = await engine.ResolveNuGetVersion(new PackageId("bootstrap", "", false) );
+                var engine = helper.CreatEngine();
+                engine.NuGetEngine.UpdatePackages = true;
+                var packageVersion = await engine.NuGetEngine.ResolvePackageVersion(new PackageId("bootstrap", "", false) );
 
-                result.Should().NotBeNullOrWhiteSpace();
+                packageVersion.Version.Should().NotBeNullOrWhiteSpace();
             }
         }
 

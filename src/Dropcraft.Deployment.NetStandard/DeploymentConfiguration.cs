@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Deployment;
+using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Configuration;
+using Dropcraft.Deployment.Core;
 using Dropcraft.Runtime.Configuration;
 
 namespace Dropcraft.Deployment
@@ -32,6 +34,21 @@ namespace Dropcraft.Deployment
         internal IDeploymentStrategySource DeploymentStrategySource { get; set; }
 
         /// <summary>
+        /// Deployment transaction source
+        /// </summary>
+        internal IDeploymentTransactionSource TransactionSource { get; set; }
+
+        /// <summary>
+        /// Package deployment functionality
+        /// </summary>
+        internal IPackageDeployer PackageDeployer { get; set; }
+
+        /// <summary>
+        /// Package discovery functionality
+        /// </summary>
+        internal IPackageDiscoverer PackageDiscoverer { get; set; }
+
+        /// <summary>
         /// List of remote package sources
         /// </summary>
         internal List<string> RemotePackagesSources { get; } = new List<string>();
@@ -44,6 +61,9 @@ namespace Dropcraft.Deployment
             ProductConfigurationSource = new ProductConfigurationSource();
             PackageConfigurationSource = new PackageConfigurationSource();
             DeploymentStrategySource = new DeploymentStrategySource();
+            TransactionSource = new DeploymentTransactionSource();
+            PackageDeployer = new PackageDeployer();
+            PackageDiscoverer = new PackageDiscoverer();
         }
 
         /// <summary>
@@ -74,7 +94,11 @@ namespace Dropcraft.Deployment
         public IDeploymentEngine CreatEngine(DeploymentContext deploymentContext)
         {
             var deploymentStartegyProvider = DeploymentStrategySource.GetStartegyProvider(deploymentContext);
-            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackagesFolderPath, RemotePackagesSources);
+
+            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackageDiscoverer,
+                PackageDeployer, TransactionSource,
+                PackagesFolderPath,
+                RemotePackagesSources);
         }
 
         public IDeploymentEngine CreatEngine(string productPath, string framework)

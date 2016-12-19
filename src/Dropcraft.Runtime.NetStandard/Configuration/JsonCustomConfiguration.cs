@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Configuration

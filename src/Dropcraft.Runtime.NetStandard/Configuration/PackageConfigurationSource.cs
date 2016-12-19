@@ -1,5 +1,5 @@
 ﻿using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
+using Dropcraft.Common.Package;
 
 namespace Dropcraft.Runtime.Configuration
 {

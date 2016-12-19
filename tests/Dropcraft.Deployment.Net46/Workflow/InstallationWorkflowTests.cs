@@ -9,23 +9,6 @@ namespace Dropcraft.Deployment.Workflow
     /*
     public class InstallationWorkflowTests
     {
-        [Fact]
-        public async Task PackageWithDependencyAreResolved()
-        {
-            using (var helper = new TestDeploymentHelper().WithConfiguration().AndNuGetSource())
-            {
-                var newPackages = new[] {new PackageId("bootstrap", "[3.3.7]", false)};
-                var productPackages = new PackageId[] {};
-                var topLevelProductPackages = new PackageId[] {};
-
-                var context = await
-                        TestContext.ExecuteResolveWorkflow(helper, newPackages, productPackages, topLevelProductPackages);
-
-                context.Ctx.PackagesForInstallation.Count.Should().Be(2);
-                context.Ctx.PackagesForInstallation[0].Id.Id.Should().Be("jQuery");
-                context.Ctx.PackagesForInstallation[1].Id.Id.Should().Be("bootstrap");
-            }
-        }
 
         [Fact]
         public async Task PackageWithDependencyAreResolvedInAdditionToProductPackage()

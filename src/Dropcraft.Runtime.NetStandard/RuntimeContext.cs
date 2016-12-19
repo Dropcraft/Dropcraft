@@ -2,9 +2,8 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
-using Dropcraft.Common;
-using Dropcraft.Common.Configuration;
-using Dropcraft.Common.Handlers;
+using Dropcraft.Common.Package;
+using Dropcraft.Common.Runtime;
 
 namespace Dropcraft.Runtime
 {
