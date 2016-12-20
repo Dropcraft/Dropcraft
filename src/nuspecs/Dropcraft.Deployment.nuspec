@@ -17,27 +17,20 @@
         <dependency id="Dropcraft.Common" version="$version$" />
         <dependency id="Microsoft.Web.Xdt" version="2.1.1"/>
         <dependency id="Newtonsoft.Json" version="9.0.1"/>
-        <dependency id="NuGet.Client" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Commands" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Common" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Configuration" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.ContentModel" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.DependencyResolver" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.DependencyResolver.Core" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Frameworks" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.LibraryModel" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.PackageManagement" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Packaging" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Packaging.Core" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Packaging.Core.Types" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.ProjectManagement" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.ProjectModel" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Protocol.Core.Types" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Protocol.Core.v3" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Repositories" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Resolver" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.RuntimeModel" version="4.0.0-rc-2048"/>
-        <dependency id="NuGet.Versioning" version="4.0.0-rc-2048"/>        
+        <dependency id="NuGet.Common" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Configuration" version="4.0.0-rc2"/>
+        <dependency id="NuGet.DependencyResolver" version="4.0.0-rc2"/>
+        <dependency id="NuGet.DependencyResolver.Core" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Frameworks" version="4.0.0-rc2"/>
+        <dependency id="NuGet.LibraryModel" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Packaging" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Packaging.Core" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Packaging.Core.Types" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Protocol.Core.Types" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Protocol.Core.v3" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Repositories" version="4.0.0-rc2"/>
+        <dependency id="NuGet.RuntimeModel" version="4.0.0-rc2"/>
+        <dependency id="NuGet.Versioning" version="4.0.0-rc2"/>        
       </group>
     </dependencies>
   </metadata>
