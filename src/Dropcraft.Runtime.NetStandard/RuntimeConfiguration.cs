@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using Dropcraft.Common;
+using Dropcraft.Common.Package;
 using Dropcraft.Common.Runtime;
 using Dropcraft.Runtime.Configuration;
+using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Runtime
 {
@@ -11,33 +13,21 @@ namespace Dropcraft.Runtime
     /// </summary>
     public class RuntimeConfiguration
     {
-        /// <summary>
-        /// Assigned runtime context
-        /// </summary>
-        public RuntimeContext RuntimeContext { get; }
-
-        internal IProductConfigurationSource ProductConfigurationSource { get; set; }
+        internal IProductConfigurationSource ProductConfigurationSource { get; set; } = new ProductConfigurationSource();
 
         internal IDictionary<Type, Func<object>> ServiceFactories { get; } = new Dictionary<Type, Func<object>>();
 
-        /// <summary>
-        /// Constructor
-        /// </summary>
-        public RuntimeConfiguration(string productPath) 
-            : this(new DefaultRuntimeContext(productPath))
-        {
-        }
+        internal IEntityActivator EntityActivator { get; set; } = new ReflectionEntityActivator();
 
         /// <summary>
-        /// Constructor
+        /// Product configuration
         /// </summary>
-        /// <param name="runtimeContext">Configured custom runtime context to use</param>
-        public RuntimeConfiguration(RuntimeContext runtimeContext)
-        {
-            RuntimeContext = runtimeContext;
-        }
+        public ProductConfigurationSourceOptions ForProductConfiguration => new ProductConfigurationSourceOptions(this);
 
-        public RuntimeConfigurationForPackagesSource ForProductConfiguration => new RuntimeConfigurationForPackagesSource(this);
+        /// <summary>
+        /// Runtime extensibility configuration
+        /// </summary>
+        public ExtensibilityOptions ForExtensibility => new ExtensibilityOptions(this);
 
         /// <summary>
         /// Allows to export host services to use by packages during startup
@@ -54,50 +44,27 @@ namespace Dropcraft.Runtime
         /// <summary>
         /// Creates IRuntimeEngine for the defined configuration
         /// </summary>
-        /// <returns>Configuration object</returns>
-        public IRuntimeEngine CreateEngine()
+        /// <param name="runtimeContext">Custom runtime context</param>
+        /// <returns>Configured runtime engine</returns>
+        public IRuntimeEngine CreateEngine(RuntimeContext runtimeContext)
         {
             foreach (var serviceFactory in ServiceFactories)
             {
-                RuntimeContext.RegisterHostService(serviceFactory.Key, serviceFactory.Value);
+                runtimeContext.RegisterHostService(serviceFactory.Key, serviceFactory.Value);
             }
 
-            return new RuntimeEngine(this);
-        }
-
-    }
-
-    /// <summary>
-    /// Allows to define package configuration sources
-    /// </summary>
-    public class RuntimeConfigurationForPackagesSource
-    {
-        private readonly RuntimeConfiguration _runtimeConfiguration;
-
-        public RuntimeConfigurationForPackagesSource(RuntimeConfiguration runtimeConfiguration)
-        {
-            _runtimeConfiguration = runtimeConfiguration;
+            return new RuntimeEngine(runtimeContext,
+                ProductConfigurationSource.GetProductConfigurationProvider(runtimeContext.ProductPath), EntityActivator);
         }
 
         /// <summary>
-        /// Instructs to use product configuration from the installation folder.
+        /// Creates IRuntimeEngine for the defined configuration
         /// </summary>
-        /// <returns>Configuration object</returns>
-        public RuntimeConfiguration UseDefaultConfigurationSource()
+        /// <param name="productPath">Target product path</param>
+        /// <returns>Configured runtime engine</returns>
+        public IRuntimeEngine CreateEngine(string productPath)
         {
-            _runtimeConfiguration.ProductConfigurationSource = new ProductConfigurationSource();
-            return _runtimeConfiguration;
-        }
-
-        /// <summary>
-        /// Instruct to use a custom package configuration source.
-        /// </summary>
-        /// <param name="configurationSource">Custom configuration source</param>
-        /// <returns>Configuration object</returns>
-        public RuntimeConfiguration UseCustomConfigurationSource(IProductConfigurationSource configurationSource)
-        {
-            _runtimeConfiguration.ProductConfigurationSource = configurationSource;
-            return _runtimeConfiguration;
+            return CreateEngine(new DefaultRuntimeContext(productPath));
         }
     }
 }

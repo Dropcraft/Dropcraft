@@ -85,9 +85,6 @@
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\EntityActivationMode.cs">
       <Link>Package\EntityActivationMode.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Package\EntityActivator.cs">
-      <Link>Package\EntityActivator.cs</Link>
-    </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\ExtensibilityPointInfo.cs">
       <Link>Package\ExtensibilityPointInfo.cs</Link>
     </Compile>
@@ -99,6 +96,9 @@
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\IDeploymentEventsHandler.cs">
       <Link>Package\IDeploymentEventsHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IEntityActivator.cs">
+      <Link>Package\IEntityActivator.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\IExtensibilityPointHandler.cs">
       <Link>Package\IExtensibilityPointHandler.cs</Link>

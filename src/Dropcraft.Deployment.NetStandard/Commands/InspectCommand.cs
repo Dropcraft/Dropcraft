@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
 using Microsoft.Extensions.CommandLineUtils;
 
@@ -37,7 +36,7 @@ namespace Dropcraft.Deployment.Commands
             var packages = configurationProvider.GetPackages().FlattenLeastDependentFirst();
             foreach (var packageConfiguration in packages)
             {
-                Console.WriteLine(packageConfiguration.Id.ToString());
+                Console.WriteLine(packageConfiguration.ToString());
             }
 
             return await Task.FromResult(0);

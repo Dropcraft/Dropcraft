@@ -118,9 +118,6 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\DeploymentCommand.cs">
       <Link>Commands\DeploymentCommand.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\DryRunCommand.cs">
-      <Link>Commands\DryRunCommand.cs</Link>
-    </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\InspectCommand.cs">
       <Link>Commands\InspectCommand.cs</Link>
     </Compile>

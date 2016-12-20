@@ -1,0 +1,4 @@
+# Ignore everything in this directory, it exists to link the files from .NET Standard library
+*
+# Except this file
+!.gitignore

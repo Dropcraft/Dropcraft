@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dropcraft.Common;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands

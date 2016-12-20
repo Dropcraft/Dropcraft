@@ -42,7 +42,6 @@
     <Compile Include="CommandLineEngine.cs" />
     <Compile Include="Commands\CommandHelper.cs" />
     <Compile Include="Commands\DeploymentCommand.cs" />
-    <Compile Include="Commands\DryRunCommand.cs" />
     <Compile Include="Commands\InstallCommand.cs" />
     <Compile Include="Commands\InspectCommand.cs" />
     <Compile Include="Commands\ManifestCommand.cs" />

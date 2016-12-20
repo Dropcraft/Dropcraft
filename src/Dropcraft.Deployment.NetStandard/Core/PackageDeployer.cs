@@ -6,6 +6,7 @@ using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
 using Dropcraft.Deployment.NuGet;
 using Dropcraft.Runtime.Configuration;
+using Dropcraft.Runtime.Core;
 using NuGet.DependencyResolver;
 using NuGet.LibraryModel;
 

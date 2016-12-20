@@ -48,6 +48,7 @@
     <Compile Include="Package\ExtensionInfo.cs" />
     <Compile Include="Deployment\IDeploymentStartegyProvider.cs" />
     <Compile Include="Deployment\IDeploymentStrategySource.cs" />
+    <Compile Include="Package\IEntityActivator.cs" />
     <Compile Include="Package\IPackageConfigurationProvider.cs" />
     <Compile Include="IPackageGraph.cs" />
     <Compile Include="IPackageGraphNode.cs" />
@@ -59,7 +60,6 @@
     <Compile Include="Package\PackageStartupHandlerInfo.cs" />
     <Compile Include="Package\RuntimeEventsHandlerInfo.cs" />
     <Compile Include="Deployment\DeploymentContext.cs" />
-    <Compile Include="Package\EntityActivator.cs" />
     <Compile Include="Deployment\DeploymentEvent.cs" />
     <Compile Include="Runtime\RuntimeEvent.cs" />
     <Compile Include="Deployment\IDeploymentEngine.cs" />

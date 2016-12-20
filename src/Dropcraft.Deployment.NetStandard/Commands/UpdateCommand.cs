@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
-using Dropcraft.Common.Package;
 using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands

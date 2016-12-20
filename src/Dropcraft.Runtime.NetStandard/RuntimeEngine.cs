@@ -9,15 +9,14 @@ namespace Dropcraft.Runtime
     public class RuntimeEngine : IRuntimeEngine
     {
         public RuntimeContext RuntimeContext { get; }
+        public IProductConfigurationProvider ConfigurationProvider { get; }
+        public IEntityActivator EntityActivator { get; }
 
-        protected IProductConfigurationProvider ConfigurationProvider { get; }
-
-        public RuntimeEngine(RuntimeConfiguration configuration)
+        internal RuntimeEngine(RuntimeContext runtimeContext, IProductConfigurationProvider configurationProvider, IEntityActivator entityActivator)
         {
-            RuntimeContext = configuration.RuntimeContext;
-            ConfigurationProvider = configuration
-                                    .ProductConfigurationSource
-                                    .GetProductConfigurationProvider(RuntimeContext.ProductPath);
+            RuntimeContext = runtimeContext;
+            ConfigurationProvider = configurationProvider;
+            EntityActivator = entityActivator;
         }
 
         public Task Start()
@@ -29,31 +28,21 @@ namespace Dropcraft.Runtime
         {
             RaiseRuntimeEvent(new BeforeRuntimeStartedEvent());
 
-            OnInitializePlatformServices();
             var packagesGraph = ConfigurationProvider.GetPackages();
 
             IEnumerable<PackageId> packagesForLoading = packages != null
                 ? packagesGraph.SliceWithDependencies(packages, false).FlattenLeastDependentFirst()
                 : packagesGraph.FlattenLeastDependentFirst();
 
-            return OnStart(packagesForLoading);
+            return Execute(packagesForLoading);
         }
 
         public void Stop()
         {
-            OnStop();
             RaiseRuntimeEvent(new AfterRuntimeStoppedEvent());
         }
 
-        protected virtual void OnInitializePlatformServices()
-        {
-            if (EntityActivator.Current == null)
-            {
-                EntityActivator.InitializeEntityActivator(new ReflectionEntityActivator());
-            }
-        }
-
-        protected virtual Task OnStart(IEnumerable<PackageId> packages)
+        private Task Execute(IEnumerable<PackageId> packages)
         {
             var deferredContext = new DeferredContext();
 
@@ -66,10 +55,6 @@ namespace Dropcraft.Runtime
             RaiseRuntimeEvent(new AllRegularPackagesLoadedEvent());
 
             return Task.Factory.StartNew(HandleDeferredContext, deferredContext);
-        }
-
-        protected virtual void OnStop()
-        {
         }
 
         private void HandleDeferredContext(object obj)
@@ -113,7 +98,7 @@ namespace Dropcraft.Runtime
             {
                 foreach (var startupHandlerInfo in packageStartupHandlerInfos)
                 {
-                    var startupHandler = EntityActivator.Current.GetPackageStartupHandler(startupHandlerInfo);
+                    var startupHandler = EntityActivator.GetPackageStartupHandler(startupHandlerInfo);
                     startupHandler.Start(RuntimeContext);
                 }
             }
@@ -123,7 +108,7 @@ namespace Dropcraft.Runtime
             {
                 foreach (var eventsHandlerInfo in runtimeEventsHandlerInfos)
                 {
-                    var eventsHandler = EntityActivator.Current.GetRuntimeEventsHandler(eventsHandlerInfo);
+                    var eventsHandler = EntityActivator.GetRuntimeEventsHandler(eventsHandlerInfo);
                     eventsHandler.RegisterEventHandlers(RuntimeContext);
                 }
             }
@@ -153,7 +138,7 @@ namespace Dropcraft.Runtime
 
         private void ActivateAndRegisterExtensibilityPoint(ExtensibilityPointInfo info)
         {
-            var extensibilityPoint = EntityActivator.Current.GetExtensibilityPointHandler(info);
+            var extensibilityPoint = EntityActivator.GetExtensibilityPointHandler(info);
             extensibilityPoint.Initialize(info, RuntimeContext);
 
             RuntimeContext.RegisterExtensibilityPoint(info.Id, extensibilityPoint);

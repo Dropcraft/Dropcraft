@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Dropcraft.Common;
 using Dropcraft.Common.Package;
+using Dropcraft.Runtime.Core;
 using FluentAssertions;
 using Xunit;
 

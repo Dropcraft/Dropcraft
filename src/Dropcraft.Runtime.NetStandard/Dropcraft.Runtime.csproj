@@ -35,7 +35,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <None Include="Configuration\manifest.json" />
+    <None Include="Core\manifest.json" />
     <None Include="project.json" />
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
@@ -43,16 +43,18 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Configuration\JsonCustomConfiguration.cs" />
-    <Compile Include="Configuration\PackageConfiguration.cs" />
-    <Compile Include="Configuration\PackageConfigurationProvider.cs" />
-    <Compile Include="Configuration\PackageConfigurationSource.cs" />
-    <Compile Include="Configuration\PackageGraph.cs" />
-    <Compile Include="Configuration\PackageGraphBuilder.cs" />
-    <Compile Include="Configuration\PackageGraphNode.cs" />
-    <Compile Include="Configuration\ProductConfigurationProvider.cs" />
-    <Compile Include="Configuration\ProductConfigurationSource.cs" />
-    <Compile Include="Configuration\ProductPackageInfo.cs" />
+    <Compile Include="Configuration\ExtensibilityOptions.cs" />
+    <Compile Include="Core\JsonCustomConfiguration.cs" />
+    <Compile Include="Core\PackageConfiguration.cs" />
+    <Compile Include="Core\PackageConfigurationProvider.cs" />
+    <Compile Include="Core\PackageConfigurationSource.cs" />
+    <Compile Include="Core\PackageGraph.cs" />
+    <Compile Include="Core\PackageGraphBuilder.cs" />
+    <Compile Include="Core\PackageGraphNode.cs" />
+    <Compile Include="Core\ProductConfigurationProvider.cs" />
+    <Compile Include="Core\ProductConfigurationSource.cs" />
+    <Compile Include="Core\ProductPackageInfo.cs" />
+    <Compile Include="Configuration\ProductConfigurationSourceOptions.cs" />
     <Compile Include="RuntimeContext.cs" />
     <Compile Include="DeferredContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -66,6 +68,7 @@
       <Name>Dropcraft.Common</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

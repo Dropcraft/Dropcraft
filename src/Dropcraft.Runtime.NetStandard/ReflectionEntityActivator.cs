@@ -1,10 +1,13 @@
 ﻿using System;
+using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 
 namespace Dropcraft.Runtime
 {
-    internal class ReflectionEntityActivator : EntityActivator
+    public class ReflectionEntityActivator : IEntityActivator
     {
+        private static readonly ILog Logger = LogProvider.For<ReflectionEntityActivator>();
+
         public static T Instantiate<T>(string className)
         {
             var type = Type.GetType(className);
@@ -16,28 +19,33 @@ namespace Dropcraft.Runtime
             return (T)Activator.CreateInstance(type);
         }
 
-        protected override IExtensibilityPointHandler OnGetExtensibilityPointHandler(ExtensibilityPointInfo info)
+        public IExtensibilityPointHandler GetExtensibilityPointHandler(ExtensibilityPointInfo info)
         {
+            Logger.TraceFormat("GetExtensibilityPointHandler for {info}", info);
             return Instantiate<IExtensibilityPointHandler>(info.ClassName);
         }
 
-        protected override T OnGetExtension<T>(ExtensionInfo info)
+        public T GetExtension<T>(ExtensionInfo info) where T : class
         {
+            Logger.TraceFormat("GetExtension for {info}", info);
             return Instantiate<T>(info.ClassName);
         }
 
-        protected override IPackageStartupHandler OnGetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
+        public IPackageStartupHandler GetPackageStartupHandler(PackageStartupHandlerInfo handlerInfo)
         {
+            Logger.TraceFormat("GetPackageStartupHandler for {info}", handlerInfo);
             return Instantiate<IPackageStartupHandler>(handlerInfo.ClassName);
         }
 
-        protected override IRuntimeEventsHandler OnGetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
+        public IRuntimeEventsHandler GetRuntimeEventsHandler(RuntimeEventsHandlerInfo handlerInfo)
         {
+            Logger.TraceFormat("GetRuntimeEventsHandler for {info}", handlerInfo);
             return Instantiate<IRuntimeEventsHandler>(handlerInfo.ClassName);
         }
 
-        protected override IDeploymentEventsHandler OnGetDeploymentEventsHandler(DeploymentEventsHandlerInfo handlerInfo)
+        public IDeploymentEventsHandler GetDeploymentEventsHandler(DeploymentEventsHandlerInfo handlerInfo)
         {
+            Logger.TraceFormat("GetDeploymentEventsHandler for {info}", handlerInfo);
             return Instantiate<IDeploymentEventsHandler>(handlerInfo.ClassName);
         }
     }

@@ -44,35 +44,41 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\JsonCustomConfiguration.cs">
-      <Link>Configuration\JsonCustomConfiguration.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ExtensibilityOptions.cs">
+      <Link>Configuration\ExtensibilityOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfiguration.cs">
-      <Link>Configuration\PackageConfiguration.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationSourceOptions.cs">
+      <Link>Configuration\ProductConfigurationSourceOptions.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfigurationProvider.cs">
-      <Link>Configuration\PackageConfigurationProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\JsonCustomConfiguration.cs">
+      <Link>Core\JsonCustomConfiguration.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageConfigurationSource.cs">
-      <Link>Configuration\PackageConfigurationSource.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageConfiguration.cs">
+      <Link>Core\PackageConfiguration.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraph.cs">
-      <Link>Configuration\PackageGraph.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageConfigurationProvider.cs">
+      <Link>Core\PackageConfigurationProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraphBuilder.cs">
-      <Link>Configuration\PackageGraphBuilder.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageConfigurationSource.cs">
+      <Link>Core\PackageConfigurationSource.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\PackageGraphNode.cs">
-      <Link>Configuration\PackageGraphNode.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageGraph.cs">
+      <Link>Core\PackageGraph.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationProvider.cs">
-      <Link>Configuration\ProductConfigurationProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageGraphBuilder.cs">
+      <Link>Core\PackageGraphBuilder.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductConfigurationSource.cs">
-      <Link>Configuration\ProductConfigurationSource.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageGraphNode.cs">
+      <Link>Core\PackageGraphNode.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Runtime.NetStandard\Configuration\ProductPackageInfo.cs">
-      <Link>Configuration\ProductPackageInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\ProductConfigurationProvider.cs">
+      <Link>Core\ProductConfigurationProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\ProductConfigurationSource.cs">
+      <Link>Core\ProductConfigurationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\ProductPackageInfo.cs">
+      <Link>Core\ProductPackageInfo.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Runtime.NetStandard\DeferredContext.cs">
       <Link>DeferredContext.cs</Link>
@@ -100,6 +106,7 @@
       <Name>Dropcraft.Common.Net46</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

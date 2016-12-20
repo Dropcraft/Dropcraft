@@ -133,7 +133,6 @@
     <Compile Include="NuGet\NuGetEngineTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestDeploymentHelper.cs" />
-    <Compile Include="Workflow\InstallationWorkflowTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Dropcraft.Common.Net46\Dropcraft.Common.Net46.csproj">

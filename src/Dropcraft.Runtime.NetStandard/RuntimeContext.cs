@@ -30,15 +30,25 @@ namespace Dropcraft.Runtime
 
         protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
         {
+            var e = new NewExtensibilityPointRegistrationEvent
+            {
+                ExtensibilityPointHandler = extensibilityPoint,
+                ExtensibilityPointKey = extensibilityPointKey
+            };
+
+            RaiseRuntimeEvent(e);
+            if (!e.IsRegistrationAllowed)
+                return;
+
             lock (_extensionLock)
             {
-                _extensibilityPoints.Add(extensibilityPointKey, extensibilityPoint);
+                _extensibilityPoints.Add(e.ExtensibilityPointKey, e.ExtensibilityPointHandler);
 
                 for (var i = _extensions.Count - 1; i >= 0; i--)
                 {
-                    if (_extensions[i].ExtensibilityPointId == extensibilityPointKey)
+                    if (_extensions[i].ExtensibilityPointId == e.ExtensibilityPointKey)
                     {
-                        extensibilityPoint.RegisterExtension(_extensions[i]);
+                        e.ExtensibilityPointHandler.RegisterExtension(_extensions[i]);
                         _extensions.RemoveAt(i);
                     }
                 }
@@ -47,9 +57,14 @@ namespace Dropcraft.Runtime
 
         protected override void OnUnregisterExtensibilityPoint(string extensibilityPointKey)
         {
+            var e = new ExtensibilityPointUnregistrationEvent {ExtensibilityPointKey = extensibilityPointKey};
+            RaiseRuntimeEvent(e);
+            if (!e.IsUnregistrationAllowed)
+                return;
+
             lock (_extensionLock)
             {
-                _extensibilityPoints.Remove(extensibilityPointKey);
+                _extensibilityPoints.Remove(e.ExtensibilityPointKey);
             }
         }
 
@@ -65,16 +80,22 @@ namespace Dropcraft.Runtime
 
         protected override void OnRegisterExtension(ExtensionInfo extensionInfo)
         {
+            var e = new NewExtensionRegistrationEvent {Extension = extensionInfo};
+            RaiseRuntimeEvent(e);
+
+            if (!e.IsRegistrationAllowed)
+                return;
+
             lock (_extensionLock)
             {
                 IExtensibilityPointHandler extensibilityPoint;
-                if (_extensibilityPoints.TryGetValue(extensionInfo.ExtensibilityPointId, out extensibilityPoint))
+                if (_extensibilityPoints.TryGetValue(e.Extension.ExtensibilityPointId, out extensibilityPoint))
                 {
-                    extensibilityPoint.RegisterExtension(extensionInfo);
+                    extensibilityPoint.RegisterExtension(e.Extension);
                 }
                 else
                 {
-                    _extensions.Add(extensionInfo);
+                    _extensions.Add(e.Extension);
                 }
             }
         }
