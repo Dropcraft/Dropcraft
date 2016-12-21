@@ -7,3 +7,4 @@ test: off
 
 artifacts:
 - path: artifacts\nuget-package\*.nupkg
+- path: artifacts\cli\*.exe
