@@ -5,6 +5,9 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// InspectCommand provides information about the installed product
+    /// </summary>
     public class InspectCommand : DeploymentCommand
     {
         private CommandOption _productPath;

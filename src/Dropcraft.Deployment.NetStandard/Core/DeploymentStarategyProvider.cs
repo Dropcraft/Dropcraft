@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
-using Dropcraft.Common.Package;
 using Dropcraft.Deployment.NuGet;
 
 namespace Dropcraft.Deployment.Core

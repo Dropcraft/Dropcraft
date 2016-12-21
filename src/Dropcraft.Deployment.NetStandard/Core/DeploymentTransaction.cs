@@ -5,7 +5,6 @@ using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
-using Dropcraft.Runtime.Configuration;
 using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment.Core

@@ -2,8 +2,15 @@
 
 namespace Dropcraft.Common.Package
 {
+    /// <summary>
+    /// Custom configuration root
+    /// </summary>
     public interface ICustomConfiguration
     {
+        /// <summary>
+        /// Returns configuration root element
+        /// </summary>
+        /// <returns></returns>
         ICustomConfigObject Get();
     }
 
@@ -12,15 +19,28 @@ namespace Dropcraft.Common.Package
     /// </summary>
     public interface ICustomConfigObject
     {
+        /// <summary>
+        /// Returns all configurations values
+        /// </summary>
+        /// <returns>List of the values</returns>
         IEnumerable<ICustomConfigValue> GetChildren();
 
+        /// <summary>
+        /// Returns configuration value by key
+        /// </summary>
+        /// <param name="key">Key</param>
+        /// <returns>Configuration value</returns>
         ICustomConfigValue GetChild(string key);
 
+        /// <summary>
+        /// Indicates whether the object has children
+        /// </summary>
+        /// <returns>True if the object has children</returns>
         bool HasChildren();
     }
 
     /// <summary>
-    /// 
+    /// Custom configuration value
     /// </summary>
     public interface ICustomConfigValue : ICustomConfigObject
     {

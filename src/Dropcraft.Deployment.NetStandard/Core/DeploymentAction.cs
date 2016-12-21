@@ -116,12 +116,21 @@ namespace Dropcraft.Deployment.Core
             e.FilesToInstall.AddRange(files);
             RaiseDeploymentEvent(e, _deploymentPackage.Id);
 
+            var productPathLength = DeploymentContext.ProductPath.Length;
+
             foreach (var file in e.FilesToInstall)
             {
                 if (file.Action == FileAction.Copy)
                 {
                     transaction.InstallFile(file);
-                    installedFiles.Add(file.TargetFileName);
+
+                    var filePath = file.TargetFileName;
+                    if (filePath.StartsWith(DeploymentContext.ProductPath))
+                    {
+                        filePath = filePath.Remove(0, productPathLength).TrimStart('/', '\\');
+                    }
+
+                    installedFiles.Add(filePath);
                 }
                 else if (file.Action == FileAction.Delete)
                 {

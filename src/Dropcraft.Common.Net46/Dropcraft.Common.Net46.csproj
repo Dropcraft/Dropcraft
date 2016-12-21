@@ -136,6 +136,9 @@
     <Compile Include="..\Dropcraft.Common.NetStandard\Runtime\RuntimeEvent.cs">
       <Link>Runtime\RuntimeEvent.cs</Link>
     </Compile>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

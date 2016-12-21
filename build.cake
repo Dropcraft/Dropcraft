@@ -3,6 +3,7 @@ var configuration = Argument("configuration", "Release");
 
 #Tool "xunit.runner.console"
 #Tool "GitVersion.CommandLine"
+#Tool "ilmerge"
 
 #Addin "Cake.DocFx"
 #Tool "docfx.console"
@@ -20,6 +21,7 @@ var srcDir = Directory("./src");
 var artifactsDir = Directory("./artifacts");
 var testResultsDir = artifactsDir + Directory("test-results");
 var nupkgDestDir = artifactsDir + Directory("nuget-package");
+var cliDestDir = artifactsDir + Directory("cli");
 
 GitVersion versionInfo;
 
@@ -33,7 +35,8 @@ Task("Clean")
     CleanDirectories(new DirectoryPath[] {
         artifactsDir,
         testResultsDir,
-        nupkgDestDir
+        nupkgDestDir,
+        cliDestDir
   	});
 
     foreach(var path in solutionPaths)
@@ -122,6 +125,12 @@ Task("Package")
     }    
 });
 
+Task("ILMerge")
+    .Does(()=>{
+        var assemblyPaths = GetFiles("./src/Dropcraft.Net46/bin/Release/*.dll");
+        ILMerge(System.IO.Path.Combine(cliDestDir, "dropcraft.exe"), "./src/Dropcraft.Net46/bin/Release/Dropcraft.exe", assemblyPaths);
+    });
+
 Task("Document").Does(() => DocFx("./docs/docfx.json"));
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -136,6 +145,7 @@ Task("Build")
     .IsDependentOn("Build-Solutions")
     .IsDependentOn("Run-Tests")
     .IsDependentOn("Package")
+    .IsDependentOn("ILMerge")
     /*.IsDependentOn("Document")*/;
 
 Task("Default")

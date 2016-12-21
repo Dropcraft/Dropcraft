@@ -18,6 +18,7 @@ namespace Dropcraft.Runtime.Core
 
         private readonly string _version = "1.0";
         private readonly string _configPath;
+        private readonly string _productPath;
 
         protected IPackageGraph Packages { get; private set; }
         protected List<ProductPackageInfo> ProductPackages { get; }
@@ -29,6 +30,7 @@ namespace Dropcraft.Runtime.Core
         public ProductConfigurationProvider(string productPath, string productConfigurationFileName)
             : this(Path.Combine(productPath, productConfigurationFileName))
         {
+            _productPath = productPath;
         }
 
         public ProductConfigurationProvider(string configPath)
@@ -151,11 +153,14 @@ namespace Dropcraft.Runtime.Core
             if (packageInfo == null)
                 return new string[] {};
 
-            if (!nonSharedFilesOnly)
-                return packageInfo.Files;
+            var files = !nonSharedFilesOnly
+                ? packageInfo.Files
+                : packageInfo.Files.Where(file => !ProductPackages.Any(x => x != packageInfo && x.Files.Contains(file)))
+                    .ToList();
 
-            return packageInfo.Files.Where(
-                    file => !ProductPackages.Any(x => x != packageInfo && x.Files.Contains(file))).ToList();
+            return string.IsNullOrWhiteSpace(_productPath)
+                ? files
+                : files.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(_productPath, path));
         }
 
         public void Save()

@@ -22,6 +22,12 @@ namespace Dropcraft.Common
         /// </summary>
         public bool AllowPrereleaseVersions { get; }
 
+        /// <summary>
+        /// Constructs PackageId from ID, version and pre-release information
+        /// </summary>
+        /// <param name="id">Package ID</param>
+        /// <param name="version">Package version</param>
+        /// <param name="allowPrereleaseVersions">Is pre-released package</param>
         public PackageId(string id, string version, bool allowPrereleaseVersions)
         {
             Id = id;
@@ -29,6 +35,10 @@ namespace Dropcraft.Common
             AllowPrereleaseVersions = allowPrereleaseVersions;
         }
 
+        /// <summary>
+        /// Constructs PackageId from string
+        /// </summary>
+        /// <param name="idString">String format is ID/version</param>
         public PackageId(string idString)
         {
             var parts = idString.Split('/');
@@ -42,11 +52,20 @@ namespace Dropcraft.Common
             AllowPrereleaseVersions = parts[1].Contains("-");
         }
 
+        /// <summary>
+        /// Determines if packages have the same IDs and versions. AllowPrereleaseVersions flag is ignored for the comparison.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool IsSamePackage(PackageId id)
         {
             return Id == id.Id && Version == id.Version;
         }
 
+        /// <summary>
+        /// Converts object to string
+        /// </summary>
+        /// <returns>String formatted as ID/version</returns>
         public override string ToString()
         {
             return $"{Id}/{Version}";

@@ -208,6 +208,9 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\NuGet\SourceRepositoryProvider.cs">
       <Link>NuGet\SourceRepositoryProvider.cs</Link>
     </Compile>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

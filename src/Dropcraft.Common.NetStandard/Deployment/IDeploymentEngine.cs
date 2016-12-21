@@ -1,9 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Deployment
 {
+    /// <summary>
+    /// High level API for installing/uninstalling packages
+    /// </summary>
     public interface IDeploymentEngine
     {
         /// <summary>

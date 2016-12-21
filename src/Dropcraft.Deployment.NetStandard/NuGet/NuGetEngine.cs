@@ -63,12 +63,6 @@ namespace Dropcraft.Deployment.NuGet
             }
         }
 
-        protected Exception LogException(Exception exception)
-        {
-            Logger.Trace(exception.Message);
-            return exception;
-        }
-
         public async Task<PackageId> ResolvePackageVersion(PackageId packageId)
         {
             PackageId package = null;
@@ -77,7 +71,7 @@ namespace Dropcraft.Deployment.NuGet
                 var resolvedVer = VersionRange.Parse(packageId.Version);
                 if (resolvedVer == null)
                 {
-                    throw LogException(new ArgumentException($"Provided package version is incorrect: {packageId.Version}"));
+                    throw new ArgumentException($"Provided package version is incorrect: {packageId.Version}");
                 }
 
                 package = packageId;
@@ -93,7 +87,7 @@ namespace Dropcraft.Deployment.NuGet
 
             if (package == null)
             {
-                throw LogException(new ArgumentException($"Version for package {packageId.Id} cannot be resolved"));
+                throw new ArgumentException($"Version for package {packageId.Id} cannot be resolved");
             }
 
             Logger.Trace($"Package {packageId.Id} resolved as {package.Id}/{package.Version}");

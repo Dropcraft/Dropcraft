@@ -3,8 +3,14 @@ using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Runtime
 {
+    /// <summary>
+    /// Defines runtime context
+    /// </summary>
     public abstract class RuntimeContext : IProductContext
     {
+        /// <summary>
+        /// Product path
+        /// </summary>
         public string ProductPath { get; protected set; }
 
         public void RegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
@@ -35,20 +41,13 @@ namespace Dropcraft.Common.Runtime
 
 
         protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint);
-
         protected abstract void OnUnregisterExtensibilityPoint(string extensibilityPointKey);
-
         protected abstract IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey);
-
         protected abstract void OnRegisterExtension(ExtensionInfo extensionInfo);
-
         protected abstract void OnRegisterEventHandler<T>(Action<T> handler) where T : RuntimeEvent;
         protected abstract void OnUnregisterEventHandler<T>(Action<T> handler) where T : RuntimeEvent;
-
         protected abstract void OnRaiseRuntimeEvent<T>(T runtimeEvent) where T : RuntimeEvent;
-
         protected abstract T OnGetHostService<T>() where T : class;
-
         protected abstract void OnRegisterHostService(Type type, Func<object> serviceFactory);
     }
 }

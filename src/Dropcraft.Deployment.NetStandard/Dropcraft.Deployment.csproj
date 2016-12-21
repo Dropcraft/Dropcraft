@@ -39,6 +39,9 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\GlobalAssemblyInfo.cs">
+      <Link>Properties\GlobalAssemblyInfo.cs</Link>
+    </Compile>
     <Compile Include="CommandLineEngine.cs" />
     <Compile Include="Commands\CommandHelper.cs" />
     <Compile Include="Commands\DeploymentCommand.cs" />

@@ -6,6 +6,8 @@ namespace Dropcraft.Deployment.Commands
 {
     public class RepairCommand : DeploymentCommand
     {
+        private CommandOption _productPath;
+
         public RepairCommand()
         {
             Name = "repair";
@@ -15,6 +17,8 @@ namespace Dropcraft.Deployment.Commands
         {
             cmdApp.Description = "Repairs the product by reinstalling all the packages";
             cmdApp.HelpOption(CommandHelper.HelpOption);
+
+            _productPath = cmdApp.Option("--path <productPath>", "Path to the product to repair", CommandOptionType.SingleValue);
         }
 
         protected override Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)

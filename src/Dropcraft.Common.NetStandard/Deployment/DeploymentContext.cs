@@ -3,6 +3,9 @@ using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Deployment
 {
+    /// <summary>
+    /// Defines deployment context
+    /// </summary>
     public abstract class DeploymentContext : IProductContext
     {
         /// <summary>
@@ -15,14 +18,20 @@ namespace Dropcraft.Common.Deployment
         /// </summary>
         public string ProductPath { get; protected set; }
 
+        /// <summary>
+        /// Configuration provider for the target produc
+        /// </summary>
         public IProductConfigurationProvider ProductConfigurationProvider { get; protected set; }
 
+        /// <summary>
+        /// Configuration provider for packages
+        /// </summary>
         public IPackageConfigurationProvider PackageConfigurationProvider { get; protected set; }
-
 
         /// <summary>
         /// Register a handler for deployment events
         /// </summary>
+        /// <typeparam name="T">Event type</typeparam>
         /// <param name="handler">Event handler</param>
         public void RegisterEventHandler<T>(Action<T> handler) where T: DeploymentEvent
             => OnRegisterEventHandler(handler);
@@ -30,6 +39,7 @@ namespace Dropcraft.Common.Deployment
         /// <summary>
         /// Unregister a handler for deployment events
         /// </summary>
+        /// <typeparam name="T">Event type</typeparam>
         /// <param name="handler">Event handler</param>
         public void UnregisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent
             => OnUnregisterEventHandler(handler);
@@ -37,13 +47,13 @@ namespace Dropcraft.Common.Deployment
         /// <summary>
         /// Raise a deployment event
         /// </summary>
-        /// <param name="deploymentEvent">Deployment event</param>
+        /// <typeparam name="T">Event type</typeparam>
+        /// <param name="deploymentEvent">Deployment event to raise</param>
         public void RaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent
             => OnRaiseDeploymentEvent(deploymentEvent);
 
         protected abstract void OnRegisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
         protected abstract void OnUnregisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
-
         protected abstract void OnRaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent;
     }
 }
