@@ -214,6 +214,9 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="..\Dropcraft.Deployment.NetStandard\Commands\manifest.json">
+      <Link>Commands\manifest.json</Link>
+    </EmbeddedResource>
     <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>

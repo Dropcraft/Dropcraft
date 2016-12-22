@@ -82,7 +82,7 @@ namespace Dropcraft.Runtime.Core
             var result = new List<RuntimeEventsHandlerInfo>();
 
             JToken token;
-            if (_jsonObject.TryGetValue("eventHandlers", out token) && token.HasValues)
+            if (_jsonObject.TryGetValue("runtimeEventHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
                 var handlers = array.Select(x => new RuntimeEventsHandlerInfo(Id, x.ToString()));
@@ -150,12 +150,12 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<DeploymentEventsHandlerInfo> GetPackageDeploymentHandlers()
+        public IEnumerable<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers()
         {
             var result = new List<DeploymentEventsHandlerInfo>();
 
             JToken token;
-            if (_jsonObject.TryGetValue("deploymentHandlers", out token) && token.HasValues)
+            if (_jsonObject.TryGetValue("deploymentEventHandlers", out token) && token.HasValues)
             {
                 var array = (JArray)token;
                 var handlers = array.Select(x => new DeploymentEventsHandlerInfo(Id, x.ToString()));

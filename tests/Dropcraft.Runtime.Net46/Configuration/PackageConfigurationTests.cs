@@ -89,7 +89,7 @@ namespace Dropcraft.Runtime.Configuration
         {
             var config = JObject.Parse("{}");
             var manifest = new PackageConfiguration(null, config);
-            var list = manifest.GetPackageDeploymentHandlers();
+            var list = manifest.GetDeploymentEventHandlers();
 
             list.Count().Should().Be(0);
         }
@@ -131,7 +131,7 @@ namespace Dropcraft.Runtime.Configuration
         [Fact]
         public void ConfigWithThreeEventHandlersParsed()
         {
-            var config = JObject.Parse("{\"eventHandlers\": [\"1\",\"2\",\"3\"]}");
+            var config = JObject.Parse("{\"runtimeEventHandlers\": [\"1\",\"2\",\"3\"]}");
             var manifest = new PackageConfiguration(null, config);
             var handlers = manifest.GetRuntimeEventHandlers();
 
@@ -145,9 +145,9 @@ namespace Dropcraft.Runtime.Configuration
         [Fact]
         public void ConfigWithThreeDeploymentHandlersParsed()
         {
-            var config = JObject.Parse("{\"deploymentHandlers\": [\"1\",\"2\",\"3\"]}");
+            var config = JObject.Parse("{\"deploymentEventHandlers\": [\"1\",\"2\",\"3\"]}");
             var manifest = new PackageConfiguration(null, config);
-            var handlers = manifest.GetPackageDeploymentHandlers();
+            var handlers = manifest.GetDeploymentEventHandlers();
 
             var handlersList = new List<DeploymentEventsHandlerInfo>(handlers);
             handlersList.Count.Should().Be(3);

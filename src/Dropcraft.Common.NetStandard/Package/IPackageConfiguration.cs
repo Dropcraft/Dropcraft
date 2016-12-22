@@ -54,10 +54,10 @@ namespace Dropcraft.Common.Package
         IEnumerable<ExtensibilityPointInfo> GetExtensibilityPoints();
 
         /// <summary>
-        /// Returns a list the deployment events handlers. Not used at the moment.
+        /// Returns a list the deployment events handlers.
         /// </summary>
         /// <returns>Event handlers</returns>
-        IEnumerable<DeploymentEventsHandlerInfo> GetPackageDeploymentHandlers();
+        IEnumerable<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers();
 
         /// <summary>
         /// Returns custom configuration for the package

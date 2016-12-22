@@ -1,0 +1,43 @@
+﻿{
+  "activation": "normal|deferred",
+
+  "startupHandlers": [
+    "",
+    "",
+    ""
+  ],
+
+  "runtimeEventHandlers": [
+    "",
+    "",
+    ""
+  ],
+
+  "deploymentEventHandlers": [
+    "",
+    "",
+    ""
+  ],
+
+  "extensibilityPoints": [
+    {
+      "id": "",
+      "activation": "normal|deferred",
+      "class": "",
+      "configuration": {}
+    }
+  ],
+
+  "extensions": [
+    {
+      "id": "",
+      "extensibilityPointId": "",
+      "class": "",
+      "configuration": {}
+    }
+  ],
+
+  "configuration": {}
+}
+
+
