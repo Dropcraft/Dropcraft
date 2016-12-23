@@ -110,7 +110,7 @@ namespace Dropcraft.Deployment.Core
         public override void Execute(IDeploymentTransaction transaction)
         {
             var files = _deploymentStartegy.GetPackageFiles(_deploymentPackage.Id, _deploymentPackage.PackagePath).ToList();
-            var installedFiles = new List<string>();
+            var installedFiles = new List<PackageFileInfo>();
 
             var e = new BeforePackageInstalledEvent();
             e.FilesToInstall.AddRange(files);
@@ -130,11 +130,11 @@ namespace Dropcraft.Deployment.Core
                         filePath = filePath.Remove(0, productPathLength).TrimStart('/', '\\');
                     }
 
-                    installedFiles.Add(filePath);
+                    installedFiles.Add(new PackageFileInfo(filePath));
                 }
                 else if (file.Action == FileAction.Delete)
                 {
-                    transaction.DeleteFile(file.TargetFileName);
+                    transaction.DeleteFile(new PackageFileInfo(file.TargetFileName));
                 }
             }
 

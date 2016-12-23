@@ -6,6 +6,6 @@ namespace Dropcraft.Runtime.Core
     public class ProductPackageInfo
     {
         public IPackageConfiguration Configuration { get; set; }
-        public List<string> Files { get; set; } = new List<string>();
+        public List<IPackageFile> Files { get; set; } = new List<IPackageFile>();
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using Dropcraft.Common;
@@ -17,8 +18,11 @@ namespace Dropcraft.Deployment.Core
         private readonly List<FileRecord> _deletedFiles = new List<FileRecord>();
         private static readonly ILog Logger = LogProvider.For<DeploymentTransaction>();
 
-        public List<PackageId> DeletedPackages { get; } = new List<PackageId>();
-        public List<ProductPackageInfo> InstalledPackages { get; } = new List<ProductPackageInfo>();
+        private readonly List<PackageId> _deletedPackages = new List<PackageId>();
+        private readonly List<ProductPackageInfo> _installedPackages = new List<ProductPackageInfo>();
+
+        public ReadOnlyCollection<PackageId> DeletedPackages => _deletedPackages.AsReadOnly();
+        public ReadOnlyCollection<ProductPackageInfo> InstalledPackages => _installedPackages.AsReadOnly();
 
         public DeploymentTransaction()
         {
@@ -39,8 +43,9 @@ namespace Dropcraft.Deployment.Core
             }
         }
 
-        public void DeleteFile(string fileName)
+        public void DeleteFile(IPackageFile fileInfo)
         {
+            var fileName = fileInfo.FileName;
             var targetPath = Path.Combine(_backupFolder, Path.GetFileName(fileName));
             File.Copy(fileName, targetPath);
             _deletedFiles.Add(new FileRecord {OriginalFile = fileName, BackupFile = targetPath});
@@ -56,7 +61,7 @@ namespace Dropcraft.Deployment.Core
             }
         }
 
-        public void InstallFile(PackageFileInfo fileInfo)
+        public void InstallFile(PackageFileDeploymentInfo fileInfo)
         {
             Logger.Trace($"Installing file {fileInfo.FileName} to {fileInfo.TargetFileName}");
             if (File.Exists(fileInfo.TargetFileName))
@@ -73,7 +78,7 @@ namespace Dropcraft.Deployment.Core
                 }
 
                 Logger.Trace("Conflict resolved: override file");
-                DeleteFile(fileInfo.TargetFileName);
+                DeleteFile(new PackageFileInfo(fileInfo.TargetFileName));
             }
             else
             {
@@ -89,14 +94,14 @@ namespace Dropcraft.Deployment.Core
 
         public void TrackDeletedPackage(PackageId packageId)
         {
-            DeletedPackages.Add(packageId);
+            _deletedPackages.Add(packageId);
         }
 
-        public void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<string> packageFiles)
+        public void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<PackageFileInfo> packageFiles)
         {
             var packageInfo = new ProductPackageInfo {Configuration = packageConfiguration};
             packageInfo.Files.AddRange(packageFiles);
-            InstalledPackages.Add(packageInfo);
+            _installedPackages.Add(packageInfo);
         }
 
         public void Commit()
@@ -105,8 +110,8 @@ namespace Dropcraft.Deployment.Core
             _deletedFiles.Clear();
             _createdFolder.Clear();
 
-            DeletedPackages.Clear();
-            InstalledPackages.Clear();
+            _deletedPackages.Clear();
+            _installedPackages.Clear();
         }
 
         public void Dispose()

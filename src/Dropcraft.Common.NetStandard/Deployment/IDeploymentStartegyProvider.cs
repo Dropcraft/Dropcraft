@@ -13,6 +13,6 @@ namespace Dropcraft.Common.Deployment
         /// <param name="packageId">Package been installed</param>
         /// <param name="packagePath">Path to the unpacked package</param>
         /// <returns>List of the files</returns>
-        IEnumerable<PackageFileInfo> GetPackageFiles(PackageId packageId, string packagePath);
+        IReadOnlyCollection<PackageFileDeploymentInfo> GetPackageFiles(PackageId packageId, string packagePath);
     }
 }

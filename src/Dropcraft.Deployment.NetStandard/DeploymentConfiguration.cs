@@ -4,7 +4,6 @@ using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Configuration;
 using Dropcraft.Deployment.Core;
-using Dropcraft.Runtime.Configuration;
 using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment
@@ -55,6 +54,11 @@ namespace Dropcraft.Deployment
         internal List<string> RemotePackagesSources { get; } = new List<string>();
 
         /// <summary>
+        /// List of local package sources
+        /// </summary>
+        internal List<string> LocalPackagesSources { get; } = new List<string>();
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public DeploymentConfiguration()
@@ -99,7 +103,8 @@ namespace Dropcraft.Deployment
             return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackageDiscoverer,
                 PackageDeployer, TransactionSource,
                 PackagesFolderPath,
-                RemotePackagesSources);
+                RemotePackagesSources, 
+                LocalPackagesSources);
         }
 
         public IDeploymentEngine CreatEngine(string productPath, string framework)

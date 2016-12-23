@@ -33,31 +33,31 @@ namespace Dropcraft.Common.Package
         /// Returns a list of the package startup event handlers
         /// </summary>
         /// <returns>Event handlers</returns>
-        IEnumerable<PackageStartupHandlerInfo> GetPackageStartupHandlers();
+        IReadOnlyCollection<PackageStartupHandlerInfo> GetPackageStartupHandlers();
 
         /// <summary>
         /// Returns a list of the runtime events handlers
         /// </summary>
         /// <returns>Event handlers</returns>
-        IEnumerable<RuntimeEventsHandlerInfo> GetRuntimeEventHandlers();
+        IReadOnlyCollection<RuntimeEventsHandlerInfo> GetRuntimeEventHandlers();
 
         /// <summary>
         /// Returns a list of the extensions implemented in the package
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ExtensionInfo> GetExtensions();
+        IReadOnlyCollection<ExtensionInfo> GetExtensions();
 
         /// <summary>
         /// Returns a list of the extensibility points exposed by the package
         /// </summary>
         /// <returns></returns>
-        IEnumerable<ExtensibilityPointInfo> GetExtensibilityPoints();
+        IReadOnlyCollection<ExtensibilityPointInfo> GetExtensibilityPoints();
 
         /// <summary>
         /// Returns a list the deployment events handlers.
         /// </summary>
         /// <returns>Event handlers</returns>
-        IEnumerable<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers();
+        IReadOnlyCollection<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers();
 
         /// <summary>
         /// Returns custom configuration for the package

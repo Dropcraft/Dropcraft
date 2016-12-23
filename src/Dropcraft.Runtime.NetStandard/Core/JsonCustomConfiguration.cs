@@ -69,7 +69,7 @@ namespace Dropcraft.Runtime.Core
     {
         public List<ICustomConfigValue> Values { get; } = new List<ICustomConfigValue>();
 
-        public IEnumerable<ICustomConfigValue> GetChildren()
+        public IReadOnlyCollection<ICustomConfigValue> GetChildren()
         {
             return Values;
         }

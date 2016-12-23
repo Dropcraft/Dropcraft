@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Package;
@@ -16,12 +17,12 @@ namespace Dropcraft.Deployment.Core
         /// <summary>
         /// Packages marked during the transaction as deleted using <see cref="TrackDeletedPackage"/>. 
         /// </summary>
-        List<PackageId> DeletedPackages { get; }
+        ReadOnlyCollection<PackageId> DeletedPackages { get; }
 
         /// <summary>
         /// Packages marked during the transaction as installed using <see cref="TrackInstalledPackage"/>. 
         /// </summary>
-        List<ProductPackageInfo> InstalledPackages { get; }
+        ReadOnlyCollection<ProductPackageInfo> InstalledPackages { get; }
 
         /// <summary>
         /// Creates a new folder
@@ -33,13 +34,13 @@ namespace Dropcraft.Deployment.Core
         /// Deletes file
         /// </summary>
         /// <param name="fileName">File to delete</param>
-        void DeleteFile(string fileName);
+        void DeleteFile(IPackageFile fileName);
 
         /// <summary>
         /// Copies file according the defined rules 
         /// </summary>
         /// <param name="fileInfo">File to copy</param>
-        void InstallFile(PackageFileInfo fileInfo);
+        void InstallFile(PackageFileDeploymentInfo fileInfo);
 
         /// <summary>
         /// Marks package as deleted. For information proposes only, rollback does not undelete the package.
@@ -52,7 +53,7 @@ namespace Dropcraft.Deployment.Core
         /// </summary>
         /// <param name="packageConfiguration">Installed package</param>
         /// <param name="packageFiles">Installed package files</param>
-        void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<string> packageFiles);
+        void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<PackageFileInfo> packageFiles);
 
         /// <summary>
         /// Commits all the chages. 

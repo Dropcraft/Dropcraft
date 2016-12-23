@@ -2,6 +2,9 @@
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// CommandHelper allows to define a pre-configured DeploymentConfiguration to be used by the commands
+    /// </summary>
     public class CommandHelper
     {
         public static string HelpOption = "--help";

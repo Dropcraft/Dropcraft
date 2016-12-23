@@ -62,7 +62,7 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<PackageStartupHandlerInfo> GetPackageStartupHandlers()
+        public IReadOnlyCollection<PackageStartupHandlerInfo> GetPackageStartupHandlers()
         {
             var result = new List<PackageStartupHandlerInfo>();
 
@@ -77,7 +77,7 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<RuntimeEventsHandlerInfo> GetRuntimeEventHandlers()
+        public IReadOnlyCollection<RuntimeEventsHandlerInfo> GetRuntimeEventHandlers()
         {
             var result = new List<RuntimeEventsHandlerInfo>();
 
@@ -92,7 +92,7 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<ExtensionInfo> GetExtensions()
+        public IReadOnlyCollection<ExtensionInfo> GetExtensions()
         {
             var result = new List<ExtensionInfo>();
 
@@ -119,7 +119,7 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<ExtensibilityPointInfo> GetExtensibilityPoints()
+        public IReadOnlyCollection<ExtensibilityPointInfo> GetExtensibilityPoints()
         {
             var result = new List<ExtensibilityPointInfo>();
 
@@ -150,7 +150,7 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public IEnumerable<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers()
+        public IReadOnlyCollection<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers()
         {
             var result = new List<DeploymentEventsHandlerInfo>();
 

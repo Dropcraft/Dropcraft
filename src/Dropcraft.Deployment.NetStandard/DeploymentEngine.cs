@@ -42,20 +42,23 @@ namespace Dropcraft.Deployment
         /// <param name="deploymentStartegyProvider">Deployment strategy to use</param>
         /// <param name="transactionSource">Transactions factory</param>
         /// <param name="packagesFolderPath">Path to cache packages</param>
-        /// <param name="remotePackagesSources">Package sources</param>
+        /// <param name="remotePackagesSources">Remote package sources</param>
         /// <param name="packageDiscoverer">Package version resolver</param>
         /// <param name="packageDeployer">Package installer</param>
+        /// <param name="localPackagesSources">Local package sources</param>
         internal DeploymentEngine(DeploymentContext deploymentContext,
             IDeploymentStartegyProvider deploymentStartegyProvider,
             IPackageDiscoverer packageDiscoverer,
             IPackageDeployer packageDeployer,
             IDeploymentTransactionSource transactionSource,
             string packagesFolderPath,
-            List<string> remotePackagesSources)
+            ICollection<string> remotePackagesSources,
+            ICollection<string> localPackagesSources)
         {
             DeploymentContext = deploymentContext;
             DeploymentStartegyProvider = deploymentStartegyProvider;
 
+            var extendedLocalPackageSources = localPackagesSources;
             if (string.IsNullOrWhiteSpace(packagesFolderPath))
             {
                 PackagesFolderPath = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -64,9 +67,10 @@ namespace Dropcraft.Deployment
             else
             {
                 PackagesFolderPath = packagesFolderPath;
+                extendedLocalPackageSources = localPackagesSources.Union(new[] { PackagesFolderPath }).ToList();
             }
 
-            NuGetEngine = new NuGetEngine(deploymentContext, PackagesFolderPath, remotePackagesSources);
+            NuGetEngine = new NuGetEngine(deploymentContext, PackagesFolderPath, remotePackagesSources, extendedLocalPackageSources);
 
             PackageDiscoverer = packageDiscoverer;
             PackageDiscoverer.NuGetEngine = NuGetEngine;
@@ -193,7 +197,7 @@ namespace Dropcraft.Deployment
         private bool ReconfiguringPackages(IEnumerable<ProductPackageInfo> packagesInfo, IPackageGraph resolvedPackagesGraph)
         {
             var packages = new List<IPackageConfiguration>();
-            var packageFiles = new Dictionary<PackageId, IEnumerable<string>>();
+            var packageFiles = new Dictionary<PackageId, IEnumerable<IPackageFile>>();
 
             foreach (var packageInfo in packagesInfo)
             {

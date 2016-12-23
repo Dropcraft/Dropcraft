@@ -23,7 +23,7 @@ namespace Dropcraft.Common.Package
         /// Returns all configurations values
         /// </summary>
         /// <returns>List of the values</returns>
-        IEnumerable<ICustomConfigValue> GetChildren();
+        IReadOnlyCollection<ICustomConfigValue> GetChildren();
 
         /// <summary>
         /// Returns configuration value by key

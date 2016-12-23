@@ -24,13 +24,13 @@ namespace Dropcraft.Runtime.Core
             return new PackageGraph(new List<PackageGraphNode>(), 0);
         }
 
-        public IList<PackageId> FlattenMostDependentFirst()
+        public ICollection<PackageId> FlattenMostDependentFirst()
         {
             var flatList = FlattenLeastDependentFirst();
             return new List<PackageId>(flatList.Reverse());
         }
 
-        public IList<PackageId> FlattenLeastDependentFirst()
+        public ICollection<PackageId> FlattenLeastDependentFirst()
         {
             var flatList = new List<PackageId>();
 
@@ -91,7 +91,7 @@ namespace Dropcraft.Runtime.Core
             return graphBuilder.Build();
         }
 
-        private void CollectNode(IPackageGraphNode node, List<IPackageGraphNode> collectedNodes)
+        private static void CollectNode(IPackageGraphNode node, ICollection<IPackageGraphNode> collectedNodes)
         {
             if (!collectedNodes.Contains(node))
                 collectedNodes.Add(node);
@@ -102,7 +102,7 @@ namespace Dropcraft.Runtime.Core
             }
         }
 
-        public IList<IPackageGraphNode> GetNodes(ICollection<PackageId> packages)
+        public IReadOnlyCollection<IPackageGraphNode> GetNodes(ICollection<PackageId> packages)
         {
             var nodes = new List<IPackageGraphNode>();
 

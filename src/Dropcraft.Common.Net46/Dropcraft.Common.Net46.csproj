@@ -55,8 +55,8 @@
     <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStrategySource.cs">
       <Link>Deployment\IDeploymentStrategySource.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\PackageFileInfo.cs">
-      <Link>Deployment\PackageFileInfo.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\PackageFileDeploymentInfo.cs">
+      <Link>Deployment\PackageFileDeploymentInfo.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\IPackageGraph.cs">
       <Link>IPackageGraph.cs</Link>
@@ -111,6 +111,9 @@
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageConfigurationSource.cs">
       <Link>Package\IPackageConfigurationSource.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageFile.cs">
+      <Link>Package\IPackageFile.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Package\IPackageStartupHandler.cs">
       <Link>Package\IPackageStartupHandler.cs</Link>

@@ -72,10 +72,10 @@ namespace Dropcraft.Runtime.Configuration
             var packageB = graph.Packages.First(x => x.Package.Id == "B");
             packageB.Dependencies.First().Package.Id.Should().Be("C");
 
-            var list = graph.FlattenLeastDependentFirst();
+            var list = graph.FlattenLeastDependentFirst().ToArray();
             list[0].Id.Should().Be("C");
 
-            list = graph.FlattenMostDependentFirst();
+            list = graph.FlattenMostDependentFirst().ToArray();
             list[2].Id.Should().Be("C");
         }
 
@@ -102,7 +102,7 @@ namespace Dropcraft.Runtime.Configuration
             packageA1.Dependencies.First(x => x.Package.Id == "B").Dependencies.Count.Should().Be(2);
             packageA1.Dependencies.First(x => x.Package.Id == "C").Dependencies.Count.Should().Be(1);
 
-            var list = graph.FlattenMostDependentFirst();
+            var list = graph.FlattenMostDependentFirst().ToArray();
             list[0].Id.Should().BeOneOf("A", "H");
             list[1].Id.Should().BeOneOf("A", "H");
             list[2].Id.Should().BeOneOf("B", "C");
@@ -110,7 +110,7 @@ namespace Dropcraft.Runtime.Configuration
             list[4].Id.Should().Be("E");
             list[5].Id.Should().Be("F");
 
-            list = graph.FlattenLeastDependentFirst();
+            list = graph.FlattenLeastDependentFirst().ToArray();
             list[0].Id.Should().BeOneOf("D", "G");
             list[1].Id.Should().BeOneOf("D", "G");
             list[2].Id.Should().Be("F");

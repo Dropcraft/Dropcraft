@@ -72,7 +72,7 @@ namespace Dropcraft.Runtime.Core
                             if (packageObject.TryGetValue(_filesTag, out token) && token.HasValues)
                             {
                                 var array = (JArray) token;
-                                info.Files.AddRange(array.Select(x => x.ToString()));
+                                info.Files.AddRange(array.Select(x => new PackageFileInfo(x.ToString())));
                             }
                             
                             var dependencies = new List<PackageId>();
@@ -104,7 +104,7 @@ namespace Dropcraft.Runtime.Core
         }
 
         public void Reconfigure(IEnumerable<IPackageConfiguration> packages, IPackageGraph packageGraph,
-            IDictionary<PackageId, IEnumerable<string>> files)
+            IDictionary<PackageId, IEnumerable<IPackageFile>> files)
         {
             Packages = packageGraph;
 
@@ -147,20 +147,23 @@ namespace Dropcraft.Runtime.Core
             Packages = builder.Build();
         }
 
-        public IEnumerable<string> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly)
+        public IReadOnlyCollection<IPackageFile> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly)
         {
             var packageInfo = ProductPackages.FirstOrDefault(x => x.Configuration.Id.IsSamePackage(packageId));
             if (packageInfo == null)
-                return new string[] {};
+                return new List<PackageFileInfo>(new PackageFileInfo[] {});
 
             var files = !nonSharedFilesOnly
                 ? packageInfo.Files
-                : packageInfo.Files.Where(file => !ProductPackages.Any(x => x != packageInfo && x.Files.Contains(file)))
+                : packageInfo.Files.Where(file => !ProductPackages.Any(x => x != packageInfo && x.Files.Any(file.IsSameFile)))
                     .ToList();
 
-            return string.IsNullOrWhiteSpace(_productPath)
-                ? files
-                : files.Select(path => Path.IsPathRooted(path) ? path : Path.Combine(_productPath, path));
+            if (string.IsNullOrWhiteSpace(_productPath))
+                return files;
+
+            return files.Select(
+                    x => Path.IsPathRooted(x.FileName) ? x : new PackageFileInfo(Path.Combine(_productPath, x.FileName)))
+                .ToList();
         }
 
         public void Save()
@@ -177,8 +180,7 @@ namespace Dropcraft.Runtime.Core
             foreach (var packageInfo in ProductPackages)
             {
                 var packageId = packageInfo.Configuration.Id;
-                var filesArray = new JArray(packageInfo.Files);
-
+                var filesArray = new JArray(packageInfo.Files.Select(x=>x.FileName));
                 var dependencies =
                     allPackages.FirstOrDefault(x => x.Package.IsSamePackage(packageId))?
                         .Dependencies.Select(d => d.Package.ToString()) ?? new string[] {};

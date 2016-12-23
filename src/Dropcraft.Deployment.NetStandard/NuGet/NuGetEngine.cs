@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 using Dropcraft.Common;
 using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Logging;
-using Dropcraft.Common.Package;
 using NuGet.Common;
 using NuGet.Configuration;
 using NuGet.DependencyResolver;
@@ -25,7 +24,7 @@ namespace Dropcraft.Deployment.NuGet
     {
         private readonly NuGetLogger _nuGetLogger;
         private readonly SourceRepositoryProvider _repositoryProvider;
-        private readonly SourceRepository _localRepository;
+        private readonly SourceRepositoryProvider _localRepositoryProvider;
         private readonly NuGetFramework _framework;
         private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
         private readonly SourceCacheContext _cache;
@@ -33,18 +32,22 @@ namespace Dropcraft.Deployment.NuGet
         public bool UpdatePackages { get; set; }
         public bool AllowDowngrades { get; set; }
 
-        public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath, List<string> remotePackagesSources)
+        public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath, IEnumerable<string> remotePackagesSources, IEnumerable<string> localPackagesSources)
         {
             var settings = Settings.LoadDefaultSettings(packagesFolderPath);
             _nuGetLogger = new NuGetLogger();
             _cache = new SourceCacheContext();
 
             _repositoryProvider = new SourceRepositoryProvider(settings);
-            _localRepository = _repositoryProvider.CreateRepository(packagesFolderPath);
-
             foreach (var packageSource in remotePackagesSources)
             {
                 _repositoryProvider.AddPackageRepository(packageSource);
+            }
+
+            _localRepositoryProvider = new SourceRepositoryProvider(settings);
+            foreach (var packagesSource in localPackagesSources)
+            {
+                _localRepositoryProvider.AddPackageRepository(packagesSource);
             }
 
             if (!string.IsNullOrWhiteSpace(deploymentContext.TargetFramework))
@@ -100,7 +103,7 @@ namespace Dropcraft.Deployment.NuGet
 
             if (!UpdatePackages)
             {
-                resolvedVersion = await GetLatestMatchingVersion(packageId, _localRepository, _nuGetLogger);
+                resolvedVersion = await GetLatestMatchingVersion(packageId, _localRepositoryProvider.Repositories, _nuGetLogger);
             }
 
             if (resolvedVersion == null && _repositoryProvider.Repositories.Count > 0)
@@ -114,6 +117,7 @@ namespace Dropcraft.Deployment.NuGet
         public async Task<GraphNode<RemoteResolveResult>> ResolvePackages(ICollection<PackageId> packages)
         {
             var walkerContext = new RemoteWalkContext(_cache, _nuGetLogger);
+            walkerContext.ProjectLibraryProviders.Add(new ProjectLibraryProvider(packages));
 
             foreach (var sourceRepository in _repositoryProvider.Repositories)
             {
@@ -121,9 +125,11 @@ namespace Dropcraft.Deployment.NuGet
                 walkerContext.RemoteLibraryProviders.Add(provider);
             }
 
-            walkerContext.ProjectLibraryProviders.Add(new ProjectLibraryProvider(packages));
-            var localProvider = new SourceRepositoryDependencyProvider(_localRepository, _nuGetLogger, _cache, true, true);
-            walkerContext.LocalLibraryProviders.Add(localProvider);
+            foreach (var sourceRepository in _localRepositoryProvider.Repositories)
+            {
+                var localProvider = new SourceRepositoryDependencyProvider(sourceRepository, _nuGetLogger, _cache, true, true);
+                walkerContext.LocalLibraryProviders.Add(localProvider);
+            }
 
             var fakeLib = new LibraryRange("Dropcraft", VersionRange.Parse("1.0.0"), LibraryDependencyTarget.Project);
             var walker = new RemoteDependencyWalker(walkerContext);

@@ -18,14 +18,14 @@ namespace Dropcraft.Deployment.Core
             _deploymentContext = deploymentContext;
         }
 
-        public virtual IEnumerable<PackageFileInfo> GetPackageFiles(PackageId packageId, string packagePath)
+        public virtual IReadOnlyCollection<PackageFileDeploymentInfo> GetPackageFiles(PackageId packageId, string packagePath)
         {
             return OnGetPackageFiles(packageId, packagePath);
         }
 
-        protected IEnumerable<PackageFileInfo> OnGetPackageFiles(PackageId packageId, string packagePath)
+        protected IReadOnlyCollection<PackageFileDeploymentInfo> OnGetPackageFiles(PackageId packageId, string packagePath)
         {
-            var files = new List<PackageFileInfo>();
+            var files = new List<PackageFileDeploymentInfo>();
             var toolsFolder = Path.Combine(packagePath, "tools");
             var contentFolder = Path.Combine(packagePath, "content");
             var libFolder = Path.Combine(packagePath, "lib");
@@ -60,10 +60,10 @@ namespace Dropcraft.Deployment.Core
             return files;
         }
 
-        protected void AddFiles(string path, string targetPath, FileAction action, FileType fileType, List<PackageFileInfo> files)
+        protected void AddFiles(string path, string targetPath, FileAction action, FileType fileType, List<PackageFileDeploymentInfo> files)
         {
             var fileEntries = Directory.EnumerateFiles(path);
-            files.AddRange(fileEntries.Where(f=>Path.GetFileName(f) != "_._").Select(fileEntry => new PackageFileInfo
+            files.AddRange(fileEntries.Where(f=>Path.GetFileName(f) != "_._").Select(fileEntry => new PackageFileDeploymentInfo
             {
                 Action = action,
                 ConflictResolution = DefaultConflictResolution,

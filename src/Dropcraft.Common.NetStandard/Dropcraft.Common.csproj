@@ -57,6 +57,7 @@
     <Compile Include="Package\IPackageConfiguration.cs" />
     <Compile Include="Package\IPackageConfigurationSource.cs" />
     <Compile Include="Package\DeploymentEventsHandlerInfo.cs" />
+    <Compile Include="Package\IPackageFile.cs" />
     <Compile Include="Package\PackageStartupHandlerInfo.cs" />
     <Compile Include="Package\RuntimeEventsHandlerInfo.cs" />
     <Compile Include="Deployment\DeploymentContext.cs" />
@@ -69,7 +70,7 @@
     <Compile Include="Package\IRuntimeEventsHandler.cs" />
     <Compile Include="Runtime\IRuntimeEngine.cs" />
     <Compile Include="Logging\LibLog.cs" />
-    <Compile Include="Deployment\PackageFileInfo.cs" />
+    <Compile Include="Deployment\PackageFileDeploymentInfo.cs" />
     <Compile Include="Package\PackageMetadataInfo.cs" />
     <Compile Include="PackageId.cs" />
     <Compile Include="IProductContext.cs" />

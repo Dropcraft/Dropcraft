@@ -62,6 +62,9 @@
     <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageConfigurationSource.cs">
       <Link>Core\PackageConfigurationSource.cs</Link>
     </Compile>
+    <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageFileInfo.cs">
+      <Link>Core\PackageFileInfo.cs</Link>
+    </Compile>
     <Compile Include="..\Dropcraft.Runtime.NetStandard\Core\PackageGraph.cs">
       <Link>Core\PackageGraph.cs</Link>
     </Compile>

@@ -40,9 +40,9 @@ namespace Dropcraft.Runtime.Configuration
             using (var helper = new ProductConfigurationHelper("Product.PackagesOnly.json"))
             {
                 helper.Configuration.IsProductConfigured.Should().BeTrue();
-                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst();
+                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst().ToArray();
 
-                packages.Count.Should().Be(2);
+                packages.Length.Should().Be(2);
                 packages[0].ToString().Should().Be("ABC/1.0");
                 packages[1].ToString().Should().Be("XYZ/2.0");
             }
@@ -54,9 +54,9 @@ namespace Dropcraft.Runtime.Configuration
             using (var helper = new ProductConfigurationHelper("Product.json"))
             {
                 helper.Configuration.IsProductConfigured.Should().BeTrue();
-                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst();
+                var packages = helper.Configuration.GetPackages().FlattenLeastDependentFirst().ToArray();
 
-                packages.Count.Should().Be(3);
+                packages.Length.Should().Be(3);
                 packages[0].ToString().Should().Be("ABC/1.0");
 
                 var config = helper.Configuration.GetPackageConfiguration(packages[0]);
@@ -69,7 +69,7 @@ namespace Dropcraft.Runtime.Configuration
                 config.GetPackageActivationMode().Should().Be(EntityActivationMode.Deferred);
 
                 var files = helper.Configuration.GetInstalledFiles(new PackageId("XYZ/2.0"), true);
-                files.Count().Should().Be(2);
+                files.Count.Should().Be(2);
             }
         }
     }

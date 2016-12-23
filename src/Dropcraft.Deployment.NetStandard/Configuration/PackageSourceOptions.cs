@@ -21,7 +21,18 @@
         }
 
         /// <summary>
-        /// Configure engine to cache downloaded in the provided folder
+        /// Configures engine to use additional local packages source
+        /// </summary>
+        /// <param name="source">Packages source</param>
+        /// <returns>Configuration object</returns>
+        public DeploymentConfiguration AddLocalSource(string source)
+        {
+            _configuration.LocalPackagesSources.Add(source);
+            return _configuration;
+        }
+
+        /// <summary>
+        /// Configure engine to cache downloaded packages in the provided folder
         /// </summary>
         /// <param name="folderPath">Target folder</param>
         /// <returns>Configuration object</returns>

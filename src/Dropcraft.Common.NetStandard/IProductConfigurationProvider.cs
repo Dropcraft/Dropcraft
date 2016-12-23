@@ -33,7 +33,7 @@ namespace Dropcraft.Common
         /// <param name="packageGraph">Package dependencies</param>
         /// <param name="files">Package files</param>
         void Reconfigure(IEnumerable<IPackageConfiguration> packages, IPackageGraph packageGraph,
-            IDictionary<PackageId, IEnumerable<string>> files);
+            IDictionary<PackageId, IEnumerable<IPackageFile>> files);
 
         /// <summary>
         /// Removes package from a list of the configured packages
@@ -41,7 +41,13 @@ namespace Dropcraft.Common
         /// <param name="packageId">Package to remove</param>
         void RemovePackage(PackageId packageId);
 
-        IEnumerable<string> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly);
+        /// <summary>
+        /// Returns package's installed files 
+        /// </summary>
+        /// <param name="packageId">Package ID</param>
+        /// <param name="nonSharedFilesOnly">When true, instructs function to return only the files which are uniqe for the package</param>
+        /// <returns>Files list</returns>
+        IReadOnlyCollection<IPackageFile> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly);
 
         /// <summary>
         /// Saves configuration to file

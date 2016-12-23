@@ -47,6 +47,7 @@
     <Compile Include="Core\PackageConfiguration.cs" />
     <Compile Include="Core\PackageConfigurationProvider.cs" />
     <Compile Include="Core\PackageConfigurationSource.cs" />
+    <Compile Include="Core\PackageFileInfo.cs" />
     <Compile Include="Core\PackageGraph.cs" />
     <Compile Include="Core\PackageGraphBuilder.cs" />
     <Compile Include="Core\PackageGraphNode.cs" />

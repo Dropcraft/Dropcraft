@@ -14,6 +14,7 @@ namespace Dropcraft.Deployment.Commands
         private CommandOption _packagePath;
         private CommandOption _framework;
         private CommandOption _source;
+        private CommandOption _localSource;
         private CommandOption _updatePackages;
         private CommandOption _allowDowngrades;
 
@@ -33,6 +34,7 @@ namespace Dropcraft.Deployment.Commands
             _packagePath = cmdApp.Option("--packages <packagesDirectory>", "Packages installation path, used as a local packages cache", CommandOptionType.SingleValue);
             _framework = cmdApp.Option("--framework <frameworkId>", "Target framework ID", CommandOptionType.SingleValue);
             _source = cmdApp.Option("-s|--source <packageSource>", "Remote package source, URL or path", CommandOptionType.MultipleValue);
+            _localSource = cmdApp.Option("-l|--local <packageSource>", "Local package source, URL or path", CommandOptionType.MultipleValue);
 
             _updatePackages = cmdApp.Option("--update-packages", "Always try to update packages from the remote sources", CommandOptionType.NoValue);
             _allowDowngrades = cmdApp.Option("--allow-downgrades", "Allow packages downgrades", CommandOptionType.NoValue);
@@ -86,6 +88,14 @@ namespace Dropcraft.Deployment.Commands
             foreach (var sourceValue in _source.Values)
             {
                 configuration.ForPackages.AddRemoteSource(sourceValue);
+            }
+
+            if (_localSource.HasValue())
+            {
+                foreach (var sourceValue in _localSource.Values)
+                {
+                    configuration.ForPackages.AddLocalSource(sourceValue);
+                }
             }
 
             return configuration.CreatEngine(_productPath.Value(), _framework.Value());

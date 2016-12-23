@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common.Deployment
 {
@@ -37,7 +38,7 @@ namespace Dropcraft.Common.Deployment
         /// <summary>
         /// Package's files to install. This list is allowed to be modified by the event handler.
         /// </summary>
-        public List<PackageFileInfo> FilesToInstall { get; } = new List<PackageFileInfo>();
+        public List<PackageFileDeploymentInfo> FilesToInstall { get; } = new List<PackageFileDeploymentInfo>();
     }
 
     /// <summary>
@@ -69,7 +70,7 @@ namespace Dropcraft.Common.Deployment
         /// <summary>
         /// Package's files to uninstall. This list is allowed to be modified by the event handler.
         /// </summary>
-        public List<string> FilesToDelete { get; } = new List<string>();
+        public List<IPackageFile> FilesToDelete { get; } = new List<IPackageFile>();
     }
 
     /// <summary>

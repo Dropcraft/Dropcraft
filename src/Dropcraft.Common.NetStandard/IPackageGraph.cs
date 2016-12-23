@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Dropcraft.Common.Package;
 
 namespace Dropcraft.Common
 {
@@ -22,13 +21,13 @@ namespace Dropcraft.Common
         /// Flattens the graph returning a list with the dependent packages fist following the dependencies 
         /// </summary>
         /// <returns>Flattened graph</returns>
-        IList<PackageId> FlattenMostDependentFirst();
+        ICollection<PackageId> FlattenMostDependentFirst();
 
         /// <summary>
         /// Flattens the graph returning a list with the dependencies first following the dependent packages
         /// </summary>
         /// <returns>Flattened graph</returns>
-        IList<PackageId> FlattenLeastDependentFirst();
+        ICollection<PackageId> FlattenLeastDependentFirst();
 
         /// <summary>
         /// Creates a subgraph including the provided packages and the packages they depend on
@@ -50,6 +49,6 @@ namespace Dropcraft.Common
         /// </summary>
         /// <param name="packages">Package IDs</param>
         /// <returns>Nodes from the graph</returns>
-        IList<IPackageGraphNode> GetNodes(ICollection<PackageId> packages);
+        IReadOnlyCollection<IPackageGraphNode> GetNodes(ICollection<PackageId> packages);
     }
 }
