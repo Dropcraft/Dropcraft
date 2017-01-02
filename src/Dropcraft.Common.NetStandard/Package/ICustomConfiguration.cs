@@ -10,7 +10,7 @@ namespace Dropcraft.Common.Package
         /// <summary>
         /// Returns configuration root element
         /// </summary>
-        /// <returns></returns>
+        /// <returns><see cref="ICustomConfigObject"/></returns>
         ICustomConfigObject Get();
     }
 

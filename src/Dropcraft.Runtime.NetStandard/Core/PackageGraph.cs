@@ -5,31 +5,59 @@ using Dropcraft.Common;
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Class PackageGraph.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.IPackageGraph" />
     public class PackageGraph : IPackageGraph
     {
         private readonly List<PackageGraphNode> _packages;
 
+        /// <summary>
+        /// Top level packages
+        /// </summary>
+        /// <value><see cref="IPackageGraphNode"/></value>
         public IReadOnlyCollection<IPackageGraphNode> Packages => _packages.AsReadOnly();
 
+        /// <summary>
+        /// Number of the packages in the graph
+        /// </summary>
         public int Count { get; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackageGraph"/> class.
+        /// </summary>
+        /// <param name="packages">The top-level packages for the graph</param>
+        /// <param name="count">Total number of the packages in the graph</param>
         public PackageGraph(List<PackageGraphNode> packages, int count)
         {
             _packages = packages;
             Count = count;
         }
 
+        /// <summary>
+        /// Returns an empty instance of <see cref="IPackageGraph"/>
+        /// </summary>
+        /// <returns><see cref="IPackageGraph"/></returns>
         public static IPackageGraph Empty()
         {
             return new PackageGraph(new List<PackageGraphNode>(), 0);
         }
 
+        /// <summary>
+        /// Flattens the graph returning a list with the dependent packages fist following the dependencies
+        /// </summary>
+        /// <returns>Flattened graph</returns>
         public ICollection<PackageId> FlattenMostDependentFirst()
         {
             var flatList = FlattenLeastDependentFirst();
             return new List<PackageId>(flatList.Reverse());
         }
 
+        /// <summary>
+        /// Flattens the graph returning a list with the dependencies first following the dependent packages
+        /// </summary>
+        /// <returns>Flattened graph</returns>
         public ICollection<PackageId> FlattenLeastDependentFirst()
         {
             var flatList = new List<PackageId>();
@@ -42,6 +70,12 @@ namespace Dropcraft.Runtime.Core
             return flatList;
         }
 
+        /// <summary>
+        /// Creates a subgraph including the provided packages and the packages they depend on
+        /// </summary>
+        /// <param name="targetPackages">Packages to use for slicing</param>
+        /// <param name="excludeNonExclusiveDependencies">When true, all dependencies shared with the packages outside of the subgraph will not be included</param>
+        /// <returns>New graph which includes the requested packages and the dependencies</returns>
         public IPackageGraph SliceWithDependencies(ICollection<PackageId> targetPackages, bool excludeNonExclusiveDependencies)
         {
             var collectedPackages = new List<IPackageGraphNode>();
@@ -72,6 +106,11 @@ namespace Dropcraft.Runtime.Core
             return graphBuilder.Build();
         }
 
+        /// <summary>
+        /// Creates a subgraph including the provided packages and the packages which depend on them
+        /// </summary>
+        /// <param name="packages">Packages to use for slicing</param>
+        /// <returns>New graph which includes the requested packages and the dependents</returns>
         public IPackageGraph SliceWithDependents(ICollection<PackageId> packages)
         {
             var nodes = GetNodes(packages);
@@ -102,6 +141,11 @@ namespace Dropcraft.Runtime.Core
             }
         }
 
+        /// <summary>
+        /// Return nodes for the provided package IDs
+        /// </summary>
+        /// <param name="packages">Package IDs</param>
+        /// <returns>Nodes from the graph</returns>
         public IReadOnlyCollection<IPackageGraphNode> GetNodes(ICollection<PackageId> packages)
         {
             var nodes = new List<IPackageGraphNode>();

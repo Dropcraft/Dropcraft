@@ -5,6 +5,12 @@ namespace Dropcraft.Common.Package
     /// </summary>
     public interface IPackageConfigurationProvider
     {
-        IPackageConfiguration GetPackageConfiguration(PackageId packageInfo, string packagePath);
+        /// <summary>
+        /// Returns package configuration
+        /// </summary>
+        /// <param name="packageId">Package</param>
+        /// <param name="packagePath">Package location</param>
+        /// <returns><see cref="IPackageConfiguration"/></returns>
+        IPackageConfiguration GetPackageConfiguration(PackageId packageId, string packagePath);
     }
 }

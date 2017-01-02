@@ -14,6 +14,10 @@ namespace Dropcraft.Runtime.Core
         /// </summary>
         public string ManifestNameTemplate { get; set; } = "manifest.json";
 
+        /// <summary>
+        /// Creates package configuration provider
+        /// </summary>
+        /// <returns><see cref="T:Dropcraft.Common.Package.IPackageConfigurationProvider" /></returns>
         public IPackageConfigurationProvider GetPackageConfigurationProvider()
         {
             return new PackageConfigurationProvider(ManifestNameTemplate);

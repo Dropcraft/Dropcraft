@@ -1,7 +1,7 @@
 ﻿namespace Dropcraft.Common.Deployment
 {
     /// <summary>
-    /// Source of <see cref="IDeploymentStartegyProvider"/>
+    /// Source of <see cref="IDeploymentStrategyProvider"/>
     /// </summary>
     public interface IDeploymentStrategySource
     {
@@ -10,6 +10,6 @@
         /// </summary>
         /// <param name="deploymentContext">Deployment context</param>
         /// <returns>Deployment strategy</returns>
-        IDeploymentStartegyProvider GetStartegyProvider(DeploymentContext deploymentContext);
+        IDeploymentStrategyProvider GetStrategyProvider(DeploymentContext deploymentContext);
     }
 }

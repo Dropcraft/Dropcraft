@@ -1,9 +1,16 @@
 ﻿namespace Dropcraft.Deployment.Configuration
 {
+    /// <summary>
+    /// Class PackageSourceOptions.
+    /// </summary>
     public class PackageSourceOptions
     {
         readonly DeploymentConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackageSourceOptions"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public PackageSourceOptions(DeploymentConfiguration configuration)
         {
             _configuration = configuration;

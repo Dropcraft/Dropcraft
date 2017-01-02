@@ -2,10 +2,17 @@ using Dropcraft.Common.Package;
 
 namespace Dropcraft.Deployment.Configuration
 {
+    /// <summary>
+    /// Class PackagesConfigurationOptions.
+    /// </summary>
     public class PackagesConfigurationOptions
     {
         readonly DeploymentConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackagesConfigurationOptions"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public PackagesConfigurationOptions(DeploymentConfiguration configuration)
         {
             _configuration = configuration;

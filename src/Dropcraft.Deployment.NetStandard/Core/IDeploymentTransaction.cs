@@ -56,7 +56,7 @@ namespace Dropcraft.Deployment.Core
         void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<PackageFileInfo> packageFiles);
 
         /// <summary>
-        /// Commits all the chages. 
+        /// Commits all the changes. 
         /// </summary>
         void Commit();
     }

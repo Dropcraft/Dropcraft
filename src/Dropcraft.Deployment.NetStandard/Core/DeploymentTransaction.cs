@@ -10,6 +10,10 @@ using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment.Core
 {
+    /// <summary>
+    /// Class DeploymentTransaction.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Core.IDeploymentTransaction" />
     public class DeploymentTransaction : IDeploymentTransaction
     {
         private readonly string _backupFolder;
@@ -21,9 +25,20 @@ namespace Dropcraft.Deployment.Core
         private readonly List<PackageId> _deletedPackages = new List<PackageId>();
         private readonly List<ProductPackageInfo> _installedPackages = new List<ProductPackageInfo>();
 
+        /// <summary>
+        /// Packages marked during the transaction as deleted using <see cref="TrackDeletedPackage" />.
+        /// </summary>
+        /// <value>The deleted packages.</value>
         public ReadOnlyCollection<PackageId> DeletedPackages => _deletedPackages.AsReadOnly();
+        /// <summary>
+        /// Packages marked during the transaction as installed using <see cref="TrackInstalledPackage" />.
+        /// </summary>
+        /// <value>The installed packages.</value>
         public ReadOnlyCollection<ProductPackageInfo> InstalledPackages => _installedPackages.AsReadOnly();
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeploymentTransaction"/> class.
+        /// </summary>
         public DeploymentTransaction()
         {
             _backupFolder = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -33,6 +48,10 @@ namespace Dropcraft.Deployment.Core
             }
         }
 
+        /// <summary>
+        /// Creates a new folder
+        /// </summary>
+        /// <param name="folder">Folder to create</param>
         public void CreateFolder(string folder)
         {
             if (!Directory.Exists(folder))
@@ -43,6 +62,10 @@ namespace Dropcraft.Deployment.Core
             }
         }
 
+        /// <summary>
+        /// Deletes the file.
+        /// </summary>
+        /// <param name="fileInfo">File to delete</param>
         public void DeleteFile(IPackageFile fileInfo)
         {
             var fileName = fileInfo.FileName;
@@ -61,6 +84,11 @@ namespace Dropcraft.Deployment.Core
             }
         }
 
+        /// <summary>
+        /// Copies file according the defined rules
+        /// </summary>
+        /// <param name="fileInfo">File to copy</param>
+        /// <exception cref="System.IO.IOException"></exception>
         public void InstallFile(PackageFileDeploymentInfo fileInfo)
         {
             Logger.Trace($"Installing file {fileInfo.FileName} to {fileInfo.TargetFileName}");
@@ -92,11 +120,20 @@ namespace Dropcraft.Deployment.Core
             Logger.Trace($"File {fileInfo.TargetFileName} copied");
         }
 
+        /// <summary>
+        /// Marks package as deleted. For information proposes only, rollback does not undelete the package.
+        /// </summary>
+        /// <param name="packageId">Deleted package</param>
         public void TrackDeletedPackage(PackageId packageId)
         {
             _deletedPackages.Add(packageId);
         }
 
+        /// <summary>
+        /// Marks package as installed. For information proposes only, rollback does not uninstall the package.
+        /// </summary>
+        /// <param name="packageConfiguration">Installed package</param>
+        /// <param name="packageFiles">Installed package files</param>
         public void TrackInstalledPackage(IPackageConfiguration packageConfiguration, IEnumerable<PackageFileInfo> packageFiles)
         {
             var packageInfo = new ProductPackageInfo {Configuration = packageConfiguration};
@@ -104,6 +141,9 @@ namespace Dropcraft.Deployment.Core
             _installedPackages.Add(packageInfo);
         }
 
+        /// <summary>
+        /// Commits all the changes.
+        /// </summary>
         public void Commit()
         {
             _installedFile.Clear();
@@ -114,6 +154,9 @@ namespace Dropcraft.Deployment.Core
             _installedPackages.Clear();
         }
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             Rollback();

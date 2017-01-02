@@ -7,6 +7,10 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// Class UninstallCommand.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Commands.DeploymentCommand" />
     public class UninstallCommand : DeploymentCommand
     {
         private CommandArgument _package;
@@ -14,11 +18,19 @@ namespace Dropcraft.Deployment.Commands
         private CommandOption _removeDependencies;
         private CommandOption _enforce;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UninstallCommand"/> class.
+        /// </summary>
         public UninstallCommand()
         {
             Name = "uninstall";
         }
 
+        /// <summary>
+        /// Defines the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
         protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             cmdApp.Description = "Uninstalls provided packages from the product";
@@ -31,6 +43,12 @@ namespace Dropcraft.Deployment.Commands
             _enforce = cmdApp.Option("-e|--enforce", "Remove packages even if some other packages still depend on them", CommandOptionType.NoValue);
         }
 
+        /// <summary>
+        /// Executes the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
+        /// <returns>Error Code</returns>
         protected override async Task<int> Execute(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             if (_package.Values.Count == 0)
@@ -56,15 +74,21 @@ namespace Dropcraft.Deployment.Commands
                 }
             }
 
-            await engine.UninstallPackages(packageIds, _removeDependencies.HasValue());
+            var options = new UninstallationOptions {RemoveDependencies = _removeDependencies.HasValue()};
+            await engine.UninstallPackages(packageIds, options);
 
             return await Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Gets the deployment engine.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <returns><see cref="IDeploymentEngine"/></returns>
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
             var configuration = CommandHelper.GetConfiguration();
-            return configuration.CreatEngine(_productPath.Value(), string.Empty);
+            return configuration.CreateEngine(_productPath.Value(), string.Empty);
         }
     }
 }

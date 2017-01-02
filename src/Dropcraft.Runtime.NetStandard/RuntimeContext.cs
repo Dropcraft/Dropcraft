@@ -7,6 +7,10 @@ using Dropcraft.Common.Runtime;
 
 namespace Dropcraft.Runtime
 {
+    /// <summary>
+    /// Class DefaultRuntimeContext
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.Runtime.RuntimeContext" />
     public class DefaultRuntimeContext : RuntimeContext
     {
         private readonly object _extensionLock;
@@ -18,6 +22,10 @@ namespace Dropcraft.Runtime
 
         private readonly Dictionary<Type, Func<object>> _serviceFactories;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DefaultRuntimeContext"/> class.
+        /// </summary>
+        /// <param name="productPath">The product path.</param>
         public DefaultRuntimeContext(string productPath)
         {
             ProductPath = productPath;
@@ -28,6 +36,11 @@ namespace Dropcraft.Runtime
             _serviceFactories = new Dictionary<Type, Func<object>>();
     }
 
+        /// <summary>
+        /// Registers new extensibility point
+        /// </summary>
+        /// <param name="extensibilityPointKey">Extensibility point key. Used to connect extensibility point and extensions</param>
+        /// <param name="extensibilityPoint">Extensibility point definition</param>
         protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
         {
             var e = new NewExtensibilityPointRegistrationEvent
@@ -55,6 +68,10 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Unregisters extensibility point. Unregistered extensibility point will not be informed about new extensions.
+        /// </summary>
+        /// <param name="extensibilityPointKey">Extensibility point to unregister</param>
         protected override void OnUnregisterExtensibilityPoint(string extensibilityPointKey)
         {
             var e = new ExtensibilityPointUnregistrationEvent {ExtensibilityPointKey = extensibilityPointKey};
@@ -68,6 +85,11 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Returns registered extensibility point associated with the key.
+        /// </summary>
+        /// <param name="extensibilityPointKey">Extensibility point to return</param>
+        /// <returns>Found extensibility point. Returns null if nothing is found.</returns>
         protected override IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey)
         {
             IExtensibilityPointHandler extensibilityPoint;
@@ -78,6 +100,10 @@ namespace Dropcraft.Runtime
             return extensibilityPoint;
         }
 
+        /// <summary>
+        /// Registers new extension
+        /// </summary>
+        /// <param name="extensionInfo">Extension definition</param>
         protected override void OnRegisterExtension(ExtensionInfo extensionInfo)
         {
             var e = new NewExtensionRegistrationEvent {Extension = extensionInfo};
@@ -100,6 +126,11 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Registers handler for runtime events
+        /// </summary>
+        /// <typeparam name="T">Type of the event to handle</typeparam>
+        /// <param name="handler">Event handler</param>
         protected override void OnRegisterEventHandler<T>(Action<T> handler)
         {
             var list = (List<Action<T>>)_handlers.GetOrAdd(typeof(T).Name, x => new List<Action<T>>());
@@ -116,6 +147,11 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Unregisters handler for runtime events
+        /// </summary>
+        /// <typeparam name="T">Type of the event</typeparam>
+        /// <param name="handler">Event handler</param>
         protected override void OnUnregisterEventHandler<T>(Action<T> handler)
         {
             object listObject;
@@ -134,6 +170,11 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Raise a new event
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="runtimeEvent">The runtime event.</param>
         protected override void OnRaiseRuntimeEvent<T>(T runtimeEvent)
         {
             if (runtimeEvent.Context == null)
@@ -158,6 +199,11 @@ namespace Dropcraft.Runtime
             }
         }
 
+        /// <summary>
+        /// Returns registered host service
+        /// </summary>
+        /// <typeparam name="T">Type of the service</typeparam>
+        /// <returns>Returns service object or null if nothing is found</returns>
         protected override T OnGetHostService<T>()
         {
             Func<object> func;
@@ -169,6 +215,11 @@ namespace Dropcraft.Runtime
             return default(T);
         }
 
+        /// <summary>
+        /// Registers services to make them available for packages during start-up. It is not recommended to be used as a generic propose IoC container.
+        /// </summary>
+        /// <param name="type">Type of the service</param>
+        /// <param name="serviceFactory">Service factory which returns service for the GetHostService requests</param>
         protected override void OnRegisterHostService(Type type, Func<object> serviceFactory)
         {
             _serviceFactories.Add(type, serviceFactory);

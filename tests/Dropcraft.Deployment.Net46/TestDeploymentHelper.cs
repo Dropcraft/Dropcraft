@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Dropcraft.Common.Deployment;
 
 namespace Dropcraft.Deployment
 {
@@ -38,7 +37,7 @@ namespace Dropcraft.Deployment
 
         public DeploymentEngine CreatEngine()
         {
-            return Configuration.CreatEngine(InstallPath, Framework) as DeploymentEngine;
+            return Configuration.CreateEngine(InstallPath, Framework) as DeploymentEngine;
         }
 
         public bool IsPackageExists(string packageName, string ver)

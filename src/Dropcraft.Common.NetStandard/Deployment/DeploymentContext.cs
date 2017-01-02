@@ -52,8 +52,25 @@ namespace Dropcraft.Common.Deployment
         public void RaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent
             => OnRaiseDeploymentEvent(deploymentEvent);
 
+        /// <summary>
+        /// Register a handler for deployment events
+        /// </summary>
+        /// <typeparam name="T">Event type</typeparam>
+        /// <param name="handler">Event handler</param>
         protected abstract void OnRegisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
+
+        /// <summary>
+        /// Unregister a handler for deployment events
+        /// </summary>
+        /// <typeparam name="T">Event type</typeparam>
+        /// <param name="handler">Event handler</param>
         protected abstract void OnUnregisterEventHandler<T>(Action<T> handler) where T : DeploymentEvent;
+
+        /// <summary>
+        /// Raise a deployment event
+        /// </summary>
+        /// <typeparam name="T">Event type</typeparam>
+        /// <param name="deploymentEvent">Deployment event to raise</param>
         protected abstract void OnRaiseDeploymentEvent<T>(T deploymentEvent) where T : DeploymentEvent;
     }
 }

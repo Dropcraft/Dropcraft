@@ -7,7 +7,7 @@ using NuGet.Protocol.Core.Types;
 
 namespace Dropcraft.Deployment.NuGet
 {
-    public class SourceRepositoryProvider : ISourceRepositoryProvider
+    internal class SourceRepositoryProvider : ISourceRepositoryProvider
     {
         private readonly List<SourceRepository> _repositories = new List<SourceRepository>();
         private readonly ConcurrentDictionary<PackageSource, SourceRepository> _repositoryCache;

@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Dropcraft.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Dropcraft.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -49,14 +53,20 @@
     <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentEngine.cs">
       <Link>Deployment\IDeploymentEngine.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStartegyProvider.cs">
-      <Link>Deployment\IDeploymentStartegyProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStrategyProvider.cs">
+      <Link>Deployment\IDeploymentStrategyProvider.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\IDeploymentStrategySource.cs">
       <Link>Deployment\IDeploymentStrategySource.cs</Link>
     </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\InstallationOptions.cs">
+      <Link>Deployment\InstallationOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\PackageFileDeploymentInfo.cs">
       <Link>Deployment\PackageFileDeploymentInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Dropcraft.Common.NetStandard\Deployment\UninstallationOptions.cs">
+      <Link>Deployment\UninstallationOptions.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Common.NetStandard\IPackageGraph.cs">
       <Link>IPackageGraph.cs</Link>

@@ -6,10 +6,26 @@ using Dropcraft.Common.Runtime;
 
 namespace Dropcraft.Runtime
 {
+    /// <summary>
+    /// Class RuntimeEngine.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.Runtime.IRuntimeEngine" />
     public class RuntimeEngine : IRuntimeEngine
     {
+        /// <summary>
+        /// Current context
+        /// </summary>
+        /// <value>The runtime context.</value>
         public RuntimeContext RuntimeContext { get; }
+        /// <summary>
+        /// Gets the configuration provider.
+        /// </summary>
+        /// <value>The configuration provider.</value>
         public IProductConfigurationProvider ConfigurationProvider { get; }
+        /// <summary>
+        /// Gets the entity activator.
+        /// </summary>
+        /// <value>The entity activator.</value>
         public IEntityActivator EntityActivator { get; }
 
         internal RuntimeEngine(RuntimeContext runtimeContext, IProductConfigurationProvider configurationProvider, IEntityActivator entityActivator)
@@ -19,11 +35,20 @@ namespace Dropcraft.Runtime
             EntityActivator = entityActivator;
         }
 
+        /// <summary>
+        /// Starts execution
+        /// </summary>
+        /// <returns>Task</returns>
         public Task Start()
         {
             return Start(null);
         }
 
+        /// <summary>
+        /// Starts execution for the selected packages and their dependencies
+        /// </summary>
+        /// <param name="packages">Packages to load</param>
+        /// <returns>Task</returns>
         public Task Start(ICollection<PackageId> packages)
         {
             RaiseRuntimeEvent(new BeforeRuntimeStartedEvent());
@@ -37,6 +62,9 @@ namespace Dropcraft.Runtime
             return Execute(packagesForLoading);
         }
 
+        /// <summary>
+        /// Stops execution. The main purpose is to notify all components about the application shutdown.
+        /// </summary>
         public void Stop()
         {
             RaiseRuntimeEvent(new AfterRuntimeStoppedEvent());

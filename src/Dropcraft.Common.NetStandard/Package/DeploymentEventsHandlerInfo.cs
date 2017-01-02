@@ -1,20 +1,38 @@
 namespace Dropcraft.Common.Package
 {
+    /// <summary>
+    /// Describes deployment event handler
+    /// </summary>
     public class DeploymentEventsHandlerInfo
     {
-        public PackageId PackageInfo { get; }
+        /// <summary>
+        /// Package where the handler is defined
+        /// </summary>
+        public PackageId PackageId { get; }
 
+        /// <summary>
+        /// Fully qualified type name
+        /// </summary>
         public string ClassName { get; }
 
-        public DeploymentEventsHandlerInfo(PackageId packageInfo, string className)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="packageId">Origin</param>
+        /// <param name="className">Handle class name</param>
+        public DeploymentEventsHandlerInfo(PackageId packageId, string className)
         {
-            PackageInfo = packageInfo;
+            PackageId = packageId;
             ClassName = className;
         }
 
+        /// <summary>
+        /// Converts object to string
+        /// </summary>
+        /// <returns>String</returns>
         public override string ToString()
         {
-            return $"{PackageInfo?.ToString() ?? ""}, {ClassName}";
+            return $"{PackageId?.ToString() ?? ""}, {ClassName}";
         }
     }
 }

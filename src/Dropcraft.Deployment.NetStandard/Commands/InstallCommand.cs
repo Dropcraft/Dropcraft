@@ -7,6 +7,10 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// Class InstallCommand.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Commands.DeploymentCommand" />
     public class InstallCommand : DeploymentCommand
     {
         private CommandArgument _package;
@@ -18,11 +22,19 @@ namespace Dropcraft.Deployment.Commands
         private CommandOption _updatePackages;
         private CommandOption _allowDowngrades;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallCommand"/> class.
+        /// </summary>
         public InstallCommand()
         {
             Name = "install";
         }
 
+        /// <summary>
+        /// Defines the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
         protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             cmdApp.Description = "Installs provided packages to the target path and updates the product configuration";
@@ -40,6 +52,12 @@ namespace Dropcraft.Deployment.Commands
             _allowDowngrades = cmdApp.Option("--allow-downgrades", "Allow packages downgrades", CommandOptionType.NoValue);
         }
 
+        /// <summary>
+        /// Executes the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
+        /// <returns>Error Code</returns>
         protected override async Task<int> Execute(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             if (_package.Values.Count == 0)
@@ -75,11 +93,22 @@ namespace Dropcraft.Deployment.Commands
             }
 
             var engine = GetDeploymentEngine(cmdApp);
-            await engine.InstallPackages(packageIds, _allowDowngrades.HasValue(), _updatePackages.HasValue());
+            var options = new InstallationOptions
+            {
+                AllowDowngrades = _allowDowngrades.HasValue(),
+                UpdatePackages = _updatePackages.HasValue()
+            };
+
+            await engine.InstallPackages(packageIds, options);
 
             return 0;
         }
 
+        /// <summary>
+        /// Gets the deployment engine.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <returns><see cref="IDeploymentEngine"/></returns>
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
             var configuration = CommandHelper.GetConfiguration()
@@ -98,7 +127,7 @@ namespace Dropcraft.Deployment.Commands
                 }
             }
 
-            return configuration.CreatEngine(_productPath.Value(), _framework.Value());
+            return configuration.CreateEngine(_productPath.Value(), _framework.Value());
         }
     }
 }

@@ -5,23 +5,45 @@ using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 using Dropcraft.Deployment.NuGet;
+using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment.Core
 {
+    /// <summary>
+    /// A base class for all deployment actions
+    /// </summary>
     public abstract class DeploymentAction
     {
         private static readonly ILog Logger = LogProvider.For<DeploymentAction>();
 
+        /// <summary>
+        /// Gets a value indicating whether this action is part of the package updating sequence
+        /// </summary>
+        /// <value><c>true</c> if this instance is update; otherwise, <c>false</c>.</value>
         public bool IsUpdate { get; }
 
+        /// <summary>
+        /// Gets the current deployment context.
+        /// </summary>
+        /// <value>The deployment context.</value>
         public DeploymentContext DeploymentContext { get; }
-
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeploymentAction"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        /// <param name="isUpdate">Is this action is part of update sequence</param>
         protected DeploymentAction(DeploymentContext deploymentContext, bool isUpdate)
         {
             IsUpdate = isUpdate;
             DeploymentContext = deploymentContext;
         }
 
+        /// <summary>
+        /// Raises the deployment event.
+        /// </summary>
+        /// <param name="e"><see cref="PackageDeploymentEvent"/></param>
+        /// <param name="id">Package identifier.</param>
         public void RaiseDeploymentEvent(PackageDeploymentEvent e, PackageId id)
         {
             e.Id = id;
@@ -29,20 +51,43 @@ namespace Dropcraft.Deployment.Core
             DeploymentContext.RaiseDeploymentEvent(e);
         }
 
+        /// <summary>
+        /// Logs message using information logging level 
+        /// </summary>
+        /// <param name="message">The message.</param>
         protected void Info(string message)
         {
             Logger.Info(message);
         }
 
+        /// <summary>
+        /// Executes the action under the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <seealso cref="IDeploymentTransaction"/>
         public abstract void Execute(IDeploymentTransaction transaction);
     }
 
+    /// <summary>
+    /// Defines an action for a single package downloading
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Core.DeploymentAction" />
     public class DownloadPackageAction : DeploymentAction
     {
         private readonly INuGetEngine _nuGetEngine;
         private readonly string _path;
         private readonly DeploymentPackageInfo _deploymentPackage;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DownloadPackageAction"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        /// <param name="isUpdate"><see cref="DeploymentAction.IsUpdate"/></param>
+        /// <param name="deploymentPackage">The associated package</param>
+        /// <param name="nuGetEngine">NuGet engine to use</param>
+        /// <param name="path">Download path</param>
+        /// <seealso cref="DeploymentPackageInfo"/>
+        /// <seealso cref="INuGetEngine"/>
         public DownloadPackageAction(DeploymentContext deploymentContext, bool isUpdate, DeploymentPackageInfo deploymentPackage,
             INuGetEngine nuGetEngine, string path) : base(deploymentContext, isUpdate)
         {
@@ -51,6 +96,11 @@ namespace Dropcraft.Deployment.Core
             _deploymentPackage = deploymentPackage;
         }
 
+        /// <summary>
+        /// Executes the action under the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <seealso cref="IDeploymentTransaction" />
         public override void Execute(IDeploymentTransaction transaction)
         {
             _nuGetEngine.InstallPackage(_deploymentPackage.Match, _path).GetAwaiter().GetResult();
@@ -62,16 +112,31 @@ namespace Dropcraft.Deployment.Core
         }
     }
 
+    /// <summary>
+    /// Defines an action for a single package deletion
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Core.DeploymentAction" />
     public class DeletePackageAction : DeploymentAction
     {
         private readonly PackageId _packageId;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeletePackageAction"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        /// <param name="isUpdate"><see cref="DeploymentAction.IsUpdate"/></param>
+        /// <param name="packageId">The package identifier.</param>
         public DeletePackageAction(DeploymentContext deploymentContext, bool isUpdate, PackageId packageId)
             : base(deploymentContext, isUpdate)
         {
             _packageId = packageId;
         }
 
+        /// <summary>
+        /// Executes the action under the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <seealso cref="IDeploymentTransaction" />
         public override void Execute(IDeploymentTransaction transaction)
         {
             var files = DeploymentContext.ProductConfigurationProvider.GetInstalledFiles(_packageId, true);
@@ -93,23 +158,40 @@ namespace Dropcraft.Deployment.Core
         }
     }
 
+    /// <summary>
+    /// Defines an action for a single package installation
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Core.DeploymentAction" />
     public class InstallPackageAction : DeploymentAction
     {
         private readonly DeploymentPackageInfo _deploymentPackage;
         private readonly IPackageConfigurationProvider _packageConfigProvider;
-        private readonly IDeploymentStartegyProvider _deploymentStartegy;
+        private readonly IDeploymentStrategyProvider _deploymentStrategy;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InstallPackageAction"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        /// <param name="isUpdate"><see cref="DeploymentAction.IsUpdate"/></param>
+        /// <param name="deploymentPackage">The deployment package.</param>
+        /// <param name="deploymentStrategy">The deployment strategy.</param>
+        /// <seealso cref="DeploymentPackageInfo"/>
         public InstallPackageAction(DeploymentContext deploymentContext, bool isUpdate, DeploymentPackageInfo deploymentPackage,
-            IDeploymentStartegyProvider deploymentStartegy) : base(deploymentContext, isUpdate)
+            IDeploymentStrategyProvider deploymentStrategy) : base(deploymentContext, isUpdate)
         {
             _deploymentPackage = deploymentPackage;
             _packageConfigProvider = DeploymentContext.PackageConfigurationProvider;
-            _deploymentStartegy = deploymentStartegy;
+            _deploymentStrategy = deploymentStrategy;
         }
 
+        /// <summary>
+        /// Executes the action under the specified transaction.
+        /// </summary>
+        /// <param name="transaction">The transaction.</param>
+        /// <seealso cref="IDeploymentTransaction" />
         public override void Execute(IDeploymentTransaction transaction)
         {
-            var files = _deploymentStartegy.GetPackageFiles(_deploymentPackage.Id, _deploymentPackage.PackagePath).ToList();
+            var files = _deploymentStrategy.GetPackageFiles(_deploymentPackage.Id, _deploymentPackage.PackagePath).ToList();
             var installedFiles = new List<PackageFileInfo>();
 
             var e = new BeforePackageInstalledEvent();

@@ -8,6 +8,10 @@ using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Class ProductConfigurationProvider.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.IProductConfigurationProvider" />
     public class ProductConfigurationProvider : IProductConfigurationProvider
     {
         private static string _versionTag = "version";
@@ -20,19 +24,40 @@ namespace Dropcraft.Runtime.Core
         private readonly string _configPath;
         private readonly string _productPath;
 
+        /// <summary>
+        /// Gets the installed packages.
+        /// </summary>
+        /// <value>The installed packages.</value>
         protected IPackageGraph Packages { get; private set; }
+        /// <summary>
+        /// Gets the installed packages' information.
+        /// </summary>
+        /// <value>The installed packages' information.</value>
         protected List<ProductPackageInfo> ProductPackages { get; }
 
         private JObject _jsonObject;
 
+        /// <summary>
+        /// Indicates existence of the configured product in the product path
+        /// </summary>
+        /// <value><c>true</c> if the product is configured; otherwise, <c>false</c>.</value>
         public bool IsProductConfigured { get; private set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductConfigurationProvider"/> class.
+        /// </summary>
+        /// <param name="productPath">The product path.</param>
+        /// <param name="productConfigurationFileName">Name of the product configuration file.</param>
         public ProductConfigurationProvider(string productPath, string productConfigurationFileName)
             : this(Path.Combine(productPath, productConfigurationFileName))
         {
             _productPath = productPath;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ProductConfigurationProvider"/> class.
+        /// </summary>
+        /// <param name="configPath">The configuration path.</param>
         public ProductConfigurationProvider(string configPath)
         {
             _configPath = configPath;
@@ -93,16 +118,31 @@ namespace Dropcraft.Runtime.Core
             }
         }
 
+        /// <summary>
+        /// Returns all configured packages
+        /// </summary>
+        /// <returns><see cref="IPackageGraph"/></returns>
         public IPackageGraph GetPackages()
         {
             return Packages;
         }
 
+        /// <summary>
+        /// Returns configuration for the selected package
+        /// </summary>
+        /// <param name="packageId">Selected Package ID</param>
+        /// <returns>Configuration for the selected package. <see cref="T:Dropcraft.Common.Package.IPackageConfiguration" /></returns>
         public IPackageConfiguration GetPackageConfiguration(PackageId packageId)
         {
             return ProductPackages.FirstOrDefault(x => x.Configuration.Id.IsSamePackage(packageId))?.Configuration;
         }
 
+        /// <summary>
+        /// Reconfigures product configuration by replacing it with the provided configuration
+        /// </summary>
+        /// <param name="packages">New list of the packages</param>
+        /// <param name="packageGraph">Package dependencies</param>
+        /// <param name="files">Package files</param>
         public void Reconfigure(IEnumerable<IPackageConfiguration> packages, IPackageGraph packageGraph,
             IDictionary<PackageId, IEnumerable<IPackageFile>> files)
         {
@@ -124,6 +164,10 @@ namespace Dropcraft.Runtime.Core
             }
         }
 
+        /// <summary>
+        /// Removes package from a list of the configured packages
+        /// </summary>
+        /// <param name="packageId">Package to remove</param>
         public void RemovePackage(PackageId packageId)
         {
             var packageInfo = ProductPackages.FirstOrDefault(x=>x.Configuration.Id.IsSamePackage(packageId));
@@ -147,6 +191,12 @@ namespace Dropcraft.Runtime.Core
             Packages = builder.Build();
         }
 
+        /// <summary>
+        /// Returns package's installed files
+        /// </summary>
+        /// <param name="packageId">Package ID</param>
+        /// <param name="nonSharedFilesOnly">When true, instructs function to return only the files which are unique for the package</param>
+        /// <returns>Files list</returns>
         public IReadOnlyCollection<IPackageFile> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly)
         {
             var packageInfo = ProductPackages.FirstOrDefault(x => x.Configuration.Id.IsSamePackage(packageId));
@@ -166,6 +216,9 @@ namespace Dropcraft.Runtime.Core
                 .ToList();
         }
 
+        /// <summary>
+        /// Saves configuration to file
+        /// </summary>
         public void Save()
         {
             var packagesObject = new JObject();

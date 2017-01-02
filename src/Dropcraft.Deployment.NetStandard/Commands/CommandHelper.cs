@@ -7,6 +7,9 @@ namespace Dropcraft.Deployment.Commands
     /// </summary>
     public class CommandHelper
     {
+        /// <summary>
+        /// The help option constant
+        /// </summary>
         public static string HelpOption = "--help";
 
         /// <summary>

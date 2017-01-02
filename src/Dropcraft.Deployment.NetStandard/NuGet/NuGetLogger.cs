@@ -3,7 +3,7 @@ using NuGet.Common;
 
 namespace Dropcraft.Deployment.NuGet
 {
-    public class NuGetLogger : ILogger
+    internal class NuGetLogger : ILogger
     {
         private static readonly ILog Logger = LogProvider.For<NuGetLogger>();
 

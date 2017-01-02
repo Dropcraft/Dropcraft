@@ -9,7 +9,6 @@ using Dropcraft.Common.Logging;
 using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Core;
 using Dropcraft.Deployment.NuGet;
-using Dropcraft.Runtime.Configuration;
 using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment
@@ -21,13 +20,40 @@ namespace Dropcraft.Deployment
     {
         private static readonly ILog Logger = LogProvider.For<DeploymentEngine>();
 
+        /// <summary>
+        /// Associated NuGet engine (<see cref="INuGetEngine"/>). 
+        /// </summary>
         public INuGetEngine NuGetEngine;
+
+        /// <summary>
+        /// Associated package discoverer (<see cref="IPackageDiscoverer"/>)
+        /// </summary>
         public IPackageDiscoverer PackageDiscoverer;
+
+        /// <summary>
+        /// Associated package deployer (<see cref="IPackageDeployer"/>)
+        /// </summary>
         public IPackageDeployer PackageDeployer;
+
+        /// <summary>
+        /// Associated transaction source (<see cref="IDeploymentTransactionSource"/>)
+        /// </summary>
         public IDeploymentTransactionSource TransactionSource;
 
-        public IDeploymentStartegyProvider DeploymentStartegyProvider { get; }
+        /// <summary>
+        /// Associated deployment strategy provider (<see cref="IDeploymentStrategyProvider"/>)
+        /// </summary>
+        public IDeploymentStrategyProvider DeploymentStrategyProvider { get; }
+
+        /// <summary>
+        /// Gets the packages folder path.
+        /// </summary>
+        /// <value>The packages folder path.</value>
         public string PackagesFolderPath { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether the packages should be cached or not.
+        /// </summary>
         public bool DontCachePackages { get; }
 
         /// <summary>
@@ -39,7 +65,7 @@ namespace Dropcraft.Deployment
         /// Constructor
         /// </summary>
         /// <param name="deploymentContext">Deployment context to use</param>
-        /// <param name="deploymentStartegyProvider">Deployment strategy to use</param>
+        /// <param name="deploymentStrategyProvider">Deployment strategy to use</param>
         /// <param name="transactionSource">Transactions factory</param>
         /// <param name="packagesFolderPath">Path to cache packages</param>
         /// <param name="remotePackagesSources">Remote package sources</param>
@@ -47,7 +73,7 @@ namespace Dropcraft.Deployment
         /// <param name="packageDeployer">Package installer</param>
         /// <param name="localPackagesSources">Local package sources</param>
         internal DeploymentEngine(DeploymentContext deploymentContext,
-            IDeploymentStartegyProvider deploymentStartegyProvider,
+            IDeploymentStrategyProvider deploymentStrategyProvider,
             IPackageDiscoverer packageDiscoverer,
             IPackageDeployer packageDeployer,
             IDeploymentTransactionSource transactionSource,
@@ -56,7 +82,7 @@ namespace Dropcraft.Deployment
             ICollection<string> localPackagesSources)
         {
             DeploymentContext = deploymentContext;
-            DeploymentStartegyProvider = deploymentStartegyProvider;
+            DeploymentStrategyProvider = deploymentStrategyProvider;
 
             var extendedLocalPackageSources = localPackagesSources;
             if (string.IsNullOrWhiteSpace(packagesFolderPath))
@@ -78,7 +104,7 @@ namespace Dropcraft.Deployment
             PackageDeployer = packageDeployer;
             PackageDeployer.NuGetEngine = NuGetEngine;
             PackageDeployer.DeploymentContext = DeploymentContext;
-            PackageDeployer.DeploymentStartegyProvider = DeploymentStartegyProvider;
+            PackageDeployer.DeploymentStrategyProvider = DeploymentStrategyProvider;
             PackageDeployer.PackagesFolderPath = PackagesFolderPath;
 
             TransactionSource = transactionSource;
@@ -88,16 +114,15 @@ namespace Dropcraft.Deployment
         /// Installs provided packages
         /// </summary>
         /// <param name="packages">Packages to install</param>
-        /// <param name="allowDowngrades">Instructs to allow packages downgrades</param>
-        /// <param name="updatePackages">Instructs to always try to update packages from the remote sources</param>
+        /// <param name="options">Additional options</param>
         /// <returns>Task</returns>
-        public async Task InstallPackages(ICollection<PackageId> packages, bool allowDowngrades, bool updatePackages)
+        public async Task InstallPackages(ICollection<PackageId> packages, InstallationOptions options)
         {
             Logger.Info("Installing packages...");
             DeploymentContext.RaiseDeploymentEvent(new BeforeMaintenanceEvent());
 
-            NuGetEngine.AllowDowngrades = allowDowngrades;
-            NuGetEngine.UpdatePackages = updatePackages;
+            NuGetEngine.AllowDowngrades = options.AllowDowngrades;
+            NuGetEngine.UpdatePackages = options.UpdatePackages;
 
             try
             {
@@ -160,9 +185,9 @@ namespace Dropcraft.Deployment
         /// Uninstalls provided packages
         /// </summary>
         /// <param name="packages">Packages to uninstall</param>
-        /// <param name="removeDependencies">Remove dependent packages if they are not referenced elsewhere</param>
+        /// <param name="options">Additional options</param>
         /// <returns>Task</returns>
-        public async Task UninstallPackages(ICollection<PackageId> packages, bool removeDependencies)
+        public async Task UninstallPackages(ICollection<PackageId> packages, UninstallationOptions options)
         {
             Logger.Info("Uninstalling packages...");
             DeploymentContext.RaiseDeploymentEvent(new BeforeMaintenanceEvent());
@@ -171,7 +196,7 @@ namespace Dropcraft.Deployment
             {
                 var uninstallationPlan = await PackageDeployer.PlanUninstallation(
                     DeploymentContext.ProductConfigurationProvider.GetPackages(),
-                    packages, removeDependencies);
+                    packages, options.RemoveDependencies);
 
                 using (var transaction = TransactionSource.NewTransaction(DeploymentContext))
                 {

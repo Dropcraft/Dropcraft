@@ -3,9 +3,9 @@
 namespace Dropcraft.Common.Deployment
 {
     /// <summary>
-    /// File handling strategy for package deployment. Identifies files to install and target path, resolves conficts. 
+    /// File handling strategy for package deployment. Identifies files to install and target path, resolves conflicts. 
     /// </summary>
-    public interface IDeploymentStartegyProvider
+    public interface IDeploymentStrategyProvider
     {
         /// <summary>
         /// Returns files required for installation for the provided package

@@ -17,17 +17,16 @@ namespace Dropcraft.Common.Deployment
         /// Installs provided packages
         /// </summary>
         /// <param name="packages">Packages to install</param>
-        /// <param name="allowDowngrades">Instructs to allow packages downgrades.</param>
-        /// <param name="updatePackages">When true, packages will be always updated from the remote source, even if they can be resolved from the installed path.</param>
+        /// <param name="options">Additional installation options</param>
         /// <returns>Task</returns>
-        Task InstallPackages(ICollection<PackageId> packages, bool allowDowngrades, bool updatePackages);
+        Task InstallPackages(ICollection<PackageId> packages, InstallationOptions options);
 
         /// <summary>
         /// Uninstalls provided packages
         /// </summary>
         /// <param name="packages">Packages to uninstall</param>
-        /// <param name="removeDependencies">Remove dependent packages if they are not referenced elsewhere</param>
+        /// <param name="options">Additional uninstallation options</param>
         /// <returns>Task</returns>
-        Task UninstallPackages(ICollection<PackageId> packages, bool removeDependencies);
+        Task UninstallPackages(ICollection<PackageId> packages, UninstallationOptions options);
     }
 }

@@ -44,13 +44,13 @@ namespace Dropcraft.Common.Package
         /// <summary>
         /// Returns a list of the extensions implemented in the package
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Extension definitions</returns>
         IReadOnlyCollection<ExtensionInfo> GetExtensions();
 
         /// <summary>
         /// Returns a list of the extensibility points exposed by the package
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Extensibility points definitions</returns>
         IReadOnlyCollection<ExtensibilityPointInfo> GetExtensibilityPoints();
 
         /// <summary>
@@ -63,7 +63,7 @@ namespace Dropcraft.Common.Package
         /// Returns custom configuration for the package
         /// </summary>
         /// <returns>Custom configuration</returns>
-        ICustomConfiguration GetCustomConfiguration();
+        ICustomConfiguration GetCustomConfiguration(string configurationTag);
 
         /// <summary>
         /// Converts configuration into JSON

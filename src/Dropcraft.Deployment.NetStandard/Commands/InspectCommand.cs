@@ -12,11 +12,19 @@ namespace Dropcraft.Deployment.Commands
     {
         private CommandOption _productPath;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="InspectCommand"/> class.
+        /// </summary>
         public InspectCommand()
         {
             Name = "inspect";
         }
 
+        /// <summary>
+        /// Defines the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
         protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             cmdApp.Description = "Provides information about the product";
@@ -25,6 +33,12 @@ namespace Dropcraft.Deployment.Commands
             _productPath = cmdApp.Option("--path <installationPath>", "Product installation path", CommandOptionType.SingleValue);
         }
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
+        /// <returns>Error code</returns>
         protected override async Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)
         {
             if (MissedOption(_productPath, logErrorAction))
@@ -45,9 +59,14 @@ namespace Dropcraft.Deployment.Commands
             return await Task.FromResult(0);
         }
 
+        /// <summary>
+        /// Gets the deployment engine.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <returns><see cref="IDeploymentEngine"/></returns>
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
-            return CommandHelper.GetConfiguration().CreatEngine(_productPath.Value(), string.Empty);
+            return CommandHelper.GetConfiguration().CreateEngine(_productPath.Value(), string.Empty);
         }
 
     }

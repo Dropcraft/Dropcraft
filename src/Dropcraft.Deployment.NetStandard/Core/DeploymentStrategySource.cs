@@ -17,9 +17,9 @@ namespace Dropcraft.Deployment.Core
         /// </summary>
         /// <param name="deploymentContext">Deployment context</param>
         /// <returns>Deployment strategy</returns>
-        public IDeploymentStartegyProvider GetStartegyProvider(DeploymentContext deploymentContext)
+        public IDeploymentStrategyProvider GetStrategyProvider(DeploymentContext deploymentContext)
         {
-            return new DeploymentStarategyProvider(deploymentContext)
+            return new DeploymentStrategyProvider(deploymentContext)
             {
                 DefaultConflictResolution = DefaultConflictResolution
             };

@@ -7,6 +7,10 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// Class UpdateCommand.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Commands.DeploymentCommand" />
     public class UpdateCommand : DeploymentCommand
     {
         private CommandOption _productPath;
@@ -15,11 +19,19 @@ namespace Dropcraft.Deployment.Commands
         private CommandOption _source;
         private CommandOption _allowPrerelease;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="UpdateCommand"/> class.
+        /// </summary>
         public UpdateCommand()
         {
             Name = "update";
         }
 
+        /// <summary>
+        /// Defines the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
         protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             cmdApp.Description = "Updates all the product packages";
@@ -33,6 +45,12 @@ namespace Dropcraft.Deployment.Commands
 
         }
 
+        /// <summary>
+        /// Executes the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
+        /// <returns>Error Code</returns>
         protected override async Task<int> Execute(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             if (MissedOption(_productPath, logErrorAction))
@@ -56,11 +74,16 @@ namespace Dropcraft.Deployment.Commands
                     .Packages.Select(x => new PackageId(x.Package.Id, string.Empty, _allowPrerelease.HasValue()))
                     .ToArray();
 
-            await engine.InstallPackages(packages, false, true);
+            await engine.InstallPackages(packages, new InstallationOptions {AllowDowngrades = false, UpdatePackages = true});
 
             return 0;
         }
 
+        /// <summary>
+        /// Gets the deployment engine.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <returns><see cref="IDeploymentEngine"/></returns>
         protected virtual IDeploymentEngine GetDeploymentEngine(CommandLineApplication app)
         {
             var configuration = CommandHelper.GetConfiguration()
@@ -71,7 +94,7 @@ namespace Dropcraft.Deployment.Commands
                 configuration.ForPackages.AddRemoteSource(sourceValue);
             }
 
-            return configuration.CreatEngine(_productPath.Value(), _framework.Value());
+            return configuration.CreateEngine(_productPath.Value(), _framework.Value());
         }
     }
 }

@@ -1,5 +1,8 @@
 ﻿namespace Dropcraft.Common.Package
 {
+    /// <summary>
+    /// Package metadata
+    /// </summary>
     public class PackageMetadataInfo
     {
         /// <summary>
@@ -37,7 +40,18 @@
         /// </summary>
         public string Copyright { get; }
 
-        public PackageMetadataInfo(string title, string authors, string description, string projectUrl, string iconUrl, string licenseUrl, string copyright)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="title">Package title</param>
+        /// <param name="authors">Authors</param>
+        /// <param name="description">Package description</param>
+        /// <param name="projectUrl">Project URL</param>
+        /// <param name="iconUrl">Icon URL</param>
+        /// <param name="licenseUrl">License URL</param>
+        /// <param name="copyright">Copyright</param>
+        public PackageMetadataInfo(string title, string authors, string description, string projectUrl, string iconUrl,
+            string licenseUrl, string copyright)
         {
             Title = title;
             Authors = authors;

@@ -4,10 +4,19 @@ using Dropcraft.Common;
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Builds dependency graphs using provided packages and information about the relations
+    /// </summary>
     public class PackageGraphBuilder
     {
         private readonly Dictionary<PackageId, List<PackageId>> _packages = new Dictionary<PackageId, List<PackageId>>();
 
+        /// <summary>
+        /// Includes the provided information in the graph
+        /// </summary>
+        /// <param name="packageId">The package identifier.</param>
+        /// <param name="dependencies">The package's dependencies.</param>
+        /// <returns><see cref="PackageGraphBuilder"/></returns>
         public PackageGraphBuilder Append(PackageId packageId, IEnumerable<PackageId> dependencies)
         {
             if (!_packages.ContainsKey(packageId))
@@ -18,6 +27,10 @@ namespace Dropcraft.Runtime.Core
             return this;
         }
 
+        /// <summary>
+        /// Builds an instance of PackageGraph using provided information.
+        /// </summary>
+        /// <returns><see cref="PackageGraph"/>.</returns>
         public PackageGraph Build()
         {
             var nodes = new List<PackageGraphNode>();

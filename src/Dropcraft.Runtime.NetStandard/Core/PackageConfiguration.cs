@@ -7,13 +7,23 @@ using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Provides JSON-based implementation of the <see cref="IPackageConfiguration"/>
+    /// </summary>
     public class PackageConfiguration : IPackageConfiguration
     {
         private readonly JObject _jsonObject;
-        private readonly Func<PackageMetadataInfo> _metadataFunc;
 
+        /// <summary>
+        /// Package ID
+        /// </summary>
+        /// <value>The identifier.</value>
         public PackageId Id { get; }
 
+        /// <summary>
+        /// Indicates whether the package is enabled in the current configuration
+        /// </summary>
+        /// <value><c>true</c> if this instance is package enabled; otherwise, <c>false</c>.</value>
         public bool IsPackageEnabled
         {
             get
@@ -23,17 +33,23 @@ namespace Dropcraft.Runtime.Core
             }
         }
 
-        public PackageConfiguration(PackageId packageId, JObject jsonObject, Func<PackageMetadataInfo> metadataFunc = null)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PackageConfiguration"/> class.
+        /// </summary>
+        /// <param name="packageId">The package identifier.</param>
+        /// <param name="jsonObject">The JSON object.</param>
+        public PackageConfiguration(PackageId packageId, JObject jsonObject)
         {
             Id = packageId;
             _jsonObject = jsonObject;
-            _metadataFunc = metadataFunc;
         }
 
+        /// <summary>
+        /// Returns the package's metadata
+        /// </summary>
+        /// <returns>Metadata</returns>
         public PackageMetadataInfo GetPackageMetadata()
         {
-            //TODO: read package metadata from NuGet info
-
             JToken token;
 
             if (_jsonObject.TryGetValue("metadata", out token))
@@ -47,9 +63,13 @@ namespace Dropcraft.Runtime.Core
                     token.Value<string>("copyright"));
             }
 
-            return _metadataFunc?.Invoke();
+            return null;
         }
 
+        /// <summary>
+        /// Returns the package's activation mode to use during the runtime
+        /// </summary>
+        /// <returns>Activation mode</returns>
         public EntityActivationMode GetPackageActivationMode()
         {
             JToken token;
@@ -62,6 +82,10 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a list of the package startup event handlers
+        /// </summary>
+        /// <returns>Event handlers</returns>
         public IReadOnlyCollection<PackageStartupHandlerInfo> GetPackageStartupHandlers()
         {
             var result = new List<PackageStartupHandlerInfo>();
@@ -77,6 +101,10 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a list of the runtime events handlers
+        /// </summary>
+        /// <returns>Event handlers</returns>
         public IReadOnlyCollection<RuntimeEventsHandlerInfo> GetRuntimeEventHandlers()
         {
             var result = new List<RuntimeEventsHandlerInfo>();
@@ -92,6 +120,10 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a list of the extensions implemented in the package
+        /// </summary>
+        /// <returns>Extension definitions</returns>
         public IReadOnlyCollection<ExtensionInfo> GetExtensions()
         {
             var result = new List<ExtensionInfo>();
@@ -119,6 +151,10 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a list of the extensibility points exposed by the package
+        /// </summary>
+        /// <returns>Extensibility points definitions</returns>
         public IReadOnlyCollection<ExtensibilityPointInfo> GetExtensibilityPoints()
         {
             var result = new List<ExtensibilityPointInfo>();
@@ -150,6 +186,10 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
+        /// <summary>
+        /// Returns a list the deployment events handlers.
+        /// </summary>
+        /// <returns>Event handlers</returns>
         public IReadOnlyCollection<DeploymentEventsHandlerInfo> GetDeploymentEventHandlers()
         {
             var result = new List<DeploymentEventsHandlerInfo>();
@@ -165,11 +205,27 @@ namespace Dropcraft.Runtime.Core
             return result;
         }
 
-        public ICustomConfiguration GetCustomConfiguration()
+        /// <summary>
+        /// Returns custom configuration for the package
+        /// </summary>
+        /// <param name="configurationTag">The configuration tag.</param>
+        /// <returns>Custom configuration</returns>
+        public ICustomConfiguration GetCustomConfiguration(string configurationTag)
         {
-            throw new NotImplementedException();
+            JToken token;
+            if (_jsonObject.TryGetValue(configurationTag, out token))
+            {
+                var jobject = token as JObject;
+                return jobject == null ? null : new JsonCustomConfiguration(jobject);
+            }
+
+            return null;
         }
 
+        /// <summary>
+        /// Converts configuration into JSON
+        /// </summary>
+        /// <returns>JSON representation of the package configuration</returns>
         public string AsJson()
         {
             return _jsonObject.ToString();

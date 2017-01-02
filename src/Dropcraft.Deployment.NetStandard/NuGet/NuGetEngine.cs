@@ -20,6 +20,10 @@ using NuGet.Versioning;
 
 namespace Dropcraft.Deployment.NuGet
 {
+    /// <summary>
+    /// Class NuGetEngine.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.NuGet.INuGetEngine" />
     public class NuGetEngine : INuGetEngine
     {
         private readonly NuGetLogger _nuGetLogger;
@@ -29,9 +33,25 @@ namespace Dropcraft.Deployment.NuGet
         private static readonly ILog Logger = LogProvider.For<NuGetEngine>();
         private readonly SourceCacheContext _cache;
 
+        /// <summary>
+        /// Gets or sets a value indicating whether packages shall always be updated from the remote source.
+        /// </summary>
+        /// <value>When false, remote package sources will only be used when the packages cannot be resolved from the local sources</value>
         public bool UpdatePackages { get; set; }
+
+        /// <summary>
+        /// Gets or sets a value indicating whether package downgrades are allowed.
+        /// </summary>
+        /// <value><c>true</c> if [allow downgrades]; otherwise, <c>false</c>.</value>
         public bool AllowDowngrades { get; set; }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NuGetEngine"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        /// <param name="packagesFolderPath">The packages folder path.</param>
+        /// <param name="remotePackagesSources">The remote packages sources.</param>
+        /// <param name="localPackagesSources">The local packages sources.</param>
         public NuGetEngine(DeploymentContext deploymentContext, string packagesFolderPath, IEnumerable<string> remotePackagesSources, IEnumerable<string> localPackagesSources)
         {
             var settings = Settings.LoadDefaultSettings(packagesFolderPath);
@@ -66,6 +86,12 @@ namespace Dropcraft.Deployment.NuGet
             }
         }
 
+        /// <summary>
+        /// Resolves the package version.
+        /// </summary>
+        /// <param name="packageId">The package identifier.</param>
+        /// <returns><see cref="PackageId" /></returns>
+        /// <exception cref="System.ArgumentException"></exception>
         public async Task<PackageId> ResolvePackageVersion(PackageId packageId)
         {
             PackageId package = null;
@@ -114,6 +140,11 @@ namespace Dropcraft.Deployment.NuGet
             return resolvedVersion == null ? null : resolvedVersion.ToFullString();
         }
 
+        /// <summary>
+        /// Resolves the packages and dependencies
+        /// </summary>
+        /// <param name="packages">The packages.</param>
+        /// <returns>NuGet graph of the resolved packages</returns>
         public async Task<GraphNode<RemoteResolveResult>> ResolvePackages(ICollection<PackageId> packages)
         {
             var walkerContext = new RemoteWalkContext(_cache, _nuGetLogger);
@@ -137,7 +168,12 @@ namespace Dropcraft.Deployment.NuGet
             return await walker.WalkAsync(fakeLib, _framework, _framework.GetShortFolderName(), RuntimeGraph.Empty, true);
         }
 
-        public void AnalysePackages(GraphNode<RemoteResolveResult> resolvedPackages)
+        /// <summary>
+        /// Analyses the packages graph for potential issues (downgrades, missed package, circular dependency, etc.)
+        /// </summary>
+        /// <param name="resolvedPackages">The resolved packages.</param>
+        /// <exception cref="System.InvalidOperationException"></exception>
+        public void AnalyzePackages(GraphNode<RemoteResolveResult> resolvedPackages)
         {
             var packagesAnalysis = resolvedPackages.Analyze();
             if (packagesAnalysis.Downgrades.Any())
@@ -217,6 +253,13 @@ namespace Dropcraft.Deployment.NuGet
                 : NuGetFramework.ParseFrameworkName(frameworkName, new DefaultFrameworkNameProvider());
         }
 
+        /// <summary>
+        /// Installs the package.
+        /// </summary>
+        /// <param name="match">NuGet package match.</param>
+        /// <param name="path">Installation path</param>
+        /// <returns>Task</returns>
+        /// <seealso cref="INuGetEngine.GetPackageTargetPath" />
         public Task InstallPackage(RemoteMatch match, string path)
         {
             var packageIdentity = new PackageIdentity(match.Library.Name, match.Library.Version);
@@ -232,19 +275,32 @@ namespace Dropcraft.Deployment.NuGet
                 stream => match.Provider.CopyToAsync(
                     match.Library,
                     stream,
-                    _cache, 
+                    _cache,
                     _nuGetLogger,
                     CancellationToken.None),
                 versionFolderPathContext,
                 CancellationToken.None);
         }
 
+        /// <summary>
+        /// Gets the package target path for installation.
+        /// </summary>
+        /// <param name="packageId">The package identifier.</param>
+        /// <param name="version">Package NuGet version</param>
+        /// <param name="path">Packages installation path</param>
+        /// <returns>Appropriate package installation path, in a form of ...\[packages-path]\[package-id]\[package-version]\</returns>
         public string GetPackageTargetPath(string packageId, NuGetVersion version, string path)
         {
             var pathResolver = new VersionFolderPathResolver(path);
             return pathResolver.GetInstallPath(packageId, version);
         }
 
+        /// <summary>
+        /// Gets the most compatible framework.
+        /// </summary>
+        /// <param name="targetFramework">The target framework.</param>
+        /// <param name="candidateFrameworks">The candidate frameworks.</param>
+        /// <returns>The most compatible framework</returns>
         public static string GetMostCompatibleFramework(string targetFramework, IEnumerable<string> candidateFrameworks)
         {
             var frameworkReducer = new FrameworkReducer();

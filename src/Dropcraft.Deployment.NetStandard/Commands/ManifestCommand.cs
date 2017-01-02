@@ -6,15 +6,27 @@ using Microsoft.Extensions.CommandLineUtils;
 
 namespace Dropcraft.Deployment.Commands
 {
+    /// <summary>
+    /// Class ManifestCommand.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Deployment.Commands.DeploymentCommand" />
     public class ManifestCommand : DeploymentCommand
     {
         private CommandArgument _path;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ManifestCommand"/> class.
+        /// </summary>
         public ManifestCommand()
         {
             Name = "manifest";
         }
 
+        /// <summary>
+        /// Defines the specified command application.
+        /// </summary>
+        /// <param name="cmdApp">The command application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
         protected override void Define(CommandLineApplication cmdApp, Action<string> logErrorAction)
         {
             cmdApp.Description = "Creates an empty package manifest";
@@ -23,6 +35,12 @@ namespace Dropcraft.Deployment.Commands
             _path = cmdApp.Argument("[path]", "Folder where the newly created manifest will be stored. E.g. C:\\Projects\\MyApp");
         }
 
+        /// <summary>
+        /// Executes the command.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="logErrorAction">The log error action.</param>
+        /// <returns>Error code</returns>
         protected override async Task<int> Execute(CommandLineApplication app, Action<string> logErrorAction)
         {
             var assembly = GetType().GetTypeInfo().Assembly;

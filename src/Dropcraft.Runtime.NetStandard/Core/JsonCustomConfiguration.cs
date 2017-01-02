@@ -5,16 +5,28 @@ using Newtonsoft.Json.Linq;
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Class JsonCustomConfiguration.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.Package.ICustomConfiguration" />
     public class JsonCustomConfiguration : ICustomConfiguration
     {
         private readonly CustomConfigurationValue _value;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="JsonCustomConfiguration"/> class.
+        /// </summary>
+        /// <param name="jsonObject">The JSON object.</param>
         public JsonCustomConfiguration(JObject jsonObject)
         {
             _value = new CustomConfigurationValue();
             Parse(jsonObject, _value);
         }
 
+        /// <summary>
+        /// Returns configuration root element
+        /// </summary>
+        /// <returns><see cref="T:Dropcraft.Common.Package.ICustomConfigObject" /></returns>
         public ICustomConfigObject Get()
         {
             return _value;

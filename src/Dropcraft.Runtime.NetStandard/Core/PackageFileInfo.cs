@@ -1,7 +1,8 @@
 ﻿using System;
 using System.IO;
+using Dropcraft.Common.Package;
 
-namespace Dropcraft.Common.Package
+namespace Dropcraft.Runtime.Core
 {
     /// <summary>
     /// Defines a package file 
@@ -29,6 +30,11 @@ namespace Dropcraft.Common.Package
             FileName = fileName;
         }
 
+        /// <summary>
+        /// Determines whether the current object represents the same file as the provided package file info.
+        /// </summary>
+        /// <param name="packageFileInfo">The package file information to compare.</param>
+        /// <returns><c>true</c> if files are the same; otherwise, <c>false</c>.</returns>
         public bool IsSameFile(IPackageFile packageFileInfo)
         {
             var path1 = Path.GetFullPath(FileName);

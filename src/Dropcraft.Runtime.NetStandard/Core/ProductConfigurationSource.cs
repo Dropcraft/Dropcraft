@@ -2,6 +2,10 @@
 
 namespace Dropcraft.Runtime.Core
 {
+    /// <summary>
+    /// Class ProductConfigurationSource.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.IProductConfigurationSource" />
     public class ProductConfigurationSource : IProductConfigurationSource
     {
         /// <summary>

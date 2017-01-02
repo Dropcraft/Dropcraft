@@ -2,6 +2,9 @@
 
 namespace Dropcraft.Runtime.Configuration
 {
+    /// <summary>
+    /// Allows to configure extensibility options
+    /// </summary>
     public class ExtensibilityOptions
     {
         private readonly RuntimeConfiguration _runtimeConfiguration;

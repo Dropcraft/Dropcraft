@@ -25,6 +25,8 @@
     <DefineConstants>TRACE;DEBUG;LIBLOG_PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Dropcraft.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +35,8 @@
     <DefineConstants>TRACE;LIBLOG_PORTABLE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Dropcraft.Common.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <None Include="project.json" />
@@ -42,11 +46,13 @@
     <Compile Include="..\GlobalAssemblyInfo.cs">
       <Link>Properties\GlobalAssemblyInfo.cs</Link>
     </Compile>
+    <Compile Include="Deployment\InstallationOptions.cs" />
+    <Compile Include="Deployment\UninstallationOptions.cs" />
     <Compile Include="Package\ICustomConfiguration.cs" />
     <Compile Include="Package\EntityActivationMode.cs" />
     <Compile Include="Package\ExtensibilityPointInfo.cs" />
     <Compile Include="Package\ExtensionInfo.cs" />
-    <Compile Include="Deployment\IDeploymentStartegyProvider.cs" />
+    <Compile Include="Deployment\IDeploymentStrategyProvider.cs" />
     <Compile Include="Deployment\IDeploymentStrategySource.cs" />
     <Compile Include="Package\IEntityActivator.cs" />
     <Compile Include="Package\IPackageConfigurationProvider.cs" />

@@ -20,6 +20,8 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\Dropcraft.Deployment.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -28,6 +30,8 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Release\Dropcraft.Deployment.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Extensions.CommandLineUtils, Version=1.0.0.0, Culture=neutral, PublicKeyToken=adb9793829ddae60, processorArchitecture=MSIL">
@@ -157,8 +161,8 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentPackageInfo.cs">
       <Link>Core\DeploymentPackageInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentStarategyProvider.cs">
-      <Link>Core\DeploymentStarategyProvider.cs</Link>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentStrategyProvider.cs">
+      <Link>Core\DeploymentStrategyProvider.cs</Link>
     </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Core\DeploymentStrategySource.cs">
       <Link>Core\DeploymentStrategySource.cs</Link>

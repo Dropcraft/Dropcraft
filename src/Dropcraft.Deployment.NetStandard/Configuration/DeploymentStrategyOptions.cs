@@ -3,10 +3,17 @@ using Dropcraft.Deployment.Core;
 
 namespace Dropcraft.Deployment.Configuration
 {
+    /// <summary>
+    /// Class DeploymentStrategyOptions.
+    /// </summary>
     public class DeploymentStrategyOptions
     {
         readonly DeploymentConfiguration _configuration;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeploymentStrategyOptions" /> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public DeploymentStrategyOptions(DeploymentConfiguration configuration)
         {
             _configuration = configuration;

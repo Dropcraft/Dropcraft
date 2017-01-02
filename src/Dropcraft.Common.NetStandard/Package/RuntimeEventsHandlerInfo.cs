@@ -1,20 +1,38 @@
 ﻿namespace Dropcraft.Common.Package
 {
+    /// <summary>
+    /// Describes runtime event handler
+    /// </summary>
     public class RuntimeEventsHandlerInfo
     {
-        public PackageId PackageInfo { get; }
+        /// <summary>
+        /// Package ID
+        /// </summary>
+        public PackageId PackageId { get; }
 
+        /// <summary>
+        /// Fully qualified type name
+        /// </summary>
         public string ClassName { get; }
 
-        public RuntimeEventsHandlerInfo(PackageId packageInfo, string className)
+        /// <summary>
+        /// Constructor
+        /// </summary>
+        /// <param name="packageId">Package ID</param>
+        /// <param name="className">Handler class name</param>
+        public RuntimeEventsHandlerInfo(PackageId packageId, string className)
         {
-            PackageInfo = packageInfo;
+            PackageId = packageId;
             ClassName = className;
         }
 
+        /// <summary>
+        /// Converts object to string
+        /// </summary>
+        /// <returns>string</returns>
         public override string ToString()
         {
-            return $"{PackageInfo?.ToString() ?? ""}, {ClassName}";
+            return $"{PackageId?.ToString() ?? ""}, {ClassName}";
         }
 
     }

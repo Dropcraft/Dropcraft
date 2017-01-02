@@ -5,6 +5,10 @@
     /// </summary>
     public interface IPackageConfigurationSource
     {
+        /// <summary>
+        /// Creates package configuration provider
+        /// </summary>
+        /// <returns><see cref="IPackageConfigurationProvider"/></returns>
         IPackageConfigurationProvider GetPackageConfigurationProvider();
     }
 }

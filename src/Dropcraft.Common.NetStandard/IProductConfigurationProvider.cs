@@ -16,14 +16,14 @@ namespace Dropcraft.Common
         /// <summary>
         /// Returns all configured packages
         /// </summary>
-        /// <returns>Package graph</returns>
+        /// <returns><see cref="IPackageGraph"/></returns>
         IPackageGraph GetPackages();
 
         /// <summary>
         /// Returns configuration for the selected package
         /// </summary>
         /// <param name="packageId">Selected Package ID</param>
-        /// <returns>Configuration for the selected package</returns>
+        /// <returns>Configuration for the selected package. <see cref="IPackageConfiguration"/></returns>
         IPackageConfiguration GetPackageConfiguration(PackageId packageId);
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace Dropcraft.Common
         /// Returns package's installed files 
         /// </summary>
         /// <param name="packageId">Package ID</param>
-        /// <param name="nonSharedFilesOnly">When true, instructs function to return only the files which are uniqe for the package</param>
+        /// <param name="nonSharedFilesOnly">When true, instructs function to return only the files which are unique for the package</param>
         /// <returns>Files list</returns>
         IReadOnlyCollection<IPackageFile> GetInstalledFiles(PackageId packageId, bool nonSharedFilesOnly);
 

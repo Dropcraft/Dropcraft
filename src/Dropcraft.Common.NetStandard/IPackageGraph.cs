@@ -32,10 +32,10 @@ namespace Dropcraft.Common
         /// <summary>
         /// Creates a subgraph including the provided packages and the packages they depend on
         /// </summary>
-        /// <param name="packages">Packages to use for slicing</param>
+        /// <param name="targetPackages">Packages to use for slicing</param>
         /// <param name="excludeNonExclusiveDependencies">When true, all dependencies shared with the packages outside of the subgraph will not be included</param>
         /// <returns>New graph which includes the requested packages and the dependencies</returns>
-        IPackageGraph SliceWithDependencies(ICollection<PackageId> packages, bool excludeNonExclusiveDependencies);
+        IPackageGraph SliceWithDependencies(ICollection<PackageId> targetPackages, bool excludeNonExclusiveDependencies);
 
         /// <summary>
         /// Creates a subgraph including the provided packages and the packages which depend on them

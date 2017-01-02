@@ -7,22 +7,46 @@ using Dropcraft.Deployment.NuGet;
 
 namespace Dropcraft.Deployment.Core
 {
-    public class DeploymentStarategyProvider : IDeploymentStartegyProvider
+    /// <summary>
+    /// Class DeploymentStrategyProvider.
+    /// </summary>
+    /// <seealso cref="Dropcraft.Common.Deployment.IDeploymentStrategyProvider" />
+    public class DeploymentStrategyProvider : IDeploymentStrategyProvider
     {
         private readonly DeploymentContext _deploymentContext;
 
+        /// <summary>
+        /// Gets or sets the default conflict resolution.
+        /// </summary>
+        /// <value><see cref="FileConflictResolution"/></value>
         public FileConflictResolution DefaultConflictResolution { get; set; } = FileConflictResolution.Override;
 
-        public DeploymentStarategyProvider(DeploymentContext deploymentContext)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DeploymentStrategyProvider"/> class.
+        /// </summary>
+        /// <param name="deploymentContext">The deployment context.</param>
+        public DeploymentStrategyProvider(DeploymentContext deploymentContext)
         {
             _deploymentContext = deploymentContext;
         }
 
+        /// <summary>
+        /// Returns files required for installation for the provided package
+        /// </summary>
+        /// <param name="packageId">Package been installed</param>
+        /// <param name="packagePath">Path to the unpacked package</param>
+        /// <returns>List of the files for deployment. <see cref="PackageFileDeploymentInfo"/></returns>
         public virtual IReadOnlyCollection<PackageFileDeploymentInfo> GetPackageFiles(PackageId packageId, string packagePath)
         {
             return OnGetPackageFiles(packageId, packagePath);
         }
 
+        /// <summary>
+        /// Called by <see cref="GetPackageFiles"/> method.
+        /// </summary>
+        /// <param name="packageId">The package identifier.</param>
+        /// <param name="packagePath">The package path.</param>
+        /// <returns>List of the files for deployment. <see cref="PackageFileDeploymentInfo"/></returns>
         protected IReadOnlyCollection<PackageFileDeploymentInfo> OnGetPackageFiles(PackageId packageId, string packagePath)
         {
             var files = new List<PackageFileDeploymentInfo>();
@@ -60,6 +84,14 @@ namespace Dropcraft.Deployment.Core
             return files;
         }
 
+        /// <summary>
+        /// Iterates through the package's files and adds them for deployment
+        /// </summary>
+        /// <param name="path">Current file search path</param>
+        /// <param name="targetPath">Target installation path.</param>
+        /// <param name="action">File action for the current folder</param>
+        /// <param name="fileType">Type of the file</param>
+        /// <param name="files">List of the files collected by the function</param>
         protected void AddFiles(string path, string targetPath, FileAction action, FileType fileType, List<PackageFileDeploymentInfo> files)
         {
             var fileEntries = Directory.EnumerateFiles(path);

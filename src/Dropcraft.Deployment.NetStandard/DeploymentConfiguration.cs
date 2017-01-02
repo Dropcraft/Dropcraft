@@ -96,25 +96,31 @@ namespace Dropcraft.Deployment
         /// </summary>
         /// <param name="deploymentContext">Custom deployment context</param>
         /// <returns><see cref="IDeploymentEngine"/></returns>
-        public IDeploymentEngine CreatEngine(DeploymentContext deploymentContext)
+        public IDeploymentEngine CreateEngine(DeploymentContext deploymentContext)
         {
-            var deploymentStartegyProvider = DeploymentStrategySource.GetStartegyProvider(deploymentContext);
+            var deploymentStrategyProvider = DeploymentStrategySource.GetStrategyProvider(deploymentContext);
 
-            return new DeploymentEngine(deploymentContext, deploymentStartegyProvider, PackageDiscoverer,
+            return new DeploymentEngine(deploymentContext, deploymentStrategyProvider, PackageDiscoverer,
                 PackageDeployer, TransactionSource,
                 PackagesFolderPath,
                 RemotePackagesSources, 
                 LocalPackagesSources);
         }
 
-        public IDeploymentEngine CreatEngine(string productPath, string framework)
+        /// <summary>
+        /// Creates <see cref="IDeploymentEngine"/> instances.
+        /// </summary>
+        /// <param name="productPath">The product path.</param>
+        /// <param name="framework">The .NET framework.</param>
+        /// <returns><see cref="IDeploymentEngine"/></returns>
+        public IDeploymentEngine CreateEngine(string productPath, string framework)
         {
             var packageConfigurationProvider = PackageConfigurationSource.GetPackageConfigurationProvider();
             var productConfigurationProvider = ProductConfigurationSource.GetProductConfigurationProvider(productPath);
             var deploymentContext = new DefaultDeploymentContext(productPath, framework, packageConfigurationProvider,
                 productConfigurationProvider);
 
-            return CreatEngine(deploymentContext);
+            return CreateEngine(deploymentContext);
         }
     }
 }
