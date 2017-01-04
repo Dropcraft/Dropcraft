@@ -1,0 +1,142 @@
+#logo {
+    padding-top: 17px;
+    padding-bottom: 17px;
+    margin-right: 20px; 
+}
+
+#dp-logo {
+    width: 150px;
+    height: 150px;
+    margin-top: 0px;
+    margin-bottom: 25px;
+}
+
+.navbar-inverse .navbar-collapse, .navbar-inverse .navbar-form {
+    border-style: none;
+}
+
+.navbar-inverse {
+    background-color: #09322C;
+    border-color: #09322C;
+}
+
+.hero a {
+    color: #EBEDD5;
+}
+
+.hero a:hover {
+    color: floralwhite;
+}
+
+.navbar-inverse .navbar-nav > li > a, .navbar-inverse .navbar-text {
+        color: #EBEDD5;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .active > a:focus, .navbar-inverse .navbar-nav > .active > a:hover {
+    background-color: #7ABBBD;
+}
+
+.hero {
+    height: 350px;
+    margin-top: 50px;
+    padding-top: 50px;
+    font-weight: 300;
+    background-color: #09322C;
+    color: ghostwhite;
+    text-align: center;
+}
+
+.hero strong {
+    font-weight: 400;
+    text-align: center;
+}
+
+.hero .text {
+    font-size: 44px;
+    padding-bottom: 20px;
+}
+
+.hero .minitext {
+    font-size: 20px;
+    color: #7ABBBD;
+}
+
+.hero .button {
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin: 0 12px;
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.3);
+}
+
+.buttons-unit {
+    margin-top: 60px;
+    text-align: center;
+}
+
+.buttons-unit .button {
+    color: #09322C;
+    background: #fff;
+    font-weight: 300;
+}
+
+a.button:hover {
+    color: #09322C;
+}
+
+.buttons-unit .button:active {
+    background: #A27865;
+}
+
+.buttons-unit-small{
+  font-size: 16px;
+}
+
+.btn-primary {
+    background: #385361;
+    color: #8BFEB4;
+}
+
+.version-link, .github-link{
+  margin: 5px;
+}
+
+.hero .button {
+    border-radius: 4px;
+    padding: 8px 16px;
+    margin: 0 12px;
+    box-shadow: 1px 3px 3px rgba(0,0,0,0.3);
+}
+
+.buttons-unit .button {
+    font-size: 22px;
+}
+
+.key-section{
+  padding: 30px 0;
+}
+
+.counter-key-section{
+  padding: 30px 0;
+}
+
+.counter-key-section{
+  border: 2px solid #6E8B60;
+  -webkit-border-image-source: -webkit-gradient(linear, left, right, color-stop(0%, rgba(0, 0, 0, 0)), color-stop(50%, #385361), color-stop(100%, rgba(0, 0, 0, 0)));
+  -webkit-border-image-source: -webkit-linear-gradient(90deg, rgba(0, 0, 0, 0), #385361 50%, rgba(0, 0, 0, 0));
+  -moz-border-image-source: -moz-linear-gradient(90deg, rgba(0, 0, 0, 0), #385361 50%, rgba(0, 0, 0, 0));
+  -ms-border-image-source: -ms-linear-gradient(90deg, rgba(0, 0, 0, 0), #385361 50%, rgba(0, 0, 0, 0));
+  -o-border-image-source: -o-linear-gradient(90deg, rgba(0, 0, 0, 0), #385361 50%, rgba(0, 0, 0, 0));
+  border-image-source: linear-gradient(90deg, rgba(0, 0, 0, 0), #385361 50%, rgba(0, 0, 0, 0));
+  border-image-slice: 1;
+}
+
+@media only screen and (max-width: 768px) {
+  .hero {
+    height: 500px;
+    margin-top: 0px;
+  }
+  .hero .button {
+    display: block;
+    margin: 12px;
+  }
+}

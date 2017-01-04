@@ -131,7 +131,11 @@ Task("ILMerge")
         ILMerge(System.IO.Path.Combine(cliDestDir, "dropcraft.exe"), "./src/Dropcraft.Net46/bin/Release/Dropcraft.exe", assemblyPaths);
     });
 
-Task("Document").Does(() => DocFx("./docs/docfx.json"));
+Task("Document")
+    .WithCriteria(() => !AppVeyor.IsRunningOnAppVeyor)
+    .Does(() => {
+        DocFx("./docs/docfx.json");
+    });
 
 ///////////////////////////////////////////////////////////////////////////////
 // PRIMARY TARGETS
@@ -146,7 +150,7 @@ Task("Build")
     .IsDependentOn("Run-Tests")
     .IsDependentOn("Package")
     .IsDependentOn("ILMerge")
-    /*.IsDependentOn("Document")*/;
+    .IsDependentOn("Document");
 
 Task("Default")
     .IsDependentOn("Build");

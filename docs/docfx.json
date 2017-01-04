@@ -16,7 +16,8 @@
           ]
         }
       ],
-      "dest": "api"
+      "dest": "api",
+      "filter": "docs/filter.yml"
     }
   ],
   "build": {
@@ -29,8 +30,8 @@
       },
       {
         "files": [
-          "articles/**.md",
-          "articles/**/toc.yml",
+          "guide/**.md",
+          "guide/**/toc.yml",
           "toc.yml",
           "*.md"
         ],
@@ -66,7 +67,8 @@
     "globalMetadataFiles": [],
     "fileMetadataFiles": [],
     "template": [
-      "default"
+      "default",
+      "template"
     ],
     "postProcessors": [],
     "noLangKeyword": false
