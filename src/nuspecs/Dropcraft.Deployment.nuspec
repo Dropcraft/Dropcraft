@@ -3,7 +3,7 @@
   <metadata>
     <id>Dropcraft.Deployment</id>
     <version>$version$</version>
-    <title>Dropcraft.Runtime</title>
+    <title>Dropcraft.Deployment</title>
     <authors>Andrei Marukovich</authors>
     <owners>Andrei Marukovich</owners>
     <licenseUrl>https://github.com/Dropcraft/Dropcraft/blob/master/LICENSE</licenseUrl>
