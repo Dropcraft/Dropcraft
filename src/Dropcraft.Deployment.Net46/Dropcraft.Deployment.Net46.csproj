@@ -140,6 +140,9 @@
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Commands\UpdateCommand.cs">
       <Link>Commands\UpdateCommand.cs</Link>
     </Compile>
+    <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentExtensibilityOptions.cs">
+      <Link>Configuration\DeploymentExtensibilityOptions.cs</Link>
+    </Compile>
     <Compile Include="..\Dropcraft.Deployment.NetStandard\Configuration\DeploymentStrategyOptions.cs">
       <Link>Configuration\DeploymentStrategyOptions.cs</Link>
     </Compile>

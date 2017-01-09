@@ -67,6 +67,7 @@
     <Compile Include="Core\IPackageDiscoverer.cs" />
     <Compile Include="Core\PackageDeployer.cs" />
     <Compile Include="Core\PackageDiscoverer.cs" />
+    <Compile Include="Configuration\DeploymentExtensibilityOptions.cs" />
     <Compile Include="NuGet\INuGetEngine.cs" />
     <Compile Include="Core\DeploymentPackageInfo.cs" />
     <Compile Include="Configuration\PackagesConfigurationOptions.cs" />

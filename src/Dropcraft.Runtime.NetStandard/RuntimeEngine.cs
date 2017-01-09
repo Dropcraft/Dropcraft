@@ -17,22 +17,18 @@ namespace Dropcraft.Runtime
         /// </summary>
         /// <value>The runtime context.</value>
         public RuntimeContext RuntimeContext { get; }
+
         /// <summary>
         /// Gets the configuration provider.
         /// </summary>
         /// <value>The configuration provider.</value>
         public IProductConfigurationProvider ConfigurationProvider { get; }
-        /// <summary>
-        /// Gets the entity activator.
-        /// </summary>
-        /// <value>The entity activator.</value>
-        public IEntityActivator EntityActivator { get; }
 
-        internal RuntimeEngine(RuntimeContext runtimeContext, IProductConfigurationProvider configurationProvider, IEntityActivator entityActivator)
+
+        internal RuntimeEngine(RuntimeContext runtimeContext, IProductConfigurationProvider configurationProvider)
         {
             RuntimeContext = runtimeContext;
             ConfigurationProvider = configurationProvider;
-            EntityActivator = entityActivator;
         }
 
         /// <summary>
@@ -126,7 +122,7 @@ namespace Dropcraft.Runtime
             {
                 foreach (var startupHandlerInfo in packageStartupHandlerInfos)
                 {
-                    var startupHandler = EntityActivator.GetPackageStartupHandler(startupHandlerInfo);
+                    var startupHandler = RuntimeContext.EntityActivator.GetPackageStartupHandler(startupHandlerInfo);
                     startupHandler.Start(RuntimeContext);
                 }
             }
@@ -136,7 +132,7 @@ namespace Dropcraft.Runtime
             {
                 foreach (var eventsHandlerInfo in runtimeEventsHandlerInfos)
                 {
-                    var eventsHandler = EntityActivator.GetRuntimeEventsHandler(eventsHandlerInfo);
+                    var eventsHandler = RuntimeContext.EntityActivator.GetRuntimeEventsHandler(eventsHandlerInfo);
                     eventsHandler.RegisterEventHandlers(RuntimeContext);
                 }
             }
@@ -166,10 +162,7 @@ namespace Dropcraft.Runtime
 
         private void ActivateAndRegisterExtensibilityPoint(ExtensibilityPointInfo info)
         {
-            var extensibilityPoint = EntityActivator.GetExtensibilityPointHandler(info);
-            extensibilityPoint.Initialize(info, RuntimeContext);
-
-            RuntimeContext.RegisterExtensibilityPoint(info.Id, extensibilityPoint);
+            RuntimeContext.RegisterExtensibilityPoint(info);
         }
 
         private void RaiseRuntimeEvent(RuntimeEvent runtimeEvent)

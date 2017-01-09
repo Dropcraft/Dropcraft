@@ -14,12 +14,24 @@ namespace Dropcraft.Common.Runtime
         public string ProductPath { get; protected set; }
 
         /// <summary>
+        /// Current entity activator
+        /// </summary>
+        public IEntityActivator EntityActivator { get; protected set; }
+
+        /// <summary>
         /// Registers new extensibility point
         /// </summary>
-        /// <param name="extensibilityPointKey">Extensibility point key. Used to connect extensibility point and extensions</param>
-        /// <param name="extensibilityPoint">Extensibility point definition</param>
-        public void RegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
-            => OnRegisterExtensibilityPoint(extensibilityPointKey, extensibilityPoint);
+        /// <param name="extensibilityPointInfo">Extensibility point definition</param>
+        public void RegisterExtensibilityPoint(ExtensibilityPointInfo extensibilityPointInfo)
+            => OnRegisterExtensibilityPoint(extensibilityPointInfo);
+
+        /// <summary>
+        /// Registers an already instantiated and configured extensibility point handler. For this handler <see cref="IExtensibilityPointHandler.Initialize"/> will not be called.
+        /// </summary>
+        /// <param name="extensibilityPointId">Extensibility point ID</param>
+        /// <param name="extensibilityPointHandler">Extensibility point handler</param>
+        public void RegisterExtensibilityPoint(string extensibilityPointId, IExtensibilityPointHandler extensibilityPointHandler)
+            => OnRegisterExtensibilityPoint(extensibilityPointId, extensibilityPointHandler);
 
         /// <summary>
         /// Unregisters extensibility point. Unregistered extensibility point will not be informed about new extensions.
@@ -85,9 +97,8 @@ namespace Dropcraft.Common.Runtime
         /// <summary>
         /// Registers new extensibility point
         /// </summary>
-        /// <param name="extensibilityPointKey">Extensibility point key. Used to connect extensibility point and extensions</param>
-        /// <param name="extensibilityPoint">Extensibility point definition</param>
-        protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint);
+        /// <param name="extensibilityPointInfo">The extensibility point information.</param>
+        protected abstract void OnRegisterExtensibilityPoint(ExtensibilityPointInfo extensibilityPointInfo);
 
         /// <summary>
         /// Unregisters extensibility point. Unregistered extensibility point will not be informed about new extensions.
@@ -101,6 +112,15 @@ namespace Dropcraft.Common.Runtime
         /// <param name="extensibilityPointKey">Extensibility point to return</param>
         /// <returns>Found extensibility point. Returns null if nothing is found.</returns>
         protected abstract IExtensibilityPointHandler OnGetExtensibilityPoint(string extensibilityPointKey);
+
+        /// <summary>
+        /// Registers an already instantiated and configured extensibility point handler. For this handler <see cref="IExtensibilityPointHandler.Initialize"/> will not be called.
+        /// <see cref="NewExtensibilityPointRegistrationEvent"/> will not be called as well.
+        /// </summary>
+        /// <param name="extensibilityPointId">Extensibility point ID</param>
+        /// <param name="extensibilityPointHandler">Extensibility point handler</param>
+        protected abstract void OnRegisterExtensibilityPoint(string extensibilityPointId,
+            IExtensibilityPointHandler extensibilityPointHandler);
 
         /// <summary>
         /// Registers new extension

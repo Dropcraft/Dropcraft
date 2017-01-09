@@ -4,6 +4,7 @@ using Dropcraft.Common.Deployment;
 using Dropcraft.Common.Package;
 using Dropcraft.Deployment.Configuration;
 using Dropcraft.Deployment.Core;
+using Dropcraft.Runtime;
 using Dropcraft.Runtime.Core;
 
 namespace Dropcraft.Deployment
@@ -59,6 +60,11 @@ namespace Dropcraft.Deployment
         internal List<string> LocalPackagesSources { get; } = new List<string>();
 
         /// <summary>
+        /// Current entity activator
+        /// </summary>
+        internal IEntityActivator EntityActivator { get; set; } = new ReflectionEntityActivator();
+
+        /// <summary>
         /// Constructor
         /// </summary>
         public DeploymentConfiguration()
@@ -92,6 +98,11 @@ namespace Dropcraft.Deployment
         public PackageSourceOptions ForPackages => new PackageSourceOptions(this);
 
         /// <summary>
+        /// Extensibility configuration
+        /// </summary>
+        public DeploymentExtensibilityOptions ForExtensibility => new DeploymentExtensibilityOptions(this);
+
+        /// <summary>
         /// Creates <see cref="IDeploymentEngine"/> instances.
         /// </summary>
         /// <param name="deploymentContext">Custom deployment context</param>
@@ -117,8 +128,9 @@ namespace Dropcraft.Deployment
         {
             var packageConfigurationProvider = PackageConfigurationSource.GetPackageConfigurationProvider();
             var productConfigurationProvider = ProductConfigurationSource.GetProductConfigurationProvider(productPath);
-            var deploymentContext = new DefaultDeploymentContext(productPath, framework, packageConfigurationProvider,
-                productConfigurationProvider);
+
+            var deploymentContext = new DefaultDeploymentContext(productPath, framework, EntityActivator,
+                packageConfigurationProvider, productConfigurationProvider);
 
             return CreateEngine(deploymentContext);
         }

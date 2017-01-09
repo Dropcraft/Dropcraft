@@ -820,7 +820,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         protected override OpenNdc GetOpenNdcMethod()
         {
-            Type ndcContextType = Type.GetType("NLog.NestedDiagnosticsContext, NLog");
+            Type ndcContextType = Type.GetType("NLog.NestedDiagnosticsContext, NLog") ?? Type.GetType("NLog.NestedDiagnosticsContext");
             MethodInfo pushMethod = ndcContextType.GetMethodPortable("Push", typeof(string));
             ParameterExpression messageParam = Expression.Parameter(typeof(string), "message");
             MethodCallExpression pushMethodCall = Expression.Call(null, pushMethod, messageParam);
@@ -829,7 +829,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         protected override OpenMdc GetOpenMdcMethod()
         {
-            Type mdcContextType = Type.GetType("NLog.MappedDiagnosticsContext, NLog");
+            Type mdcContextType = Type.GetType("NLog.MappedDiagnosticsContext, NLog") ?? Type.GetType("NLog.MappedDiagnosticsContext");
 
             MethodInfo setMethod = mdcContextType.GetMethodPortable("Set", typeof(string), typeof(string));
             MethodInfo removeMethod = mdcContextType.GetMethodPortable("Remove", typeof(string));
@@ -855,7 +855,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         private static Type GetLogManagerType()
         {
-            return Type.GetType("NLog.LogManager, NLog");
+            return Type.GetType("NLog.LogManager, NLog") ?? Type.GetType("NLog.LogManager");
         }
 
         private static Func<string, object> GetGetLoggerMethodCall()
@@ -1042,7 +1042,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         protected override OpenNdc GetOpenNdcMethod()
         {
-            Type logicalThreadContextType = Type.GetType("log4net.LogicalThreadContext, log4net");
+            Type logicalThreadContextType = Type.GetType("log4net.LogicalThreadContext, log4net") ?? Type.GetType("log4net.LogicalThreadContext");
             PropertyInfo stacksProperty = logicalThreadContextType.GetPropertyPortable("Stacks");
             Type logicalThreadContextStacksType = stacksProperty.PropertyType;
             PropertyInfo stacksIndexerProperty = logicalThreadContextStacksType.GetPropertyPortable("Item");
@@ -1070,7 +1070,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         protected override OpenMdc GetOpenMdcMethod()
         {
-            Type logicalThreadContextType = Type.GetType("log4net.LogicalThreadContext, log4net");
+            Type logicalThreadContextType = Type.GetType("log4net.LogicalThreadContext, log4net") ?? Type.GetType("log4net.LogicalThreadContext");
             PropertyInfo propertiesProperty = logicalThreadContextType.GetPropertyPortable("Properties");
             Type logicalThreadContextPropertiesType = propertiesProperty.PropertyType;
             PropertyInfo propertiesIndexerProperty = logicalThreadContextPropertiesType.GetPropertyPortable("Item");
@@ -1105,7 +1105,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         private static Type GetLogManagerType()
         {
-            return Type.GetType("log4net.LogManager, log4net");
+            return Type.GetType("log4net.LogManager, log4net") ?? Type.GetType("log4net.LogManager");
         }
 
         private static Func<string, object> GetGetLoggerMethodCall()
@@ -1136,7 +1136,7 @@ namespace Dropcraft.Common.Logging.LogProviders
             {
                 _logger = logger.Logger;
 
-                var logEventLevelType = Type.GetType("log4net.Core.Level, log4net");
+                var logEventLevelType = Type.GetType("log4net.Core.Level, log4net") ?? Type.GetType("log4net.Core.Level");
                 if (logEventLevelType == null)
                 {
                     throw new InvalidOperationException("Type log4net.Core.Level was not found.");
@@ -1150,7 +1150,7 @@ namespace Dropcraft.Common.Logging.LogProviders
                 _levelFatal = levelFields.First(x => x.Name == "Fatal").GetValue(null);
 
                 // Func<object, object, bool> isEnabledFor = (logger, level) => { return ((log4net.Core.ILogger)logger).IsEnabled(level); }
-                var loggerType = Type.GetType("log4net.Core.ILogger, log4net");
+                var loggerType = Type.GetType("log4net.Core.ILogger, log4net") ?? Type.GetType("log4net.Core.ILogger");
                 if (loggerType == null)
                 {
                     throw new InvalidOperationException("Type log4net.Core.ILogger, was not found.");
@@ -1275,6 +1275,7 @@ namespace Dropcraft.Common.Logging.LogProviders
     internal class EntLibLogProvider : LogProviderBase
     {
         private const string TypeTemplate = "Microsoft.Practices.EnterpriseLibrary.Logging.{0}, Microsoft.Practices.EnterpriseLibrary.Logging";
+        private const string TypeTemplateFallback = "Microsoft.Practices.EnterpriseLibrary.Logging.{0}";
         private static bool s_providerIsAvailableOverride = true;
         private static readonly Type LogEntryType;
         private static readonly Type LoggerType;
@@ -1285,8 +1286,11 @@ namespace Dropcraft.Common.Logging.LogProviders
         [SuppressMessage("Microsoft.Performance", "CA1810:InitializeReferenceTypeStaticFieldsInline")]
         static EntLibLogProvider()
         {
-            LogEntryType = Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplate, "LogEntry"));
-            LoggerType = Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplate, "Logger"));
+            LogEntryType = Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplate, "LogEntry")) ??
+                           Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplateFallback, "LogEntry"));
+
+            LoggerType = Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplate, "Logger")) ??
+                         Type.GetType(string.Format(CultureInfo.InvariantCulture, TypeTemplateFallback, "Logger"));
             TraceEventTypeType = TraceEventTypeValues.Type;
             if (LogEntryType == null
                  || TraceEventTypeType == null
@@ -1489,7 +1493,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         private static Func<string, string, IDisposable> GetPushProperty()
         {
-            Type ndcContextType = Type.GetType("Serilog.Context.LogContext, Serilog.FullNetFx");
+            Type ndcContextType = Type.GetType("Serilog.Context.LogContext, Serilog.FullNetFx") ?? Type.GetType("Serilog.Context.LogContext");
             MethodInfo pushPropertyMethod = ndcContextType.GetMethodPortable(
                 "PushProperty",
                 typeof(string),
@@ -1513,7 +1517,7 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         private static Type GetLogManagerType()
         {
-            return Type.GetType("Serilog.Log, Serilog");
+            return Type.GetType("Serilog.Log, Serilog") ?? Type.GetType("Serilog.Log");
         }
 
         private static Func<string, object> GetForContextMethodCall()
@@ -1558,7 +1562,7 @@ namespace Dropcraft.Common.Logging.LogProviders
             [SuppressMessage("Microsoft.Naming", "CA2204:Literals should be spelled correctly", MessageId = "Serilog")]
             static SerilogLogger()
             {
-                var logEventLevelType = Type.GetType("Serilog.Events.LogEventLevel, Serilog");
+                var logEventLevelType = Type.GetType("Serilog.Events.LogEventLevel, Serilog") ?? Type.GetType("Serilog.Events.LogEventLevel");
                 if (logEventLevelType == null)
                 {
                     throw new InvalidOperationException("Type Serilog.Events.LogEventLevel was not found.");
@@ -1571,7 +1575,7 @@ namespace Dropcraft.Common.Logging.LogProviders
                 WarningLevel = Enum.Parse(logEventLevelType, "Warning", false);
 
                 // Func<object, object, bool> isEnabled = (logger, level) => { return ((SeriLog.ILogger)logger).IsEnabled(level); }
-                var loggerType = Type.GetType("Serilog.ILogger, Serilog");
+                var loggerType = Type.GetType("Serilog.ILogger, Serilog") ?? Type.GetType("Serilog.ILogger");
                 if (loggerType == null)
                 {
                     throw new InvalidOperationException("Type Serilog.ILogger was not found.");
@@ -1744,14 +1748,14 @@ namespace Dropcraft.Common.Logging.LogProviders
 
         private static Type GetLogManagerType()
         {
-            return Type.GetType("Gibraltar.Agent.Log, Gibraltar.Agent");
+            return Type.GetType("Gibraltar.Agent.Log, Gibraltar.Agent") ?? Type.GetType("Gibraltar.Agent.Log");
         }
 
         private static WriteDelegate GetLogWriteDelegate()
         {
             Type logManagerType = GetLogManagerType();
-            Type logMessageSeverityType = Type.GetType("Gibraltar.Agent.LogMessageSeverity, Gibraltar.Agent");
-            Type logWriteModeType = Type.GetType("Gibraltar.Agent.LogWriteMode, Gibraltar.Agent");
+            Type logMessageSeverityType = Type.GetType("Gibraltar.Agent.LogMessageSeverity, Gibraltar.Agent") ?? Type.GetType("Gibraltar.Agent.LogMessageSeverity");
+            Type logWriteModeType = Type.GetType("Gibraltar.Agent.LogWriteMode, Gibraltar.Agent") ?? Type.GetType("Gibraltar.Agent.LogWriteMode");
 
             MethodInfo method = logManagerType.GetMethodPortable(
                 "Write",

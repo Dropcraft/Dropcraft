@@ -22,14 +22,16 @@ namespace Dropcraft.Deployment.Core
         /// </summary>
         /// <param name="productPath">The product path.</param>
         /// <param name="framework">The target framework.</param>
+        /// <param name="entityActivator">Entity activator to use</param>
         /// <param name="packageConfigurationProvider">The package configuration provider.</param>
         /// <param name="productConfigurationProvider">The product configuration provider.</param>
-        public DefaultDeploymentContext(string productPath, string framework,
+        public DefaultDeploymentContext(string productPath, string framework, IEntityActivator entityActivator,
             IPackageConfigurationProvider packageConfigurationProvider,
             IProductConfigurationProvider productConfigurationProvider)
         {
             ProductPath = productPath;
             TargetFramework = framework;
+            EntityActivator = entityActivator;
 
             PackageConfigurationProvider = packageConfigurationProvider;
             ProductConfigurationProvider = productConfigurationProvider;

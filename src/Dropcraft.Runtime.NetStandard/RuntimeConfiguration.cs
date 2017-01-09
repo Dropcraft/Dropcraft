@@ -54,7 +54,7 @@ namespace Dropcraft.Runtime
             }
 
             return new RuntimeEngine(runtimeContext,
-                ProductConfigurationSource.GetProductConfigurationProvider(runtimeContext.ProductPath), EntityActivator);
+                ProductConfigurationSource.GetProductConfigurationProvider(runtimeContext.ProductPath));
         }
 
         /// <summary>
@@ -64,7 +64,7 @@ namespace Dropcraft.Runtime
         /// <returns>Configured runtime engine</returns>
         public IRuntimeEngine CreateEngine(string productPath)
         {
-            return CreateEngine(new DefaultRuntimeContext(productPath));
+            return CreateEngine(new DefaultRuntimeContext(productPath, EntityActivator));
         }
     }
 }

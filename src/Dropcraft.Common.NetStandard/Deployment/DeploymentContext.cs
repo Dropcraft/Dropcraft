@@ -19,6 +19,11 @@ namespace Dropcraft.Common.Deployment
         public string ProductPath { get; protected set; }
 
         /// <summary>
+        /// Current entity activator
+        /// </summary>
+        public IEntityActivator EntityActivator { get; protected set; }
+
+        /// <summary>
         /// Configuration provider for the target produc
         /// </summary>
         public IProductConfigurationProvider ProductConfigurationProvider { get; protected set; }

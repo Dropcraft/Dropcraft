@@ -94,7 +94,7 @@ Task("Build-Solutions")
         MSBuild(solution, settings =>
             settings
                 .SetConfiguration(configuration)
-                .WithProperty("TreatWarningsAsErrors", "false")
+                .WithProperty("TreatWarningsAsErrors", "true")
                 .UseToolVersion(MSBuildToolVersion.NET46)
                 .SetVerbosity(Verbosity.Minimal)
                 .SetNodeReuse(false));

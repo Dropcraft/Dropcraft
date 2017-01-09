@@ -21,21 +21,21 @@ namespace Dropcraft.Common.Runtime
     }
 
     /// <summary>
-    /// Heppens when the runtime is requested to be stopped
+    /// Happens when the runtime is requested to be stopped
     /// </summary>
     public class AfterRuntimeStoppedEvent : RuntimeEvent
     {
     }
 
     /// <summary>
-    /// Happens after all regular (non-deffered) packages are loaded
+    /// Happens after all regular (non-deferred) packages are loaded
     /// </summary>
     public class AllRegularPackagesLoadedEvent : RuntimeEvent
     {
     }
 
     /// <summary>
-    /// Happens after all deffered packages are loaded
+    /// Happens after all deferred packages are loaded
     /// </summary>
     public class AllDeferredPackagesLoadedEvent : RuntimeEvent
     {
@@ -69,19 +69,30 @@ namespace Dropcraft.Common.Runtime
     public class NewExtensibilityPointRegistrationEvent : RuntimeEvent
     {
         /// <summary>
-        /// Extensibility point key
+        /// Extensibility point
         /// </summary>
-        public string ExtensibilityPointKey { get; set; }
-
-        /// <summary>
-        /// Extensibility point handler requested for the registration.
-        /// </summary>
-        public IExtensibilityPointHandler ExtensibilityPointHandler { get; set; }
+        public ExtensibilityPointInfo ExtensibilityPoint { get; set; }
 
         /// <summary>
         /// Allows to block the extensibility point registration
         /// </summary>
         public bool IsRegistrationAllowed { get; set; } = true;
+    }
+
+    /// <summary>
+    /// Happens after new extensibility point is registered
+    /// </summary>
+    public class AfterExtensibilityPointRegisteredEvent : RuntimeEvent
+    {
+        /// <summary>
+        /// Extensibility point key
+        /// </summary>
+        public string ExtensibilityPointId { get; set; }
+
+        /// <summary>
+        /// Registered handler
+        /// </summary>
+        public IExtensibilityPointHandler ExtensibilityPointHandler { get; set; }
     }
 
     /// <summary>
@@ -92,7 +103,7 @@ namespace Dropcraft.Common.Runtime
         /// <summary>
         /// Extensibility point key
         /// </summary>
-        public string ExtensibilityPointKey { get; set; }
+        public string ExtensibilityPointId { get; set; }
 
         /// <summary>
         /// Allows to block the extensibility point unregistration

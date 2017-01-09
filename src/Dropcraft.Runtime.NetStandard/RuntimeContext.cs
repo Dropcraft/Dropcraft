@@ -26,9 +26,11 @@ namespace Dropcraft.Runtime
         /// Initializes a new instance of the <see cref="DefaultRuntimeContext"/> class.
         /// </summary>
         /// <param name="productPath">The product path.</param>
-        public DefaultRuntimeContext(string productPath)
+        /// <param name="entityActivator">Entity activator to use</param>
+        public DefaultRuntimeContext(string productPath, IEntityActivator entityActivator)
         {
             ProductPath = productPath;
+            EntityActivator = entityActivator;
 
             _extensionLock = new object();
             _extensibilityPoints = new Dictionary<string, IExtensibilityPointHandler>();
@@ -39,33 +41,51 @@ namespace Dropcraft.Runtime
         /// <summary>
         /// Registers new extensibility point
         /// </summary>
-        /// <param name="extensibilityPointKey">Extensibility point key. Used to connect extensibility point and extensions</param>
-        /// <param name="extensibilityPoint">Extensibility point definition</param>
-        protected override void OnRegisterExtensibilityPoint(string extensibilityPointKey, IExtensibilityPointHandler extensibilityPoint)
+        /// <param name="extensibilityPointInfo">The extensibility point information.</param>
+        protected override void OnRegisterExtensibilityPoint(ExtensibilityPointInfo extensibilityPointInfo)
         {
             var e = new NewExtensibilityPointRegistrationEvent
             {
-                ExtensibilityPointHandler = extensibilityPoint,
-                ExtensibilityPointKey = extensibilityPointKey
+                ExtensibilityPoint = extensibilityPointInfo
             };
 
             RaiseRuntimeEvent(e);
             if (!e.IsRegistrationAllowed)
                 return;
 
+            var extensibilityPoint = EntityActivator.GetExtensibilityPointHandler(e.ExtensibilityPoint);
+            extensibilityPoint.Initialize(extensibilityPointInfo, this);
+            OnRegisterExtensibilityPoint(e.ExtensibilityPoint.Id, extensibilityPoint);
+        }
+
+        /// <summary>
+        /// Registers an already instantiated and configured extensibility point handler. For this handler <see cref="M:Dropcraft.Common.Package.IExtensibilityPointHandler.Initialize(Dropcraft.Common.Package.ExtensibilityPointInfo,Dropcraft.Common.Runtime.RuntimeContext)" /> will not be called.
+        /// </summary>
+        /// <param name="extensibilityPointId">Extensibility point ID</param>
+        /// <param name="extensibilityPointHandler">Extensibility point handler</param>
+        protected override void OnRegisterExtensibilityPoint(string extensibilityPointId,
+            IExtensibilityPointHandler extensibilityPointHandler)
+        {
             lock (_extensionLock)
             {
-                _extensibilityPoints.Add(e.ExtensibilityPointKey, e.ExtensibilityPointHandler);
+                _extensibilityPoints.Add(extensibilityPointId, extensibilityPointHandler);
 
                 for (var i = _extensions.Count - 1; i >= 0; i--)
                 {
-                    if (_extensions[i].ExtensibilityPointId == e.ExtensibilityPointKey)
+                    if (_extensions[i].ExtensibilityPointId == extensibilityPointId)
                     {
-                        e.ExtensibilityPointHandler.RegisterExtension(_extensions[i]);
+                        extensibilityPointHandler.RegisterExtension(_extensions[i]);
                         _extensions.RemoveAt(i);
                     }
                 }
             }
+
+            var e = new AfterExtensibilityPointRegisteredEvent
+            {
+                ExtensibilityPointId = extensibilityPointId,
+                ExtensibilityPointHandler = extensibilityPointHandler
+            };
+            RaiseRuntimeEvent(e);
         }
 
         /// <summary>
@@ -74,14 +94,14 @@ namespace Dropcraft.Runtime
         /// <param name="extensibilityPointKey">Extensibility point to unregister</param>
         protected override void OnUnregisterExtensibilityPoint(string extensibilityPointKey)
         {
-            var e = new ExtensibilityPointUnregistrationEvent {ExtensibilityPointKey = extensibilityPointKey};
+            var e = new ExtensibilityPointUnregistrationEvent {ExtensibilityPointId = extensibilityPointKey};
             RaiseRuntimeEvent(e);
             if (!e.IsUnregistrationAllowed)
                 return;
 
             lock (_extensionLock)
             {
-                _extensibilityPoints.Remove(e.ExtensibilityPointKey);
+                _extensibilityPoints.Remove(e.ExtensibilityPointId);
             }
         }
 
