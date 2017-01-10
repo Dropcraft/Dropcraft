@@ -17,6 +17,11 @@ NuGet-based deployment and application composition framework for .NET and .NET C
  - v0.6 - Full support for .NET Core applications on Linux
  - v1.0 - Stable deployment and runtime APIs for all supported platforms 
 
+## Documentation
+
+ - [Introduction](http://lunarfrog.com/blog/introducing-dropcraft-nuget)
+ - [API documentation](http://dropcraft.net/api/index.html)
+
 ## Build
 
 Cake is used to build the project. On Windows run:
